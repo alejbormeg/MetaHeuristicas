@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstring>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -59,7 +60,15 @@ void readDataFromIonosphere(ifstream &infile, vector<vector <double>> &data ,vec
 	cout << "Classes tiene estas dimensiones: " << classes.size() << endl;
 }
 
-void readData(ifstream &infile, vector<vector <double>> &data){
+void preparaEtiquetas(vector<vector <double>> &data,vector <int> & classes){
+	int tam_fila=data[0].size();
+	for (int i=0; i<data.size(); i++){
+		classes.push_back(data[i][tam_fila-1]);
+		data[i].pop_back();
+	}
+}
+
+void readData(ifstream &infile, vector<vector <double>> &data, vector <int> & classes){
 	string text_line;
 	vector <double> row;
 
@@ -86,7 +95,40 @@ void readData(ifstream &infile, vector<vector <double>> &data){
 		row.clear();
 	}
 
+	preparaEtiquetas(data, classes);
+
 	cout << "Data tiene las dimensiones: " << data.size()<< endl;
+}
+
+double distanciaEuclidea(vector<double> &e1, vector<double> &e2){
+	double distancia;
+	double suma=0; 
+	double aux=0;
+
+	for(int i=0; i<e1.size(); i++){
+		aux=e1[i]-e2[i];
+		suma+=aux*aux;
+	}
+
+	return sqrt(suma);
+}
+
+template <typename T>
+T Clasificador1NN( vector< vector <double>> &datos, vector<T> & etiquetas, vector<double> nuevo_ejemplo) {
+	T cmin=etiquetas[0];
+	double dmin=distanciaEuclidea(datos[0],nuevo_ejemplo);
+	double distancia=0;
+
+	for (int i=1; i<datos.size(); i++){
+		distancia=distanciaEuclidea(datos[i],nuevo_ejemplo);
+		if(distancia < dmin){
+			dmin=distancia;
+			cmin=etiquetas[i];
+			cout << "Nueva distancia: " << dmin << " con el elemento " << cmin << endl;
+		}
+	}
+
+	return cmin;
 }
 
 int main(int argc, char *argv[])
@@ -95,13 +137,23 @@ int main(int argc, char *argv[])
 	ofstream outfile;
 	vector< vector <double>> data;
 	vector<string> classes;
-
-	openFiles (infile, outfile, ionosphere);
-	readDataFromIonosphere(infile,data,classes);
-	//readData(infile,data);
+	vector<int> clases;
+	vector<double> ejemplo;
+	openFiles (infile, outfile, spectf_heart);
+	//readDataFromIonosphere(infile,data,classes);
+	readData(infile,data,clases);
 
 	for (int i=0; i<data.size(); i++){
 		cout << "dim fila " << data[i].size() << endl;
 		cout << "i: " << i << endl;
 	}
+
+	for (int i=0; i<45; i++){
+		ejemplo.push_back(1.0);
+	}
+
+	int a= Clasificador1NN(data,clases,ejemplo);
+	cout << "Dimenison etiquetas: " << clases.size() << endl;
+	cout << "Etiqueta asignada: " << a << endl;
+
 }
