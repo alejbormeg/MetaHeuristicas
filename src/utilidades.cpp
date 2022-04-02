@@ -1,8 +1,6 @@
-#include"../include/funciones.h"
+#include"../include/utilidades.h"
 
-
-
-double distanciaEuclidea(vector<double> &e1, vector<double> &e2){
+double distanciaEuclidea(std::vector<double> &e1, std::vector<double> &e2){
 	double distancia;
 	double suma=0; 
 	double aux=0;
@@ -15,7 +13,7 @@ double distanciaEuclidea(vector<double> &e1, vector<double> &e2){
 	return sqrt(suma);
 }
 
-double distanciaPonderada(vector<double> &e1, vector<double> &e2, vector<double> &w){
+double distanciaPonderada(std::vector<double> &e1, std::vector<double> &e2, std::vector<double> &w){
 	double distancia;
 	double suma=0; 
 	double aux=0;
@@ -28,7 +26,7 @@ double distanciaPonderada(vector<double> &e1, vector<double> &e2, vector<double>
 	return sqrt(suma);
 }
 
-double tasa_red (vector<double>&w){
+double tasa_red (std::vector<double>&w){
 	int numvalores=0;
 
 	for(int i=0;i<w.size();i++){
@@ -42,3 +40,4 @@ double tasa_red (vector<double>&w){
 double funcionEvaluacion(double tasa_clas, double tasa_red){
 	return 0.5*tasa_clas+0.5*tasa_red;
 }
+

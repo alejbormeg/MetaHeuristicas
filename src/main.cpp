@@ -1,11 +1,13 @@
 #include <iostream>
-#include <vector>
 #include <string>
 #include <fstream>
 #include <cstring>
 #include <sstream>
+#include "../include/utilidades.h"
 #include "../include/funciones.h"
+#include "../include/BL.h"
 #include <ctime> 
+
 
 using namespace std;
 
@@ -161,7 +163,12 @@ int main(int argc, char *argv[])
 		funcion_evaluacion=funcionEvaluacion(tasa_clas,tasa_red_);
 		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
 	}
-
-
+	
 	//5-fold Cross Validation con BL.
+	for (int i=1; i<6; i++){
+		srand(i);
+		w=inicializacionBL(datos2[0].first.size());
+	}
+
+
 }
