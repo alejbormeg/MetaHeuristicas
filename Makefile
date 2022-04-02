@@ -55,6 +55,7 @@ SOURCES		:= $(wildcard $(patsubst %,%/*.cpp, $(SOURCEDIRS)))
 
 # define the C object files 
 OBJECTS		:= $(SOURCES:.cpp=.o)
+#OBJECTS		:= main.o funciones.o
 
 #
 # The following part of the makefile is generic; it can be used to 
@@ -64,21 +65,26 @@ OBJECTS		:= $(SOURCES:.cpp=.o)
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-all: $(OUTPUT) $(MAIN)
+all: $(OUTPUT) $(INCLUDE) $(MAIN) 
 	@echo Executing 'all' complete!
 
 $(OUTPUT):
 	$(MD) $(OUTPUT)
 
-$(MAIN): $(OBJECTS) 
+$(MAIN): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(OUTPUTMAIN) $(OBJECTS) $(LFLAGS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
 # (see the gnu make manual section about automatic variables)
+main.o: main.cpp funciones.o
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c src/main.cpp src/funciones.o -o src/main.o
+
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+
+
 
 .PHONY: clean
 clean:
