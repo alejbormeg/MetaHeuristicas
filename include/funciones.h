@@ -1,7 +1,6 @@
 
 #ifndef FUNCIONES
 #define FUNCIONES
-#include <algorithm>    // std::random_shuffle
 #include <cstdlib>      // std::rand, std::srand
 #include <utilidades.h>
 using namespace std;

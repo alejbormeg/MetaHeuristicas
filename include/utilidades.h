@@ -2,6 +2,7 @@
 #ifndef UTILIDADES
 #define UTILIDADES
 
+#include <algorithm>    // std::random_shuffle
 #include <cassert>
 #include<cmath>
 #include <vector>

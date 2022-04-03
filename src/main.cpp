@@ -166,8 +166,32 @@ int main(int argc, char *argv[])
 	
 	//5-fold Cross Validation con BL.
 	for (int i=1; i<6; i++){
-		srand(i);
+		cout << "Iteracion: " << i << endl;
+		Prepara5FoldCrossVal(datos2,entrenamiento,validacion,i);
 		w=inicializacionBL(datos2[0].first.size());
+
+		//Calculamos tiempo que tarda el algoritmo
+		t0=clock();
+		BusquedaLocal(entrenamiento,w,i);
+		t1=clock();
+
+		//Obtenemos tiempo de ejecución en validacion
+		tiempo=1000*(double(t1-t0)/CLOCKS_PER_SEC);
+		cout <<"\t Tiempo de ejecución entrenamiento: " << tiempo <<"ms"<<endl;
+
+		cout <<endl;
+		//Obtenemos el valor de tasa_clas en validacion
+		tasa_clas=LeaveOneOut(validacion,w);
+		cout <<"\t Tasa_clas validacion:" << tasa_clas <<endl;
+		
+		//Obtenemos el valor de tasa_red en validacion
+		tasa_red_=tasa_red(w);
+		cout <<"\t Tasa_red validacion:" << tasa_red_<<endl;
+
+		//Obtenemos la función de evaluación en validacion
+		funcion_evaluacion=funcionEvaluacion(tasa_clas,tasa_red_);
+		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
+
 	}
 
 
