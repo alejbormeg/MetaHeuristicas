@@ -21,6 +21,7 @@ vector<double> distanciaEnemigoMascercano(vector<pair<vector<double>,T>> &entren
 		}
 	}
 
+
 	for(int i=0; i<entrenamiento[0].first.size();i++){
 		distancia_elem_elem.push_back(abs(entrenamiento[enemigo_mas_cercano].first[i]-entrenamiento[elemento].first[i]));
 	}
@@ -62,11 +63,11 @@ vector<double> metodoRELIEF(vector<pair<vector<double>,T>> &entrenamiento){
 	}
 
 	//Comenzamos el algoritmo
-
 	for(int i=0; i<entrenamiento.size(); i++){
 		distancias_enemigo=distanciaEnemigoMascercano(entrenamiento,i);
 		distancias_amigo=distanciaAmigoMasCercano(entrenamiento,i);
 		w=w+distancias_enemigo-distancias_amigo;
+
 	}
 
 	double max=*max_element(w.begin(),w.end());
@@ -78,6 +79,12 @@ vector<double> metodoRELIEF(vector<pair<vector<double>,T>> &entrenamiento){
 			w[i]=w[i]/max;
 		}
 	}
+
+	std::cout<<std::endl;   
+   for(int i=0; i<w.size(); i++){
+        std::cout<<w[i] << ", ";
+    }
+    std::cout<<std::endl;
 	return w;
 }
 

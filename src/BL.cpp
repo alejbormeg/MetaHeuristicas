@@ -25,4 +25,8 @@ void Mov(std::vector<double> & w, double sigma, int pos){
     if(w[pos]>1.0){
         w[pos]=1.0;
     }
+
+    if(w[pos]<0.0){
+        w[pos]=0.0;
+    }
 }

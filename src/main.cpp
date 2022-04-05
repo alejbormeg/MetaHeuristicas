@@ -106,21 +106,21 @@ int main(int argc, char *argv[])
 	vector<double> ejemplo;
 	openFiles (infile, outfile, ionosphere);
 	readDataFromIonosphere(infile,datos2);
-	
 	//readData(infile,datos1);
 
-	
+	Normalizar(datos2); 
+
 	//5-Fold Cross Validation RELIEF
-	random_shuffle(datos2.begin(),datos2.end());
+	//random_shuffle(datos2.begin(),datos2.end());
 	vector<pair<vector<double>,string>> entrenamiento;
 	vector<pair<vector<double>,string>> validacion;
 	vector<double> w;
 	double tasa_clas=0;
 	double tasa_red_=0;
 	double funcion_evaluacion=0;
-	unsigned t0,t1;
+	unsigned t0,t1,t2,t3;
 	double tiempo=0.0;
-
+	
 	for(int i=1; i<6; i++){
 		cout << "Iteracion: " << i << endl;
 		Prepara5FoldCrossVal(datos2,entrenamiento,validacion,i);
@@ -135,7 +135,12 @@ int main(int argc, char *argv[])
 		cout <<endl;
 
 		//Obtenemos el valor de tasa_clas en entrenamiento
+		t2=clock();
 		tasa_clas=LeaveOneOut(entrenamiento,w);
+		t3=clock();
+		tiempo=1000*(double(t3-t2)/CLOCKS_PER_SEC);
+		cout <<"\t Tiempo de ejecución LeaveOneOut: " << tiempo <<"ms"<<endl;
+
 		cout <<"\t Tasa_clas entrenamiento:" << tasa_clas <<endl;
 		
 		//Obtenemos el valor de tasa_red en entrenamiento
@@ -152,7 +157,7 @@ int main(int argc, char *argv[])
 
 		cout <<endl;
 		//Obtenemos el valor de tasa_clas en validacion
-		tasa_clas=LeaveOneOut(validacion,w);
+		tasa_clas=Evaluacion(entrenamiento,validacion,w);
 		cout <<"\t Tasa_clas validacion:" << tasa_clas <<endl;
 		
 		//Obtenemos el valor de tasa_red en validacion
@@ -164,7 +169,9 @@ int main(int argc, char *argv[])
 		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
 	}
 	
+
 	//5-fold Cross Validation con BL.
+	
 	for (int i=1; i<6; i++){
 		cout << "Iteracion: " << i << endl;
 		Prepara5FoldCrossVal(datos2,entrenamiento,validacion,i);
@@ -181,7 +188,7 @@ int main(int argc, char *argv[])
 
 		cout <<endl;
 		//Obtenemos el valor de tasa_clas en validacion
-		tasa_clas=LeaveOneOut(validacion,w);
+		tasa_clas=Evaluacion(entrenamiento,validacion,w);
 		cout <<"\t Tasa_clas validacion:" << tasa_clas <<endl;
 		
 		//Obtenemos el valor de tasa_red en validacion
@@ -193,6 +200,6 @@ int main(int argc, char *argv[])
 		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
 
 	}
-
+	
 
 }
