@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 	double tiempo=0.0;
 
 	//Leemos los datos del fichero correspondiente
-	openFiles (infile, spectf_heart);
+	openFiles (infile, ionosphere);
 	readData(infile,datos);
 	//readData(infile,datos1);
 
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 	for (int i=1; i<6; i++){
 		cout << "Iteracion: " << i << endl;
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
-		w=inicializacionBL(datos[0].first.size());
+		w=inicializacionBL(datos[0].first.size(),i);
 
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
@@ -266,6 +266,11 @@ int main(int argc, char *argv[])
 		funcion_evaluacion_promedio+=funcion_evaluacion;
 		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
 
+		cout << "Solucion obtenida: "<<endl;
+		for (int j=0; j<w.size(); j++){
+			cout << w[j]<<", ";
+		}
+		cout << endl;
 	}
 	cout << endl;
 	cout << endl;

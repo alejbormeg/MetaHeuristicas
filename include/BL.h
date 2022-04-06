@@ -15,7 +15,7 @@
  * @param dim dimensión del vector de pesos
  * @return std::vector<double> vector de pesos
  */
-std::vector<double> inicializacionBL(int dim);
+std::vector<double> inicializacionBL(int dim,int i);
 
 /**
  * @brief Función que implementa el desarrollo de un nuevo vecino a la solución actual mutando con una distribución normal [0,sigma^2] una componente.
@@ -23,9 +23,8 @@ std::vector<double> inicializacionBL(int dim);
  * @param w Vector de pesos
  * @param sigma Desviación típica de la normal que usaremos
  * @param pos Índice del atributo a mutar
- * @return Vector mutado a partir de w
  */
-std::vector<double> Mov(std::vector<double>const &w,double sigma,int pos);
+void Mov(std::vector<double> &w,double sigma,int pos,int i);
 
 /**
  * @brief Algoritmo que implementa la búsqueda local primer mejor
