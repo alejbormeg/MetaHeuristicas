@@ -1,12 +1,6 @@
+#include"../include/RELIEF.h"
 
-#ifndef FUNCIONES
-#define FUNCIONES
-#include <cstdlib>      // std::rand, std::srand
-#include <utilidades.h>
-using namespace std;
-
-template <typename T>
-vector<double> distanciaEnemigoMascercano(vector<pair<vector<double>,T>> &entrenamiento, int elemento){
+vector<double> distanciaEnemigoMascercano(vector<pair<vector<double>,std::string>> &entrenamiento, int elemento){
 	vector<double> distancia_elem_elem;
 	int enemigo_mas_cercano=0;
 	double distancia=0;
@@ -28,8 +22,7 @@ vector<double> distanciaEnemigoMascercano(vector<pair<vector<double>,T>> &entren
 	return distancia_elem_elem;
 }
 
-template <typename T>
-vector<double> distanciaAmigoMasCercano(vector<pair<vector<double>,T>> &entrenamiento, int elemento){
+vector<double> distanciaAmigoMasCercano(vector<pair<vector<double>,std::string>> &entrenamiento, int elemento){
 	vector<double> distancia_elem_elem;
 	int amigo_mas_cercano=0;
 	double distancia=0;
@@ -50,9 +43,7 @@ vector<double> distanciaAmigoMasCercano(vector<pair<vector<double>,T>> &entrenam
 	return distancia_elem_elem;
 }
 
-
-template <typename T>
-vector<double> metodoRELIEF(vector<pair<vector<double>,T>> &entrenamiento){
+vector<double> metodoRELIEF(vector<pair<vector<double>,std::string>> &entrenamiento){
 	vector<double> w; 
 	vector<double> distancias_enemigo; 
 	vector<double> distancias_amigo; 
@@ -80,12 +71,5 @@ vector<double> metodoRELIEF(vector<pair<vector<double>,T>> &entrenamiento){
 		}
 	}
 
-	std::cout<<std::endl;   
-   for(int i=0; i<w.size(); i++){
-        std::cout<<w[i] << ", ";
-    }
-    std::cout<<std::endl;
 	return w;
 }
-
-#endif
