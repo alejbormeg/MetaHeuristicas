@@ -20,7 +20,6 @@ std::vector<double> inicializacionBL(int dim,int i){
 
 void Mov(std::vector<double> & w, double sigma, int pos,int i){
     std::mt19937 gen(i);  // Will be used to obtain a seed for the random number engine
-    //std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     //Se inicializa con la desviación estandar, por eso usamos sigma en lugar de sigma²
     std::normal_distribution<double> dist(0.0,sigma);
     double z=dist(gen);

@@ -101,9 +101,10 @@ int main(int argc, char *argv[])
 	double funcion_evaluacion_promedio=0.0;
 	unsigned t0,t1;
 	double tiempo=0.0;
+	double tiempo_promedio=0.0;
 
 	//Leemos los datos del fichero correspondiente
-	openFiles (infile, ionosphere);
+	openFiles (infile, parkinsons);
 	readData(infile,datos);
 	//readData(infile,datos1);
 
@@ -128,7 +129,10 @@ int main(int argc, char *argv[])
 		cout << "Numero de elementos en entrenamiento: " << entrenamiento.size() << endl;
 		cout << "Numero de elementos en validacion: " << validacion.size() << endl;
 		//Obtenemos el valor de tasa_clas en entrenamiento
+		t0=clock();
 		tasa_clas=LeaveOneOut(entrenamiento,w);
+		t1=clock();
+
 		cout <<"\t Tasa_clas entrenamiento:" << tasa_clas <<endl;
 		
 		//Obtenemos el valor de tasa_red en entrenamiento
@@ -140,7 +144,9 @@ int main(int argc, char *argv[])
 		cout <<"\t Funcion objetivo entrenamiento:" << funcion_evaluacion<<endl;
 		
 		//Obtenemos tiempo de ejecución en entrenamiento
-		cout <<"\t Tiempo de ejecución entrenamiento: " << 0.0 <<"ms"<<endl;
+		tiempo=1000*(double(t1-t0)/CLOCKS_PER_SEC);
+		cout <<"\t Tiempo de ejecución entrenamiento: " << tiempo <<"ms"<<endl;
+		tiempo_promedio+=tiempo;
 
 		cout <<endl;
 		//Obtenemos el valor de tasa_clas en validacion
@@ -165,11 +171,13 @@ int main(int argc, char *argv[])
 	cout << "Tasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
 	cout << "Tasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 	cout << "Funcion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
-	
+	cout << "Tiempo promedio: " << tiempo_promedio/5 <<endl;
+
 	//5-Fold Cross Validation RELIEF
 	tasa_clas_promedio=0.0;
 	tasa_red_promedio=0.0;
 	funcion_evaluacion_promedio=0.0;
+	tiempo_promedio=0.0;
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO RELIEF" <<endl;
 	cout<< "*************************************"<<endl;
@@ -201,6 +209,7 @@ int main(int argc, char *argv[])
 		
 		//Obtenemos tiempo de ejecución en entrenamiento
 		tiempo=1000*(double(t1-t0)/CLOCKS_PER_SEC);
+		tiempo_promedio+=tiempo;
 		cout <<"\t Tiempo de ejecución entrenamiento: " << tiempo <<"ms"<<endl;
 
 		cout <<endl;
@@ -226,12 +235,14 @@ int main(int argc, char *argv[])
 	cout << "Tasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
 	cout << "Tasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 	cout << "Funcion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
-	
+	cout << "Tiempo promedio: " << tiempo_promedio/5 <<endl;
+
 
 	//5-fold Cross Validation con BL.
 	tasa_clas_promedio=0.0;
 	tasa_red_promedio=0.0;
 	funcion_evaluacion_promedio=0.0;
+	tiempo_promedio=0.0;
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO Busqueda Local" <<endl;
 	cout<< "*************************************"<<endl;
@@ -248,6 +259,7 @@ int main(int argc, char *argv[])
 
 		//Obtenemos tiempo de ejecución en validacion
 		tiempo=1000*(double(t1-t0)/CLOCKS_PER_SEC);
+		tiempo_promedio+=tiempo;
 		cout <<"\t Tiempo de ejecución entrenamiento: " << tiempo <<"ms"<<endl;
 
 		cout <<endl;
@@ -278,5 +290,6 @@ int main(int argc, char *argv[])
 	cout << "Tasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
 	cout << "Tasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 	cout << "Funcion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
+	cout << "Tiempo promedio: " << tiempo_promedio/5 <<endl;
 
 }
