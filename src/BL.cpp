@@ -54,7 +54,6 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
     std::cout <<"Empezamos la funcion evaluacion en: " << fmax << std::endl;
     int contador_mut=0; //contador de número de mutaciones
     int contador_ev=0;  //Contador de evaluaciones
-    std::cout << "Numero de Vecinos máximos: " << 20*tam_vector << std::endl;
 
     while(contador_mut<(20*tam_vector) && contador_ev<15000){
         std::random_shuffle(orden_mutaciones.begin(),orden_mutaciones.end());
@@ -80,6 +79,6 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
         //Salimos
     }
 
-    std::cout << "\n ITERACIONES FINALES HASTA CONVERGENCIA \n" << contador_ev << std::endl;
+    std::cout << "\n ITERACIONES FINALES HASTA CONVERGENCIA :" << contador_ev << std::endl;
 
 }

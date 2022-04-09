@@ -114,6 +114,21 @@ double LeaveOneOut (std::vector<std::pair<std::vector<double>,std::string>> &ent
 	return 100*((double)(num_correctos)/num_elementos);
 }
 
+double Evaluacion (std::vector<std::pair<std::vector<double>,std::string>> &entrenamiento,std::vector<std::pair<std::vector<double>,std::string>> &validacion, std::vector<double> &w){
+	int num_correctos=0;
+	int num_elementos=validacion.size();
+	std::string etiqueta_predicha;
+
+	for(int i=0; i<validacion.size();i++){
+		etiqueta_predicha=Clasificador1NN(entrenamiento,validacion[i].first,w);
+		if(etiqueta_predicha==validacion[i].second){
+			num_correctos++;
+		}
+	}	
+
+	return 100*((double)(num_correctos)/num_elementos);
+}
+
 void Prepara5FoldCrossVal(std::vector<std::pair<std::vector<double>,std::string>> & datos,std::vector<std::pair<std::vector<double>,std::string>> & entrenamiento,std::vector<std::pair<std::vector<double>,std::string>> & validacion,int k){
 	entrenamiento.clear();
 	validacion.clear();

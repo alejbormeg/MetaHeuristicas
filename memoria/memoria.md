@@ -115,6 +115,19 @@ Para cada atributo a:
 
 ### Bases de datos a usar
 
+Las bases de datos que utilizaremos son: 
+
+- **Ionosphere**: datos de radar recogidos por un sistema en Goose Bay, Labrador. Los objetivos eran electrones libres en la ionosfera. Los
+"buenos" retornos de radar son aquellos que muestran evidencia de algún tipo de estructura en la ionosfera. Los retornos "malos" son aquellos que no lo hacen. 
+
+  Tiene 352 ejemplos con 34 atributos (señales procesadas) y 2 clases (good o bad).
+
+- **Parkinsons**:contiene datos para distinguir entre lapresencia y la ausencia de la enfermedad de Parkinson en una serie de pacientes a partir de medidas biomédicas de la voz. 
+  Tiene 195 ejemplos con 23 atributos (incluyendo la clase). Las clases están desbalanceadas (147 enfermos 48 sanos). Algunos atributos son: Frecuencia mínima, máxima y media de la voz, medidas absolutas y porcentuales de variación de la voz, medidas de ratio de ruido en las componentes tonales.
+
+- **Spectf-heart**:contiene atributos calculados a partir de imágenes médicas de tomografía computerizada (SPECT) del corazón de pacientes humanos. La tarea consiste en determinar si la fisiología del corazón analizado es correcta o no.
+  Tiene 267 ejemplos, 45 atributos (incluyendo la clase) y 2 clases (sano o con patología).
+
 ## Detalles técnicos
 
 En nuestro problema, el conjunto de datos se va a representar por medio de un vector de pares (atributos, etiqueta). 
@@ -253,3 +266,340 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 
+
+# Procedimiento 
+
+Para el desarrollo de la práctica se ha optado por implementar todo en el lenguaje c++ y a partir de código propio, únicamente haciendo uso de funciones y estructuras de datos de la STL y de la librería random para los procesos aleatorios. 
+
+Se ha estructurado todo en una carpeta denominada Software que contiene a su vez una carpeta includes con los ficheros de cabecera empleados: utilidades.h, RELIEF.h y BL.h.
+
+El fichero utilidades.h tiene funciones utilizadas por todos los algoritmos como el clasificador 1NN, Leave One Out u otras. Mientras que las otras dos contienen las funciones específicas de los otros dos algoritmos. 
+
+También se dispone de una carpeta src dónde se encientran las implementaciones de los ficheros anteriores así como el programa principal.
+
+Por otro lado encontramos la carpeta instancias_APC con las bases de datos.
+
+Finalmente, para compilarlo todo se dispone de un Makefile que además de la compilación contiene las reglas run y clean, para ejecutar y limpiar los directorios respectivamente. 
+
+## Manual de uso
+
+Para ejecutar el algoritmo con cada una de las bases de datos, se debe modificar el fichero main.cpp, haciendo que la función openfile reciba como parámetros `ionosphere`, `parkinsons` o `spectf_heart`, que son variables globales con la ruta local a las bases de datos.
+
+
+# Experimentos y análisis de resultados
+
+## Casos del problema empleados y parámetros utilizados. 
+
+En la resolución del problema hemos optado por mezclar los datos y normalizarlos sea cual sea la base de datos empleada, así nos aseguramos la efectividad del clasificador y que se reduzca el problema de clases desbalanceadas como ocurre en la base de datos de **Parkinsons**. Por otro lado, para que los procesos aleatorios, como la generación de vectores aleatorios que siguen una distribución uniforme al comienzo de la Búsqueda Local, sean reproducibles en cualquier ordenador, hemos establecido una semilla al llamar a cada una de estas funciones que coincidía con la iteración de 5-fold Cross Validation en la que se encuentre el programa en ese momento, por lo que las semillas usadas son 1,2,3,4,5. Estas se usan también para inicializar el generador de números pseudoaleatorios mt19937 cuando lo usemos en las mutaciones de la Búsqueda local, solo que en lugar de utilizar las iteraciones de Cross Validation usaremos el índice del bucle for que recorre los atributos de $w$ realizando las mutaciones aleatorias.
+
+## Resultados Obtenidos
+
+Obtenemos los resultados para el algoritmo **RELIEF**:
+
+|Particiones | Ionosphere      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 85.714 | 2.941 |44.327| 3.394 |
+|Partición 2| 90 |2.941| 46.470 | 3.272 | 
+|Partición 3| 90 | 2.941 | 46.470 | 4.259 | 
+|Partición 4| 84.285 | 2.941 | 43.613 | 3.316 | 
+|Partición 5| 88.732 | 2.941 | 45.836 | 3.485 | 
+|Media|  87.746 | 2.941 | 45.343 | 3.545 | 
+
+|Particiones | Parkinsons      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 94.871 | 0 |47.435| 1.199 |
+|Partición 2| 94.871 | 0 | 47.435 | 1.017 | 
+|Partición 3| 97.435 | 0 | 48.717 | 1.213 | 
+|Partición 4| 92.307 | 0 | 46.153 | 1.328 | 
+|Partición 5| 100 | 0 | 50 | 1.005 | 
+|Media|  95.897 | 0 | 47.948 | 1.152 | 
+
+\newpage
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 79.71 | 0 |39.855| 4.122 |
+|Partición 2| 82.608 | 0 | 41.304 | 4.498 | 
+|Partición 3| 76.811 | 0 | 38.405 | 4.172 | 
+|Partición 4| 85.507 | 0 | 42.753 | 4.781 | 
+|Partición 5| 90.411 | 0 | 45.2055 | 3.952 | 
+|Media|  83.009 | 0 | 41.504 | 4.303 | 
+
+Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
+
+|Particiones | Ionosphere      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 85.714 | 58.823 |72.268| 8825.46 |
+|Partición 2| 87.142 |55.882| 71.512 | 3509.74 | 
+|Partición 3| 87.142 | 79.411 | 83.277 | 8396.57 | 
+|Partición 4| 91.428 | 58.823 | 75.126 | 3881.64 | 
+|Partición 5| 87.323 | 64.705 | 76.014 | 8485.97 | 
+|Media|  87.750 | 63.529 | 75.64 | 6619.88 | 
+
+|Particiones | Parkinsons      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 100 | 50 | 75 | 788.805 |
+|Partición 2| 76.923 | 77.272 | 77.097 | 1018.39 | 
+|Partición 3| 94.871 | 72.727 | 83.799 | 965.224 | 
+|Partición 4| 97.435 | 68.181 | 82.808 | 426.535 | 
+|Partición 5| 97.435 | 68.181 | 82.808 | 804.335 |
+|Media|  93.333 | 67.272 | 80.303 | 800.658 | 
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 79.71 | 72.727 |76.218| 5768.42 |
+|Partición 2| 78.260 | 54.545 | 66.403 | 5768.42 | 
+|Partición 3| 81.159 | 65.909 | 73.534 | 9876.57 | 
+|Partición 4| 86.956 | 59.090 | 73.023 | 6979.56 | 
+|Partición 5| 86.301 | 56.818 | 71.559 | 11173.2 | 
+|Media|  82.477 | 61.818 | 72.147 | 9528.56 | 
+
+Los resultados anteriores se han obtenido en cada iteración del proceso de 5-fold Cross Validation y como podemos observar, por regla general el método **RELIEF** consigue unas tasas muy elevadas de Precisión sobre el conjunto de Test en todas las bases de datos utilizadas, **pero en cambio este método no consigue reducir atributos** o al menos no sirve para este cometido (a excepción de la base de datos de **Ionosphere** dónde se reduce en un 3% aproximadamente), por lo que no consigue una evaluación muy alta de la función objetivo, ya que nuestro propósito era reducir el mayor número de atributos posible a la vez que intentar mantener una elevada precisión al clasificar. 
+
+Sin embargo, el método de **Búsqueda local** si que tiene un comportamiento que se ajusta mejor a lo que queríamos obtener, pues como podemos observar, aunque las tasas de clasificación son siempre menores o iguales que las obtenidas con el método RELIEF, obtenemos unas tasas de reducción muy elevadas, por encima del 60% en la mayoría de los casos, y logrando un aumento muy considerable en los valores de la función objetivo en comparación con los obtenidos con RELIEF (normalmente por encima de los 70). Este hecho puede deberse a al naturaleza del algoritmo, pues las mutaciones se realizan en cada paso sobre un único atributo en lugar de todos a la vez como en RELIEF, por lo que es más fácil encontrar atributos relevantes y no relevantes. 
+
+Por otro lado, comparando los tiempos empleados por ambos algoritmos podemos ver que el método RELIEF es mucho más rápido que el de Búsqueda Local, pues en media tarda unos 2-3ms en entrenar, en cambio el de Búsqueda Local está muy condicionado a si las mutaciones mejoran más o menos la función objetivo lo que en un caso extremo podría llevar a ejecutar 15000 evaluaciones de la función objetivo, es por ello que los tiempos son mayores, aunque muy razonables para la notable mejora conseguida con respecto a RELIEF (menos de 10 segundos normalmente).
+
+Como resumen tenemos: 
+
+|Algoritmos | Ionosphere   ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms |  % clas | % red | Agr. | Tiempo ms | % clas | % red | Agr. | Tiempo ms |
+|1-NN| 86.599 | 0 |43.299| 2.653 |
+|RELIEF| 87.746 | 2.941 | 45.343 | 3.545 | 
+|Búsqueda Local| 87.750 | 63.529 | 75.64 | 6619.88 | 
+
+|Algoritmos | Parkinsons ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms |
+|1-NN | 93.333 | 67.272 | 80.303 | 800.658 | 
+|RELIEF | 95.897 | 0 | 47.948 | 1.152 | 
+|Búsqueda Local | 93.333 | 67.272 | 80.303 | 800.658 | 
+
+|Algoritmos | Spectf_heart ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms |
+|1-NN | 96.923 | 0 | 48.461 | 0.58 | 
+|RELIEF | 83.009 | 0 | 41.504 | 4.303 | 
+|Búsqueda Local | 82.477 | 61.818 | 72.147 | 9528.56 | 
+
+
+En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de los resultados obtenidos por el método de Búsqueda Local podemos conlcuir: 
+
+- No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también. 
+- El tiempo es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
+
+No obstante, hay un detalle que no se aprecia en las tablas en el método de búsqueda local, y que se aprecia cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
+
+Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos los siguientes resultados por pantalla al ejecutar el algoritmo: 
+
+```
+Iteracion: 1
+Empezamos la funcion evaluacion en: 46.7949
+
+ ITERACIONES FINALES HASTA CONVERGENCIA :1572
+         Tiempo de ejecución entrenamiento: 838.751ms
+         Tasa_clas validacion:100
+         Tasa_red validacion:50
+         Funcion objetivo validacion:75
+Solucion obtenida: 
+0.781141, 0, 0.0552385, 0.999041, 0.0200457, 0, 0, 
+0.0950612, 0.935539, 0.846311, 0.0972302, 0.524548, 0, 
+0.00326139, 0, 0.913962, 0.752749, 0.841574, 0.939128, 
+0.0387805, 0.715971, 1, 
+
+Iteracion: 2
+Empezamos la funcion evaluacion en: 48.0769
+
+ ITERACIONES FINALES HASTA CONVERGENCIA :2027
+         Tiempo de ejecución entrenamiento: 1081.82ms
+         Tasa_clas validacion:76.9231
+         Tasa_red validacion:77.2727
+         Funcion objetivo validacion:77.0979
+Solucion obtenida: 
+0.0635937, 0, 1, 0, 0, 0.0329383, 0.698863, 0, 0, 
+0.0580529, 0.0398286, 0.998241, 0, 0.0121121, 0.719754, 0, 
+0.0819994, 0, 0.0600942, 1, 0.080975, 0.0718255, 
+
+Iteracion: 3
+Empezamos la funcion evaluacion en: 55.5653
+
+ ITERACIONES FINALES HASTA CONVERGENCIA :1906
+         Tiempo de ejecución entrenamiento: 977.552ms
+         Tasa_clas validacion:94.8718
+         Tasa_red validacion:72.7273
+         Funcion objetivo validacion:83.7995
+Solucion obtenida: 
+0.0707249, 0.839949, 0.0552385, 0, 0, 0.018748, 0.0406307, 
+0.0100419, 0.0935515, 1, 0, 0, 0, 0, 0, 0.913301, 0.696564,
+0.398963, 0, 0, 0.0903173, 0.863963, 
+
+Iteracion: 4
+Empezamos la funcion evaluacion en: 53.6131
+
+ ITERACIONES FINALES HASTA CONVERGENCIA :839
+         Tiempo de ejecución entrenamiento: 442.798ms
+         Tasa_clas validacion:97.4359
+         Tasa_red validacion:68.1818
+         Funcion objetivo validacion:82.8089
+Solucion obtenida: 
+0.900621, 0, 0.855621, 0.0343507, 0.0228713, 0, 0.0595821, 
+0.0869721, 0.903179, 0.0582782, 0.00515915, 0.572356, 0, 
+0.0294471, 0.728605, 0.811948, 0.0979347, 0.0504305, 
+0.0692294, 0.961353, 0.0190247, 0.0397804, 
+
+Iteracion: 5
+Empezamos la funcion evaluacion en: 51.69
+
+ ITERACIONES FINALES HASTA CONVERGENCIA :1603
+         Tiempo de ejecución entrenamiento: 840.784ms
+         Tasa_clas validacion:97.4359
+         Tasa_red validacion:68.1818
+         Funcion objetivo validacion:82.8089
+Solucion obtenida: 
+0.0551801, 0.831328, 0, 0.979445, 0.089821, 0, 0, 0, 
+0.990821, 0.808282, 0.074774, 0.819473, 0.0264971, 0, 
+0.0580757, 0, 0.0875768, 0.877903, 0.0697856, 0.673025, 0, 
+0.0698192, 
+```
+
+Si nos fijamos, los atributos ponderados por encima de 0.7 (valor a partir del cual considero que un atributo es muy relevante ) en la primera iteración serían: 1,4,9,10,17,18,19,21,22
+
+Sin embargo en la segunda iteración son: 3,12,15,20
+
+Como vemos, niguno de los ponderados en la primera iteración por encima de 0.7 se repite en la segunda iteración. 
+
+Si seguimos ahora con la tercera iteración: 2, 10, 16, 22
+
+Como vemos en este caso se ponderan algunos atributos comunes con la primera iteración y otros no ponderados hasta ahora por encima de 0.7.
+
+En cambio, los valores de clasificación son todos muy similares y elevados.
+
+Y este hecho se ve en cada iteración. Es por ello que no considero apropiado devolver como resultado final al problema la media de los 5 vectores obtenidos, pues en cada caso se ponderan atributos diferentes y si mostramos el vector promedio: 
+
+```
+Solucion obtenida: 
+0.374252, 0.334255, 0.39322, 0.402567, 0.0265476, 
+0.0103373, 0.159815, 0.038415, 0.584618, 0.554185, 
+0.0433984, 0.582924, 0.00529942, 0.00896412, 0.301287, 
+0.527842, 0.343365, 0.433774, 0.227647, 0.534632, 
+0.181258, 0.409078, 
+```
+
+Como vemos no hemos conseguido reducir a tantos atributos por debajo de 0.1 como en las iteraciones de Cross Validation, solo aquellos que son verdaderamente irrelevantes en todas las iteraciones porque nunca o casi nunca se han ponderado, como ocurre en los atributos: 5,6,8,11,13,14, que no han salido en ninguna de las iteraciones anteriores analizadas ponderados por encima de 0.7. 
+
+Además, al tener este comportamiento excluyente, el resto de atributos tienden a quedarse en términos cercanos a 0.5, 0.4 y ninguno supera el 0.7, por lo que con esta solución no reflejamos el hecho de que hay atributos mucho más importantes que otros.
+
+Este hecho no ocurre tanto con el algoritmo **RELIEF**, pues si analizamos la salida de cada iteración del mismo modo en que hemos hecho con el de Búsqueda Local:
+
+```
+Iteracion: 1
+Numero de elementos en entrenamiento: 156
+Numero de elementos en validacion: 39
+
+         Tasa_clas entrenamiento:94.2308
+         Tasa_red entrenamiento:0
+         Funcion objetivo entrenamiento:47.1154
+         Tiempo de ejecución entrenamiento: 1.102ms
+         Tasa_clas validacion:94.8718
+         Tasa_red validacion:0
+         Funcion objetivo validacion:47.4359
+Solucion obtenida: 
+1, 0.388353, 0.84248, 0.401231, 0.378912, 0.402414, 
+0.436481, 0.402141, 0.574087, 0.473696, 0.581067, 0.512275,
+0.395842, 0.581054, 0.297156, 0.716484, 0.645781, 0.880921,
+0.751947, 0.890509, 0.547066, 0.928198, 
+Iteracion: 2
+Numero de elementos en entrenamiento: 156
+Numero de elementos en validacion: 39
+
+         Tasa_clas entrenamiento:98.0769
+         Tasa_red entrenamiento:0
+         Funcion objetivo entrenamiento:49.0385
+         Tiempo de ejecución entrenamiento: 1.484ms
+         Tasa_clas validacion:94.8718
+         Tasa_red validacion:0
+         Funcion objetivo validacion:47.4359
+Solucion obtenida: 
+0.619862, 0.310448, 0.560894, 0.2776, 0.302762, 0.294823, 
+0.366709, 0.294531, 0.470386, 0.382529, 0.502991, 0.425973,
+0.309465, 0.502861, 0.174225, 0.401239, 0.585643, 0.949089,
+0.717267, 0.759623, 0.34737, 1, 
+Iteracion: 3
+Numero de elementos en entrenamiento: 156
+Numero de elementos en validacion: 39
+
+         Tasa_clas entrenamiento:93.5897
+         Tasa_red entrenamiento:0
+         Funcion objetivo entrenamiento:46.7949
+         Tiempo de ejecución entrenamiento: 1.521ms
+         Tasa_clas validacion:97.4359
+         Tasa_red validacion:0
+         Funcion objetivo validacion:48.7179
+Solucion obtenida: 
+1, 0.297727, 0.843674, 0.27533, 0.273018, 0.308313, 
+0.376326, 0.308253, 0.730687, 0.612213, 0.796042, 
+0.649244, 0.463112, 0.796029, 0.123959, 0.606604, 
+0.647272, 0.820244, 0.732885, 0.793197, 0.461053, 0.868964, 
+Iteracion: 4
+Numero de elementos en entrenamiento: 156
+Numero de elementos en validacion: 39
+
+         Tasa_clas entrenamiento:94.2308
+         Tasa_red entrenamiento:0
+         Funcion objetivo entrenamiento:47.1154
+         Tiempo de ejecución entrenamiento: 1.371ms
+         Tasa_clas validacion:92.3077
+         Tasa_red validacion:0
+         Funcion objetivo validacion:46.1538
+Solucion obtenida: 
+0.897252, 0.27068, 0.801999, 0.266364, 0.300469, 0.31335, 0.370151, 0.313183, 0.539956, 0.465823, 0.575747, 0.480578, 0.346269, 0.575613, 0.155191, 0.578079, 0.751897, 1, 0.715037, 0.854044, 0.555776, 0.941265, 
+Iteracion: 5
+Numero de elementos en entrenamiento: 156
+Numero de elementos en validacion: 39
+
+         Tasa_clas entrenamiento:94.8718
+         Tasa_red entrenamiento:0
+         Funcion objetivo entrenamiento:47.4359
+         Tiempo de ejecución entrenamiento: 0.872ms
+         Tasa_clas validacion:100
+         Tasa_red validacion:0
+         Funcion objetivo validacion:50
+Solucion obtenida: 
+0.751032, 0.270351, 0.577874, 0.375149, 0.363059, 0.419926, 0.505587, 0.419608, 0.580489, 0.49853, 0.617586, 0.533746, 0.373091, 0.617322, 0.197938, 0.549694, 0.65334, 0.795322, 0.791317, 0.856609, 0.553759, 1, 
+
+
+MEDIA RELIEF
+        Tasa clasificacion promedio: 95.8974
+        Tasa reduccion promedio: 0
+        Funcion Evaluacion promedio: 47.9487
+        Tiempo promedio: 1.27
+Solucion obtenida: 
+0.853629, 0.307512, 0.725384, 0.319135, 0.323644, 0.347765, 0.411051, 0.347543, 0.579121, 0.486558, 0.614686, 0.520363, 0.377556, 0.614576, 0.189694, 0.57042, 0.656787, 0.889115, 0.741691, 0.830796, 0.493005, 0.947685,
+```
+
+Como vemos, los atributos por encima de 0.7 en la primera iteración serían:1,3,16,18,19,20,22
+
+En la segunda iteración serían: 18, 19 , 20 y 22. 
+
+En la tercera iteración: 1,3,9,11,14,18,19,20,22
+
+Como vemos coinciden en su gran mayoría en cada iteración, y si nos fijamos en el vector pormedio solución, podemos ver que en este caso si hay valores por encima de 0.7 que son los que por regla general más se han ponderado en cada iteración. 
+
+La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y el algoritmo de Búsqueda Local, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
+
+# Referencias Bibliográficas
+
+En esta práctica el material utilizado ha sido por regla general el proporcionado en el Seminario 2, así como el Tema 2 de teoría.
+
+Otros enlaces utilizados: 
+
+- Generador mt19937: https://www.cplusplus.com/reference/random/mt19937/
+- Distribución Uniforme: https://www.cplusplus.com/reference/random/uniform_real_distribution/
+- Distribución normal: https://www.cplusplus.com/reference/random/normal_distribution/

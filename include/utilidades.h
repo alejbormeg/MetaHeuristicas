@@ -118,27 +118,12 @@ double LeaveOneOut (std::vector<std::pair<std::vector<double>,std::string>> &ent
 /**
  * @brief Función para calcular la precisión usando los datos de entrenamiento para clasificar los de validación.
  * 
- * @tparam T etiqueta
  * @param entrenamiento vector de datos de entrenamiento
  * @param validacion  vector de datos de validación
  * @param w vector de pesos
  * @return double 
  */
-template <typename T>
-double Evaluacion (std::vector<std::pair<std::vector<double>,T>> &entrenamiento,std::vector<std::pair<std::vector<double>,T>> &validacion, std::vector<double> &w){
-	int num_correctos=0;
-	int num_elementos=validacion.size();
-	T etiqueta_predicha;
-
-	for(int i=0; i<validacion.size();i++){
-		etiqueta_predicha=Clasificador1NN(entrenamiento,validacion[i].first,w);
-		if(etiqueta_predicha==validacion[i].second){
-			num_correctos++;
-		}
-	}	
-
-	return 100*((double)(num_correctos)/num_elementos);
-}
+double Evaluacion (std::vector<std::pair<std::vector<double>,std::string>> &entrenamiento,std::vector<std::pair<std::vector<double>,std::string>> &validacion, std::vector<double> &w);
 
 /**
  * @brief Función para dividir un conjunto de datos en particiones para 5-fold Cross Validation
