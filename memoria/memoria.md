@@ -599,6 +599,7 @@ En la tercera iteración: 1,3,9,11,14,18,19,20,22
 
 Como vemos coinciden en su gran mayoría en cada iteración, y si nos fijamos en el vector pormedio solución, podemos ver que en este caso si hay valores por encima de 0.7 que son los que por regla general más se han ponderado en cada iteración. 
 
+\newpage
 La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y el algoritmo de Búsqueda Local, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
 
 # Referencias Bibliográficas
