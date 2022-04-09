@@ -1,5 +1,0 @@
-MEDIA BUSQUEDA LOCAL
-Tasa clasificacion promedio: 87.7505
-Tasa reduccion promedio: 63.5294
-Funcion Evaluacion promedio: 75.64
-Executing run: all complete!

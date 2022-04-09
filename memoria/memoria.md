@@ -10,10 +10,10 @@ documentclass: report
 
 # Descripción del problema APC.
 
-El problema que trataremos es el APC (Aprendizaje de Pesos en Características). Antes de explicar el problema tendremos en cuenta los siguientes elementos que se explicarán en el siguiente apartado: 
+El problema que trataremos es el APC (Aprendizaje de Pesos en Características). Antes de explicar el problema tendremos en cuenta los siguientes puntos: 
 
-- Conjunto de datos: Se presentará como usa sucesión de elementos sobre los cuales se han llevado a cabo una serie de mediciones o se aporta una serie de características y tienen asociada una etiqueta. Por lo tanto estamos en el ámbito de problemas de Aprendizaje Supervisado.
-- Clasificador KNN: Utilizaremos el algoritmo de los K vecinos más cercanos con K=1 para clasificar ejemplos, de esta manera la etiqueta que asignaremos al ejemplo que clasificamos será la del elemento más cercano a él en el conjunto de datos del que disponemos.
+- Conjunto de datos: Utilizaremos tres bases de datos que se explicarán más adelante y se representarán como usa sucesión de elementos sobre los cuales se han llevado a cabo una serie de mediciones o se aporta una serie de características y tienen asociada una etiqueta. Por lo tanto estamos en el ámbito de problemas de Aprendizaje Supervisado.
+- Clasificador: Utilizaremos el clasificador de los K vecinos más cercanos con K=1 para clasificar ejemplos, de esta manera la etiqueta que asignaremos al ejemplo que clasificamos será la del elemento más cercano a él en el conjunto de datos del que disponemos.
 - Distancia: Para medir la distancia entre elementos del conjunto usaremos la distancia euclídea ponderada: 
 $$d(e_1,e_2)=\sqrt{\sum_i{w_i(e_1^i-e_2^i)^2}}$$
 Como podemos ver, cada elemento del sumatorio viene multiplicado por una constante $w_i$. 
@@ -40,6 +40,8 @@ Finalmente, las dos métricas anteriores se combinarán en la que será nuestra 
 
 $$F(W)=\alpha⋅tasa_{clas}(W)+(1− \alpha)⋅tasa_{red}(W)$$
 
+En nuestro aso $\alpha=0.5$ de manera que daremos la misma importancia a la tarea de reducción como la de clasificación. 
+
 ## Validación Cruzada
 
 Por otro lado, como sabemos de las técnicas de Aprendizaje Automático, para diseñar un clasificador, es necesario realizar dos tareas: **Aprendizaje y Validación**.
@@ -57,21 +59,21 @@ Para mayor seguridad y garantías de generalización, se suelen realizar varias 
 
 Finalmente, como ya se ha comentado, usaremos el **clasificador KNN** con K=1, por lo que en esta última parte de la sección vamos a explicar algunos detalles del clasificador.
 
-El proceso de aprendizaje consiste en manteenr en memoria una tabla con los ejemplos de entrenamiento junto con la clase que tienen asociada, de esta forma, dado un nuevo ejemplo se calculará la distancia con los n elementos de la tabla y se escogen los k elementos más cercanos, de esta forma la clase que asignaremos al nuevo ejemplo sería la mayoritaria entre estas k clases. En nuestro caso como K=1 se simplifica el procesp, pues asignamos la clase del elemento más cercano.
+El proceso de aprendizaje consiste en mantener en memoria una tabla con los ejemplos de entrenamiento junto con la clase que tienen asociada, de esta forma, dado un nuevo ejemplo se calculará la distancia con los n elementos de la tabla y se escogen los k elementos más cercanos, de esta forma la clase que asignaremos al nuevo ejemplo sería la mayoritaria entre estas k clases. En nuestro caso como K=1 se simplifica el procesp, pues asignamos la clase del elemento más cercano.
 
 La descripción en Pseudocódigo sería: 
 
 ```
-cmin=clase del primer elemento en entrenamiento e1
-dmin=distancia entre e1 y el nuevo ejemplo
+Clasificador1NN(datos, elemento):
+  cmin=clase del primer elemento en entrenamiento e1
+  dmin=distancia entre e1 y el nuevo ejemplo
 
-Para i=2 hasta m hacer: 
-  Se calcula la distancia entre ei y el nuevo ejemplo.
+  Para i=2 hasta m hacer: 
+    Se calcula la distancia entre ei y el nuevo ejemplo.
 
-  Se comprueba si la nueva distancia es menor que dmin: 
-    - Si es menor se elige cmin=clase de ei y se actualiza dmin.
-    -Si no es menor se continúa.
-
+    Se comprueba si la nueva distancia es menor que dmin: 
+      - Si es menor se elige cmin=clase de ei y se actualiza dmin.
+      - Si no es menor se continúa.
 Devolver cmin.
 ```
 Por otro lado la distancia que usaremos para el clasificador será la comentada en el apartado anterior, que denominaremos **distancia euclídea ponderada**, recordamos su expresión:
@@ -82,35 +84,38 @@ Finalmente usaremos dos técnicas diferentes para comprobar la precisión de nue
 - Entrenamiento: Usaremos el método **Leave One Out**, su pseudocódigo es el siguiente: 
 
   ```
-  Para cada elemento e en Entrenamiento: 
-    etiqueta_predicha=Clasificador1NN(Entrenamiento-{e},e)
+  LeaveOneOut(Entrenamiento):
+    Para cada elemento e en Entrenamiento: 
+      etiqueta_predicha=Clasificador1NN(Entrenamiento-{e},e)
 
-    Si etiqueta_predicha=etiqueta_real de e
-      correctos ++
-  
-  return correctos/num_datos
+      Si etiqueta_predicha=etiqueta_real de e
+        correctos ++
+    
+    return 100*(correctos/num_datos)
   ```
   Es decir, en cada paso eliminamos un elemento del conjunto de datos de entrenamiento y tratamos de clasificarlo, si las etiquetas predicha y real coinciden sumamos un acierto, si no se continúa. Finalmente se devuelve el porcentaje de acierto.
 
 - Validación: En este caso método será intentar clasificar cada elemento del conjunto de validación usando los del conjunto de entrenamiento: 
   ```
-  Para cada elemento e en Validacion: 
-    etiqueta_predicha=Clasificador1NN(Entrenamiento,e)
+  Evaluacion(Entrenamiento, Validacion):
+    Para cada elemento e en Validacion: 
+      etiqueta_predicha=Clasificador1NN(Entrenamiento,e)
 
-    Si etiqueta_predicha=etiqueta_real de e
-      correctos ++
-  
-  return correctos/num_datos
+      Si etiqueta_predicha=etiqueta_real de e
+        correctos ++
+    
+    return 100*(correctos/num_datos)
   ```
 
 Para este método es muy importante que los datos estén normalizados entre [0,1] para no priorizar unos atributos sobre otros. Por ello, para cualquier conjunto de datos que utilicemos, lo primero que se hará será normalizar los datos y mezclarlos (para evitar que las clases estén desbalanceadas). El algoritmo para normalizar es el siguiente: 
 
 ```
-Para cada atributo a: 
-  Se calcula el máximo y mínimo de entre todos los datos
+Normalizar(Datos):
+  Para cada atributo a: 
+    Se calcula el máximo y mínimo de entre todos los datos
 
-  Para cada elemento del conjunto de datos: 
-    Cambiar valor de atributo a por (x-min)/(max-min)
+    Para cada elemento del conjunto de datos: 
+      Cambiar valor de atributo a por (x-min)/(max-min)
 ```
 
 ### Bases de datos a usar
@@ -149,6 +154,7 @@ Entendemos el enemigo más cercano como el elemento más próximo al que estemos
 La implementación del algoritmo es la siguiente en pseudocódigo: 
 
 ```
+RELIEF(Entrenamiento,w):
 	Inicializamos w a 0
 
 	Para cada elemento e en el conjunto de entrenamiento E:
@@ -164,6 +170,7 @@ La implementación del algoritmo es la siguiente en pseudocódigo:
 Por su lado las implementaciones para las funciones que calculan las distancias al enemigo y amigo más cercano son las siguientes: 
 
 ```
+DistanciaEnemigoMasCercano(Entrenamiento,a):
   elemento de entrada a
   dmin=distancia euclídea entre a y el primer elemento de entrenamiento
   distancia=0
@@ -283,7 +290,7 @@ Finalmente, para compilarlo todo se dispone de un Makefile que además de la com
 
 ## Manual de uso
 
-Para ejecutar el algoritmo con cada una de las bases de datos, se debe modificar el fichero main.cpp, haciendo que la función openfile reciba como parámetros `ionosphere`, `parkinsons` o `spectf_heart`, que son variables globales con la ruta local a las bases de datos.
+Para compilar y ejecutar el proyecto se tiene un makefile con reglas para compilar (make) y ejecutar (make run_parkinsons, make run_ionosphere y make run_heart) no es necesario recompilar para cambiar la base de datos pues se pasa como argumento al ejecutable según la orden del makefile que usemos.
 
 
 # Experimentos y análisis de resultados
@@ -395,7 +402,7 @@ En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de
 - No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también. 
 - El tiempo es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
 
-No obstante, hay un detalle que no se aprecia en las tablas en el método de búsqueda local, y que se aprecia cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
+No obstante, hay un hecho importante que no se aprecia en las tablas en el método de búsqueda local, y que se aprecia cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
 
 Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos los siguientes resultados por pantalla al ejecutar el algoritmo: 
 
@@ -481,7 +488,7 @@ Como vemos en este caso se ponderan algunos atributos comunes con la primera ite
 
 En cambio, los valores de clasificación son todos muy similares y elevados.
 
-Y este hecho se ve en cada iteración. Es por ello que no considero apropiado devolver como resultado final al problema la media de los 5 vectores obtenidos, pues en cada caso se ponderan atributos diferentes y si mostramos el vector promedio: 
+Y este hecho se ve en cada iteración, lo que conlleva que hay ciertos atributos que podrían tener información redundante a la hora de clasificar y por lo tanto mejora la función objetivo el hecho de reducirlos si su "contrario" se incrementa. Es por ello que no considero apropiado devolver como resultado final al problema la media de los 5 vectores obtenidos, pues en cada caso se ponderan atributos diferentes y si mostramos el vector promedio: 
 
 ```
 Solucion obtenida: 
@@ -492,9 +499,9 @@ Solucion obtenida:
 0.181258, 0.409078, 
 ```
 
-Como vemos no hemos conseguido reducir a tantos atributos por debajo de 0.1 como en las iteraciones de Cross Validation, solo aquellos que son verdaderamente irrelevantes en todas las iteraciones porque nunca o casi nunca se han ponderado, como ocurre en los atributos: 5,6,8,11,13,14, que no han salido en ninguna de las iteraciones anteriores analizadas ponderados por encima de 0.7. 
+Como vemos no hemos conseguido reducir a tantos atributos por debajo de 0.1 como en las anteriores iteraciones de Cross Validation, solo aquellos que son verdaderamente irrelevantes en todas las iteraciones porque nunca o casi nunca se han ponderado, como ocurre en los atributos: 5,6,8,11,13,14, que no han salido en ninguna de las iteraciones anteriores analizadas ponderados por encima de 0.7. 
 
-Además, al tener este comportamiento excluyente, el resto de atributos tienden a quedarse en términos cercanos a 0.5, 0.4 y ninguno supera el 0.7, por lo que con esta solución no reflejamos el hecho de que hay atributos mucho más importantes que otros.
+Además, al tener este comportamiento excluyente, el resto de atributos tienden a quedarse en términos cercanos a 0.4-0.5, pues en una iteración se ven incrementados notablemente y en la siguiente son prácticamente 0 por haber aumentado otros, y ninguno supera el 0.7, por lo que con esta solución no reflejamos el hecho de que hay atributos mucho más importantes que otros y mucho menos el hecho de que algunos atributos son **redundantes**.
 
 Este hecho no ocurre tanto con el algoritmo **RELIEF**, pues si analizamos la salida de cada iteración del mismo modo en que hemos hecho con el de Búsqueda Local:
 

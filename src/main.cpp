@@ -90,11 +90,18 @@ void ImprimeSolucion(vector<double> const& w){
 
 int main(int argc, char *argv[])
 {	
+
+	//Comprobación de si se llama con parámetros
+	if (argc==1)
+   {
+       cout << "Debes indicar la base de datos...\n";
+       return 1;
+   }
 	//Declaración de variables
 	ifstream infile; //Variable de tipo ifstream para leer de fichero
 	//La estructura de datos que usaremos será un vector de pares vector-etiqueta
 	vector<pair<vector<double>,string>> datos;
-
+	string argumento= argv[1]; //Capturamos el argumento con el que se invoca
 	//Variables para separar entre entrenamiento y test en Cross Validation
 	vector<pair<vector<double>,string>> entrenamiento;
 	vector<pair<vector<double>,string>> validacion;
@@ -113,8 +120,21 @@ int main(int argc, char *argv[])
 	double tiempo_promedio=0.0;
 
 	//Leemos los datos del fichero correspondiente
-	openFiles (infile, parkinsons);
-	readData(infile,datos);
+	cout << argv[1] << endl;
+	if(argumento=="parkinsons"){
+		openFiles (infile, parkinsons);
+		readData(infile,datos);
+	} else if (argumento=="heart"){
+		openFiles (infile, spectf_heart);
+		readData(infile,datos);	
+	} else if (argumento=="ionosphere"){
+		openFiles (infile, ionosphere);
+		readData(infile,datos);			
+	}else {
+		cout<< "Los argumentos son incorrectos, los argumentos validos son: \n 1.parkinsons \n 2.heart \n 3.ionosphere\n";
+		return 1;
+	}
+
 	//readData(infile,datos1);
 
 	//Normalizamos los datos y los mezclamos

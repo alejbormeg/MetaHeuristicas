@@ -95,3 +95,12 @@ clean:
 run: all
 	./$(OUTPUTMAIN)
 	@echo Executing 'run: all' complete!
+
+run_parkinsons: all 
+	./$(OUTPUTMAIN) parkinsons
+
+run_ionosphere: all 
+	./$(OUTPUTMAIN) ionosphere
+
+run_heart: all 
+	./$(OUTPUTMAIN) heart
