@@ -5,6 +5,7 @@
 #include "../include/utilidades.h"
 #include "../include/RELIEF.h"
 #include "../include/BL.h"
+#include "../include/AGG.h"
 #include <ctime> 
 
 
@@ -141,7 +142,7 @@ int main(int argc, char *argv[])
 	Normalizar(datos); 
 	random_shuffle(datos.begin(),datos.end());
 
-
+	/*
 	//5-fold Cross Validation 1NN
 	//Inicializamos el vector de pesos a 1 para que la distancia ponderada coincida con la euclídea.
 	for(int i=0; i<datos[0].first.size();i++){
@@ -342,4 +343,6 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
+	*/
+	AlgoritmoGeneticoGeneracional(datos,w,30,1);
 }

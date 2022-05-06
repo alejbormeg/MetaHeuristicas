@@ -7,7 +7,6 @@
 std::vector<double> inicializacionBL(int dim,int i){
     std::vector<double> w;
     std::mt19937 gen(i);  // Will be used to obtain a seed for the random number engine
-    //std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<double> dist(0.0, 1.0);
     double elem_generado;
     for(int i=0; i<dim; i++){
