@@ -10,13 +10,23 @@
 
 
 /**
+ * @brief Calcula el valor de fitness de todos los elementos de la población
+ * 
+ * @param poblacion población
+ * @param datos datos en los que evaluar
+ * @param vfitness vector de fitness
+ */
+void CalculaFitness(std::vector<std::vector<double>> & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&vfitness);
+
+/**
  * @brief Los mutados compiten para entrar en la población 
  * 
  * @param poblacion Población reemplazada
  * @param mutaciones mutaciones
  * @param datos conjunto de datos que usaremos para entrenar
+ * @param vfitness vector de fitness
  */
-void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos);
+void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & vfitness);
 
 /**
  * @brief Algoritmo que implementa un algoritmo genético estacionario

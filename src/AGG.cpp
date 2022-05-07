@@ -218,10 +218,10 @@ bool Contiene(std::vector<std::vector<double>>const & poblacion,std::vector<doub
 
 }
 
-void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double fitness){
-    double fitness1=0.0, minimofitness=100.0;
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness){
+    double fitness1=0.0, minimofitness=100.0,maximofitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
-    int indice_peor=0;
+    int indice_peor=0,indice_mejor=0;
     std::vector<double> v;
 
     //Limpiamos la población anterior
@@ -238,29 +238,31 @@ void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::ve
             indice_peor=i;
             minimofitness=fitness1;
         }
+
+        if(fitness1>maximofitness){
+            indice_mejor=i;
+            maximofitness=fitness1;
+        }
     }
 
     //Si el mínimo es mejor que la solución de la población anterior
     if(minimofitness>fitness){
-        //No conservamos el mejor de la anterior
-            for(int i=0; i<mutaciones.size();i++){
-                poblacion.push_back(mutaciones[i]);
-            }    
+        //No conservamos el mejor de la anterior   
+        poblacion=mutaciones;
     }else{
         //En caso contrario eliminamos el peor de mutaciones y lo reemplazamos si no está
         if(!Contiene(mutaciones,w)){
-            for(int i=0; i<mutaciones.size();i++){
-                if(i!=indice_peor)
-                    poblacion.push_back(mutaciones[i]);
-                else
-                    poblacion.push_back(w); //Metemos el mejor de la población anterior en la pos del peor de la actual
-            }
+            poblacion=mutaciones;
+            poblacion[indice_peor]=w;
         }
         else{
-            for(int i=0; i<mutaciones.size();i++){
-                poblacion.push_back(mutaciones[i]);
-            }
+            poblacion=mutaciones;
         }
+    }
+
+    if(maximofitness>fitness){
+        w=poblacion[indice_mejor];
+        fitness=maximofitness;
     }
 }
 
@@ -279,12 +281,11 @@ void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std
     Evaluacion(poblacion,datos,solucion,fitness);
     
     while(evaluaciones<15000){
-        std::cout << "Iteraciones: " << evaluaciones << std::endl;
         Seleccion(datos,poblacion,seleccion,gen,tam_pob);
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
-        Reemplazar(poblacion,cruce,datos,solucion,fitness);
-        Evaluacion(poblacion,datos,solucion,fitness);
+        ReemplazarYEvaluar(poblacion,cruce,datos,solucion,fitness);
+        //Evaluacion(poblacion,datos,solucion,fitness);
         evaluaciones+=30;
         seleccion.clear();
         cruce.clear();

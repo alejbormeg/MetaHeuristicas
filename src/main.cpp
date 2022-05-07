@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 	ImprimeSolucion(w_solucion);
 	*/
 
-	
+	/*
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGG-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
 
-
+	*/
     cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGE-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
 	}
 	cout << endl;
 	cout << endl;
-	cout << "MEDIA AGG-BLX"<<endl;
+	cout << "MEDIA AGE-BLX"<<endl;
 	cout << "\tTasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
 	cout << "\tTasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
@@ -524,7 +524,7 @@ int main(int argc, char *argv[])
 	w_solucion.clear();
 
 	cout<< "*************************************"<<endl;
-	cout<< "ALGORITMO AGG-ARITMETICO" <<endl;
+	cout<< "ALGORITMO AGE-ARITMETICO" <<endl;
 	cout<< "*************************************"<<endl;
 
 	//Inicializamos el vector solucion.
@@ -571,7 +571,7 @@ int main(int argc, char *argv[])
 	}
 	cout << endl;
 	cout << endl;
-	cout << "MEDIA AGG ARITMETICO"<<endl;
+	cout << "MEDIA AGE ARITMETICO"<<endl;
 	cout << "\tTasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
 	cout << "\tTasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;

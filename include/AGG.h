@@ -108,7 +108,7 @@ bool Contiene(std::vector<std::vector<double>> const & poblacion,std::vector<dou
  * @param w mejor solución de la población anterior
  * @param fitness fitness de la mejor solución de la población anterior
  */
-void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double fitness);
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness);
 
 /**
  * @brief Algoritmo que implementa un algoritmo genético generacional elitista
