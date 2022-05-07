@@ -25,16 +25,28 @@ std::vector<std::vector<double>> Inicializar(int tam_pob, int dim,std::mt19937 &
  * @param solucion solucion encontrada
  * @param fitness funcion evaluacion
  */
-void Evaluacion(std::vector<std::vector<double>> & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness);
+void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness);
 
 /**
  * @brief Realiza la seleccion de los padres por torneo binario
  * 
+ * @param datos conjunto de datos que usaremos para entrenar
  * @param poblacion población inicial
  * @param seleccion padres seleccionados
  * @param generator generador de números aleatorios
+ * @param tam tamaño de la selección (para poder usarse en el AGE)
  */
-void Seleccion(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator);
+void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam);
+
+/**
+ * @brief Implementa el cruce aritmético
+ * 
+ * @param c1 padre 1
+ * @param c2 padre 2
+ * @param cruce matriz con los cruces
+ * @param generator generador de números aleatorios
+ */
+void ARITMETICO(std::vector<double> const &c1,std::vector<double> const &c2,std::vector<std::vector<double>> & cruce,std::mt19937 &generator);
 
 /**
  * @brief Aplica el algoritmo de cruce BLX
@@ -78,24 +90,37 @@ void Mov(std::vector<double> & w, double sigma, int pos,std::mt19937 &generator)
 void Mutacion(std::vector<std::vector<double>> & cruce, double pm,std::mt19937 &generator);
 
 /**
+ * @brief Comprueba si el vector w está en la población 
+ * 
+ * @param poblacion población
+ * @param w vector que queremos comprobar
+ * @return true si está
+ * @return false si no está
+ */
+bool Contiene(std::vector<std::vector<double>> const & poblacion,std::vector<double> & w);
+
+/**
  * @brief Reemplaza la población actual por la mutada
  * 
  * @param poblacion Población reemplazada
- * @param poblacion_anterior población anterior
  * @param mutaciones mutaciones
+ * @param datos conjunto de datos que usaremos para entrenar
+ * @param w mejor solución de la población anterior
+ * @param fitness fitness de la mejor solución de la población anterior
  */
-void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & poblacion_anterior,std::vector<std::vector<double>> & mutaciones );
+void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double fitness);
 
 /**
- * @brief Algoritmo que implementa la búsqueda local primer mejor
+ * @brief Algoritmo que implementa un algoritmo genético generacional elitista
  * 
  * @param datos conjunto de datos que usaremos para entrenar
  * @param w vector de pesos
  * @param fitness valor de la función objetivo
  * @param tam_pob tamaño de la poblacion
  * @param semilla entero para establecer semilla para procesos aleatorios
+ * @param tipo indica si es con BLX(1) o aritmetico(2)
  */
-void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla);
+void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo);
 
 
 

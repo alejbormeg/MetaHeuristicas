@@ -4,7 +4,7 @@
 std::vector<std::vector<double>> Inicializar(int tam_pob, int dim, std::mt19937 &generator){
     std::vector<double> v;
     std::vector<std::vector<double>> poblacion;
-      // Will be used to obtain a seed for the random number engine
+    // Will be used to obtain a seed for the random number engine
     std::uniform_real_distribution<double> dist(0.0, 1.0);
     double elem_generado;
 
@@ -20,7 +20,7 @@ std::vector<std::vector<double>> Inicializar(int tam_pob, int dim, std::mt19937 
     return poblacion;
 }
 
-void Evaluacion(std::vector<std::vector<double>> & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness){
+void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness){
     double actual_fitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
     std::vector<double> sol_actual;
@@ -38,11 +38,26 @@ void Evaluacion(std::vector<std::vector<double>> & poblacion,std::vector<std::pa
     }
 }
 
-//TODO Está mal hecho, es con torneo binario
-void Seleccion(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator){
-    int tam=poblacion.size();
+void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam){
+    double fitness1=0.0, fitness2=0.0;
+    double tasa_clas=0.0, tasa_red_=0.0;
+    std::vector<double> v1,v2;
     for (int i=0; i<tam; i++){
-        seleccion.push_back(poblacion[generator()%tam]);
+        v1=poblacion[generator()%tam];
+        v2=poblacion[generator()%tam];
+        //Calculamos el valor de fitness de v1
+        tasa_clas=LeaveOneOut(datos,v1);
+        tasa_red_=tasa_red(v1);
+        fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
+        //Calculamos el valor de fitness de v2
+        tasa_clas=LeaveOneOut(datos,v2);
+        tasa_red_=tasa_red(v2);
+        fitness2=funcionEvaluacion(tasa_clas,tasa_red_);
+
+        if(fitness1>fitness2)
+            seleccion.push_back(v1);
+        else
+            seleccion.push_back(v2);
     }
 }
 
@@ -85,18 +100,58 @@ void BLX(std::vector<double> const & c1,std::vector<double>const &  c2,std::vect
 
 }
 
+void ARITMETICO(std::vector<double> const &c1,std::vector<double> const &c2,std::vector<std::vector<double>> & cruce,std::mt19937 &generator){
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
+    double alpha=0.0;
+    double elemento=0.0;
+    //Hijos generados
+    std::vector<double>h;
+
+    for(int k=0; k<2; k++){
+        alpha=dist(generator);
+
+        for(int i=0; i<c1.size(); i++){
+            elemento=((alpha*c1[i])+(1-alpha)*c2[i]);
+            if(elemento>1.0)
+                elemento=1.0;
+            else if(elemento<0.0)
+                elemento=0.0;
+            h.push_back(elemento);
+        }
+        cruce.push_back(h);
+        h.clear();
+    }
+
+}
+
+
 
 void Cruce(std::vector<std::vector<double>> const & seleccion,int tipo, double alpha,double pc,std::vector<std::vector<double>> & cruce,std::mt19937 &generator){
+    int dim=seleccion.size();
+    int cruces=pc*dim/2; //Numero de parejas que cruzan
+    int contador_cruces=0;
     //Metodo BLX-0.3
     if(tipo==1){
-        int dim=seleccion.size();
-        int cruces=pc*dim/2; //Numero de parejas que cruzan
-        int contador_cruces=0;
-        std::cout << "NUM PAREJAS QUE CRUZAN: " << cruces << std::endl;
         //Las parejas son (1,2), (2,3) ... (n-1,n)
         for (int i=0; i<dim; i+=2){
             if (contador_cruces<cruces)
                 BLX(seleccion[i],seleccion[i+1],cruce,alpha,generator);
+            else{
+                cruce.push_back(seleccion[i]);
+                cruce.push_back(seleccion[i+1]);
+            }   
+        }
+        //Si tenía longitud impar el último queda sin pareja y se añade al final
+        if(dim%2!=0){
+            cruce.push_back(seleccion[dim-1]);
+        }
+
+    //Cruce aritmético
+    }else if(tipo==2){
+        //Las parejas son (1,2), (2,3) ... (n-1,n)
+        for (int i=0; i<dim; i+=2){
+            if (contador_cruces<cruces)
+                ARITMETICO(seleccion[i],seleccion[i+1],cruce,generator);
             else{
                 cruce.push_back(seleccion[i]);
                 cruce.push_back(seleccion[i+1]);
@@ -143,7 +198,74 @@ void Mutacion(std::vector<std::vector<double>> & cruce, double pm,std::mt19937 &
     }
 }
 
-void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla){
+
+bool Contiene(std::vector<std::vector<double>>const & poblacion,std::vector<double> & w){
+    int coincidencias=0, dim=w.size();
+    for(int i=0; i<poblacion.size(); i++){
+        for(int j=0; j<dim; j++){
+            if(poblacion[i][j]==w[j]){
+                coincidencias++;
+            }else 
+                break;
+        }
+        if(coincidencias==dim)
+            return true; 
+        else 
+            coincidencias=0;
+    }
+
+    return false;
+
+}
+
+void Reemplazar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double fitness){
+    double fitness1=0.0, minimofitness=100.0;
+    double tasa_clas=0.0, tasa_red_=0.0;
+    int indice_peor=0;
+    std::vector<double> v;
+
+    //Limpiamos la población anterior
+    poblacion.clear();
+
+    //Evaluamos todos los vectores de la nueva población
+    for(int i=0; i<mutaciones.size();i++){
+        v=mutaciones[i];
+        //Calculamos el valor de fitness de v1
+        tasa_clas=LeaveOneOut(datos,v);
+        tasa_red_=tasa_red(v);
+        fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
+        if(fitness1<minimofitness){
+            indice_peor=i;
+            minimofitness=fitness1;
+        }
+    }
+
+    //Si el mínimo es mejor que la solución de la población anterior
+    if(minimofitness>fitness){
+        //No conservamos el mejor de la anterior
+            for(int i=0; i<mutaciones.size();i++){
+                poblacion.push_back(mutaciones[i]);
+            }    
+    }else{
+        //En caso contrario eliminamos el peor de mutaciones y lo reemplazamos si no está
+        if(!Contiene(mutaciones,w)){
+            for(int i=0; i<mutaciones.size();i++){
+                if(i!=indice_peor)
+                    poblacion.push_back(mutaciones[i]);
+                else
+                    poblacion.push_back(w); //Metemos el mejor de la población anterior en la pos del peor de la actual
+            }
+        }
+        else{
+            for(int i=0; i<mutaciones.size();i++){
+                poblacion.push_back(mutaciones[i]);
+            }
+        }
+    }
+}
+
+
+void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo){
     srand(semilla); //establecemos semilla
     std::mt19937 gen(semilla); //generador
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
@@ -154,48 +276,19 @@ void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std
     int t=0;
 
     poblacion=Inicializar(tam_pob,dim,gen);
-    /*
-    for(int k=0; k<tam_pob; k++){
-        std::cout << "\nElemento: " << k << std::endl;
-        for(int i=0; i<dim; i++){
-            std::cout << poblacion[k][i]  << " ";
-        }
-    }
-    std::cout<<std::endl;
-    */
-
     Evaluacion(poblacion,datos,solucion,fitness);
-
-    /*
-    for(int k=0; k<tam_pob; k++){
-            std::cout << "\nElemento: " << k << std::endl;
-            for(int i=0; i<dim; i++){
-                std::cout << poblacion[i] [k] << " ";
-            }
-        }
-    std::cout<<std::endl;
-
-    std::cout<<"Solucion por ahora: " << std::endl;
-    for (int i=0; i<dim; i++){
-        std::cout << solucion[i] << " ";
-
-    }
-    std::cout<<std::endl;
-    */
-    Seleccion(poblacion,seleccion,gen);
-    Cruce(seleccion,1,0.3,0.7,cruce,gen);
-    Mutacion(cruce,0.7,gen);
-    //TODO ME HE QUEDADO AQUÍ
-    Reemplazar(poblacion,seleccion);
-
-    /*
+    
     while(evaluaciones<15000){
-        Seleccion(poblacion,seleccion,gen);
+        std::cout << "Iteraciones: " << evaluaciones << std::endl;
+        Seleccion(datos,poblacion,seleccion,gen,tam_pob);
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
-        Mutacion(cruce,0.7,gen);
-        Reemplazar(poblacion,seleccion,mutacion);
-        Evaluacion(poblacion,solucion,fitness);
+        Mutacion(cruce,0.1,gen);
+        Reemplazar(poblacion,cruce,datos,solucion,fitness);
+        Evaluacion(poblacion,datos,solucion,fitness);
+        evaluaciones+=30;
+        seleccion.clear();
+        cruce.clear();
     }
-    */
+    w=solucion;
 }
 
