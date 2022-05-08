@@ -109,19 +109,11 @@ void ARITMETICO(std::vector<double> const &c1,std::vector<double> const &c2,std:
     std::vector<double>h;
 
     for(int k=0; k<2; k++){
-        //std::cout<<"k=" << k << std::endl;
         alpha=dist(generator);
-        //std::cout<<"alpha=" << alpha << std::endl;
-
         for(int i=0; i<c1.size(); i++){
-            elemento=(alpha*c1[i])+(1-alpha)*c2[i];
+            elemento=alpha*c1[i]+(1-alpha)*c2[i];
             h.push_back(elemento);
         }
-        //std::cout<< "Vector h: "<< std::endl;
-        //for(int i=0; i<h.size(); i++){
-        //    std::cout << h[i] << " ";
-        //}
-        //std::cout<<std::endl;
         cruce.push_back(h);
         h.clear();
     }
@@ -287,7 +279,7 @@ void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
         ReemplazarYEvaluar(poblacion,cruce,datos,solucion,fitness);
-        evaluaciones+=30;
+        evaluaciones+=tam_pob;
         seleccion.clear();
         cruce.clear();
     }
