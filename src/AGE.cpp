@@ -74,9 +74,7 @@ void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,st
     }
 }
 
-void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo){
-    srand(semilla); //establecemos semilla
-    std::mt19937 gen(semilla); //generador
+void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo, std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
     std::vector<double>solucion;
     std::vector<double> vector_fitness;
@@ -89,7 +87,6 @@ void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std
     CalculaFitness(poblacion,datos,vector_fitness,pos_mejor,pos_peor);
 
     while(evaluaciones<15000){
-        std::cout << "Iteraciones: " << evaluaciones << std::endl;
         Seleccion(datos,poblacion,seleccion,gen,2);
         Cruce(seleccion,tipo,0.3,1,cruce,gen);
         Mutacion(cruce,0.1,gen);

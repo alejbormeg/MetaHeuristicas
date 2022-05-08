@@ -271,9 +271,7 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
 }
 
 
-void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo){
-    srand(semilla); //establecemos semilla
-    std::mt19937 gen(semilla); //generador
+void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo,std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
     std::vector<double>solucion;
     int evaluaciones=0;

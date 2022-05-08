@@ -144,6 +144,7 @@ int main(int argc, char *argv[])
 	Normalizar(datos); 
 	random_shuffle(datos.begin(),datos.end());
 
+	mt19937 gen(0);
 	/*
 	//5-fold Cross Validation 1NN
 	//Inicializamos el vector de pesos a 1 para que la distancia ponderada coincida con la euclídea.
@@ -362,7 +363,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoGeneracional(datos,w,30,i,1);
+		AlgoritmoGeneticoGeneracional(datos,w,30,i,1,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -407,7 +408,7 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
-
+	*/
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGG-ARITMETICO" <<endl;
 	cout<< "*************************************"<<endl;
@@ -422,7 +423,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoGeneracional(datos,w,30,i,2);
+		AlgoritmoGeneticoGeneracional(datos,w,30,i,2,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -462,8 +463,11 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
-	*/
-
+	tasa_clas_promedio=0.0;
+	tasa_red_promedio=0.0;
+	funcion_evaluacion_promedio=0.0;
+	tiempo_promedio=0.0;
+	w_solucion.clear();
 
 	/*
     cout<< "*************************************"<<endl;
@@ -480,7 +484,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoEstacionario(datos,w,30,i,2);
+		AlgoritmoGeneticoEstacionario(datos,w,30,i,2,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -540,7 +544,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoEstacionario(datos,w,30,i,2);
+		AlgoritmoGeneticoEstacionario(datos,w,30,i,2,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -580,8 +584,13 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
-	*/
+	tasa_clas_promedio=0.0;
+	tasa_red_promedio=0.0;
+	funcion_evaluacion_promedio=0.0;
+	tiempo_promedio=0.0;
+	w_solucion.clear();
 
+	
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO  AM(10,1.0)" <<endl;
 	cout<< "*************************************"<<endl;
@@ -596,7 +605,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoMemetico(datos,w,10,i,1,1.0);
+		AlgoritmoMemetico(datos,w,10,i,1,1.0,false,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -641,8 +650,7 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
-
-
+	
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO  AM(10,0.1)" <<endl;
 	cout<< "*************************************"<<endl;
@@ -657,7 +665,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoMemetico(datos,w,10,i,1,0.1);
+		AlgoritmoMemetico(datos,w,10,i,1,0.1,false,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -689,6 +697,7 @@ int main(int argc, char *argv[])
 	for(int i=0; i<w_solucion.size();i++){
 		w_solucion[i]=w_solucion[i]/5;
 	}
+
 	cout << endl;
 	cout << endl;
 	cout << "MEDIA AM(10,0.1)"<<endl;
@@ -702,5 +711,67 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
+	
+	cout<< "*************************************"<<endl;
+	cout<< "ALGORITMO  AM(10,0.1Mej)" <<endl;
+	cout<< "*************************************"<<endl;
+
+	//Inicializamos el vector solucion.
+	for(int i=0; i<datos[0].first.size();i++){
+		w_solucion.push_back(0.0);
+	}
+
+	for (int i=1; i<6; i++){
+		cout << "\nIteracion: " << i << endl;
+		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
+		//Calculamos tiempo que tarda el algoritmo
+		t0=clock();
+		AlgoritmoMemetico(datos,w,10,i,1,0.1,true,gen);
+		t1=clock();
+
+		//Obtenemos tiempo de ejecución en validacion
+		tiempo=1000*(double(t1-t0)/CLOCKS_PER_SEC);
+		tiempo_promedio+=tiempo;
+		cout <<"\t Tiempo de ejecución entrenamiento: " << tiempo <<"ms"<<endl;
+
+		//Obtenemos el valor de tasa_clas en validacion
+		tasa_clas=Evaluacion(entrenamiento,validacion,w);
+		tasa_clas_promedio+=tasa_clas;
+		cout <<"\t Tasa_clas validacion:" << tasa_clas <<endl;
+		
+		//Obtenemos el valor de tasa_red en validacion
+		tasa_red_=tasa_red(w);
+		tasa_red_promedio+=tasa_red_;
+		cout <<"\t Tasa_red validacion:" << tasa_red_<<endl;
+
+		//Obtenemos la función de evaluación en validacion
+		funcion_evaluacion=funcionEvaluacion(tasa_clas,tasa_red_);
+		funcion_evaluacion_promedio+=funcion_evaluacion;
+		cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
+
+		//Acumulamos en el vector solucion
+		w_solucion=w_solucion+w;
+		ImprimeSolucion(w);
+	}
+
+	//Dividimos cada componente del vector entre 5 para obtener el vector promedio
+	for(int i=0; i<w_solucion.size();i++){
+		w_solucion[i]=w_solucion[i]/5;
+	}
+
+	cout << endl;
+	cout << endl;
+	cout << "MEDIA AM(10,0.1Mej)"<<endl;
+	cout << "\tTasa clasificacion promedio: " << tasa_clas_promedio/5 <<endl;
+	cout << "\tTasa reduccion promedio: " << tasa_red_promedio/5<<endl;
+	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
+	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
+	ImprimeSolucion(w_solucion);
+	tasa_clas_promedio=0.0;
+	tasa_red_promedio=0.0;
+	funcion_evaluacion_promedio=0.0;
+	tiempo_promedio=0.0;
+	w_solucion.clear();
+	*/
 
 }

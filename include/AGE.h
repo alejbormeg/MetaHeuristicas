@@ -57,7 +57,8 @@ void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,st
  * @param tam_pob tamaño de la poblacion
  * @param semilla entero para establecer semilla para procesos aleatorios
  * @param tipo indica si es con BLX(1) o aritmetico(2)
+ * @param gen generador de números aleatorios 
  */
-void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo);
+void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo,std::mt19937 & gen);
 
 #endif
