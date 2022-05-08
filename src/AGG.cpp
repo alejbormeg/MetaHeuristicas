@@ -94,6 +94,7 @@ void BLX(std::vector<double> const & c1,std::vector<double>const &  c2,std::vect
                 elem_generado=0.0;
             h.push_back(elem_generado);
         }
+
         cruce.push_back(h);
         h.clear();
     }
@@ -108,16 +109,19 @@ void ARITMETICO(std::vector<double> const &c1,std::vector<double> const &c2,std:
     std::vector<double>h;
 
     for(int k=0; k<2; k++){
+        //std::cout<<"k=" << k << std::endl;
         alpha=dist(generator);
+        //std::cout<<"alpha=" << alpha << std::endl;
 
         for(int i=0; i<c1.size(); i++){
-            elemento=((alpha*c1[i])+(1-alpha)*c2[i]);
-            if(elemento>1.0)
-                elemento=1.0;
-            else if(elemento<0.0)
-                elemento=0.0;
+            elemento=(alpha*c1[i])+(1-alpha)*c2[i];
             h.push_back(elemento);
         }
+        //std::cout<< "Vector h: "<< std::endl;
+        //for(int i=0; i<h.size(); i++){
+        //    std::cout << h[i] << " ";
+        //}
+        //std::cout<<std::endl;
         cruce.push_back(h);
         h.clear();
     }
@@ -161,7 +165,7 @@ void Cruce(std::vector<std::vector<double>> const & seleccion,int tipo, double a
         if(dim%2!=0){
             cruce.push_back(seleccion[dim-1]);
         }
-    }
+    } 
 }
 
 void Mov(std::vector<double> & w, double sigma, int pos,std::mt19937 &generator){
@@ -218,7 +222,7 @@ bool Contiene(std::vector<std::vector<double>>const & poblacion,std::vector<doub
 
 }
 
-void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness){
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness){
     double fitness1=0.0, minimofitness=100.0,maximofitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
     int indice_peor=0,indice_mejor=0;
@@ -285,7 +289,6 @@ void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
         ReemplazarYEvaluar(poblacion,cruce,datos,solucion,fitness);
-        //Evaluacion(poblacion,datos,solucion,fitness);
         evaluaciones+=30;
         seleccion.clear();
         cruce.clear();

@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 	ImprimeSolucion(w_solucion);
 	*/
 
-	/*
+	
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGG-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
-	
+
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGG-ARITMETICO" <<endl;
 	cout<< "*************************************"<<endl;
@@ -462,7 +462,9 @@ int main(int argc, char *argv[])
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
 
-	*/
+
+
+	/*
     cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGE-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -577,4 +579,5 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
 	ImprimeSolucion(w_solucion);
+	*/
 }
