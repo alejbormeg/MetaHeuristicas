@@ -62,6 +62,7 @@ void ReemplazarYEvaluarAM(std::vector<std::vector<double>> & poblacion,std::vect
         poblacion=mutaciones;
     }else{
         //En caso contrario eliminamos el peor de mutaciones y lo reemplazamos si no está
+        /*
         if(!Contiene(mutaciones,w)){
             poblacion=mutaciones;
             poblacion[indice_peor]=w;
@@ -69,6 +70,7 @@ void ReemplazarYEvaluarAM(std::vector<std::vector<double>> & poblacion,std::vect
         else{
             poblacion=mutaciones;
         }
+        */
     }
 
     if(maximofitness>fitness){
@@ -133,7 +135,7 @@ void AlgoritmoMemetico(std::vector<std::pair<std::vector<double>,std::string>> &
     std::vector<int> pos_mejores;//Guarda las posiciones de los mejores elementos, solo en caso de 0.1*N mejores
 
     poblacion=Inicializar(tam_pob,dim,gen);
-    Evaluacion(poblacion,datos,solucion,fitness,vfitness);
+    //Evaluacion(poblacion,datos,solucion,fitness,vfitness);
     w=poblacion[solucion];
     while(evaluaciones<15000){
         Seleccion(datos,poblacion,seleccion,gen,tam_pob,vfitness);

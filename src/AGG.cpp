@@ -20,17 +20,20 @@ std::vector<std::vector<double>> Inicializar(int tam_pob, int dim, std::mt19937 
     return poblacion;
 }
 
-void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, int &solucion, double &fitness, std::vector<double> &vfitness){
-    double actual_fitness=0.0;
+void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, int &solucion, std::vector<double> &vfitness){
+    double actual_fitness=0.0, fitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
     std::vector<double> sol_actual;
 
     //Cada cromosoma se evalúa y tomamos como solución el mejor de l población 
     for (int i=0; i<poblacion.size(); i++){
+        //Evaluamos la solución i
         sol_actual=poblacion[i];
+        //calculamos su fitness
         tasa_clas=LeaveOneOut(datos,sol_actual);
         tasa_red_=tasa_red(sol_actual);
         actual_fitness=funcionEvaluacion(tasa_clas,tasa_red_);
+        //Lo metemos en el vector
         vfitness.push_back(actual_fitness);
         if(actual_fitness>fitness){
             solucion=i;
@@ -121,7 +124,6 @@ void ARITMETICO(std::vector<double> const &c1,std::vector<double> const &c2,std:
 }
 
 
-
 void Cruce(std::vector<std::vector<double>> const & seleccion,int tipo, double alpha,double pc,std::vector<std::vector<double>> & cruce,std::mt19937 &generator){
     int dim=seleccion.size();
     int cruces=pc*dim/2; //Numero de parejas que cruzan
@@ -195,33 +197,17 @@ void Mutacion(std::vector<std::vector<double>> & cruce, double pm,std::mt19937 &
 }
 
 
-bool Contiene(std::vector<std::vector<double>>const & poblacion,std::vector<double> & w){
-    int coincidencias=0, dim=w.size();
-    for(int i=0; i<poblacion.size(); i++){
-        for(int j=0; j<dim; j++){
-            if(poblacion[i][j]==w[j]){
-                coincidencias++;
-            }else 
-                break;
-        }
-        if(coincidencias==dim)
-            return true; 
-        else 
-            coincidencias=0;
-    }
-
-    return false;
-
-}
-
-void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness,std::vector<double> &vfitness){
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,int &solucion,std::vector<double> &vfitness){
     double fitness1=0.0, minimofitness=100.0,maximofitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
-    int indice_peor=0,indice_mejor=0;
+    int indice_peor=0;
+    double mejor_fitness_anterior=vfitness[solucion];
     std::vector<double> v;
 
     //Limpiamos la población anterior
     poblacion.clear();
+    //Limpiamos el vector de fitness actual 
+    vfitness.clear();
 
     //Evaluamos todos los vectores de la nueva población
     for(int i=0; i<mutaciones.size();i++){
@@ -237,48 +223,47 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
         }
 
         if(fitness1>maximofitness){
-            indice_mejor=i;
+            solucion=i;
             maximofitness=fitness1;
         }
     }
 
     //Si el mínimo es mejor que la solución de la población anterior
-    if(minimofitness>fitness){
+    if(minimofitness>mejor_fitness_anterior){
         //No conservamos el mejor de la anterior   
         poblacion=mutaciones;
     }else{
-        //En caso contrario eliminamos el peor de mutaciones y lo reemplazamos si no está
+        //En caso contrario reemplazamos el peor de mutaciones 
         poblacion=mutaciones;
         poblacion[indice_peor]=w;
     }
 
-    if(maximofitness>fitness){
-        w=poblacion[indice_mejor];
-        fitness=maximofitness;
+    //Si hemos mejorado el fitness con respecto a la población anterior cambiamos el vector solución
+    if(maximofitness>mejor_fitness_anterior){
+        w=poblacion[solucion];
     }
 }
 
 
-void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo,std::mt19937 & gen){
+void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int tipo,std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
-    int solucion;
+    int solucion; //índice a la mejor solución de la población 
     std::vector<double> vfitness;  // guarda los valores de fitness de los elementos de la poblacion
 
     int evaluaciones=0;
-    double fitness = 0.0;
     int dim=datos[0].first.size();
-    int t=0;
 
+    //Inicializamos la población
     poblacion=Inicializar(tam_pob,dim,gen);
-    Evaluacion(poblacion,datos,solucion,fitness,vfitness);
+    Evaluacion(poblacion,datos,solucion,vfitness);
+    //Solución actual
     w=poblacion[solucion];
 
     while(evaluaciones<15000){
         Seleccion(datos,poblacion,seleccion,gen,tam_pob,vfitness);
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
-        vfitness.clear();
-        ReemplazarYEvaluar(poblacion,cruce,datos,w,fitness,vfitness);
+        ReemplazarYEvaluar(poblacion,cruce,datos,w,solucion,vfitness);
         evaluaciones+=tam_pob;
         seleccion.clear();
         cruce.clear();

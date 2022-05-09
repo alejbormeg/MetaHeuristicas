@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 	ImprimeSolucion(w_solucion);
 	*/
 
-
+	/*
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGG-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoGeneracional(datos,w,30,i,1,gen);
+		AlgoritmoGeneticoGeneracional(datos,w,30,1,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoGeneracional(datos,w,30,i,2,gen);
+		AlgoritmoGeneticoGeneracional(datos,w,30,2,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -468,7 +468,8 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
-
+	*/
+	
     cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO AGE-BLX" <<endl;
 	cout<< "*************************************"<<endl;
@@ -483,7 +484,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoEstacionario(datos,w,30,i,1,gen);
+		AlgoritmoGeneticoEstacionario(datos,w,30,1,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -543,7 +544,7 @@ int main(int argc, char *argv[])
 		Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 		//Calculamos tiempo que tarda el algoritmo
 		t0=clock();
-		AlgoritmoGeneticoEstacionario(datos,w,30,i,2,gen);
+		AlgoritmoGeneticoEstacionario(datos,w,30,2,gen);
 		t1=clock();
 
 		//Obtenemos tiempo de ejecución en validacion
@@ -590,7 +591,7 @@ int main(int argc, char *argv[])
 	w_solucion.clear();
 
 	
-	
+	/*
 	cout<< "*************************************"<<endl;
 	cout<< "ALGORITMO  AM(10,1.0)" <<endl;
 	cout<< "*************************************"<<endl;
@@ -772,5 +773,5 @@ int main(int argc, char *argv[])
 	funcion_evaluacion_promedio=0.0;
 	tiempo_promedio=0.0;
 	w_solucion.clear();
-	
+	*/
 }
