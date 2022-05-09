@@ -94,7 +94,6 @@ void BLX(std::vector<double> const & c1,std::vector<double>const &  c2,std::vect
                 elem_generado=0.0;
             h.push_back(elem_generado);
         }
-
         cruce.push_back(h);
         h.clear();
     }
@@ -226,7 +225,7 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
     //Evaluamos todos los vectores de la nueva población
     for(int i=0; i<mutaciones.size();i++){
         v=mutaciones[i];
-        //Calculamos el valor de fitness de v1
+        //Calculamos el valor de fitness de v
         tasa_clas=LeaveOneOut(datos,v);
         tasa_red_=tasa_red(v);
         fitness1=funcionEvaluacion(tasa_clas,tasa_red_);

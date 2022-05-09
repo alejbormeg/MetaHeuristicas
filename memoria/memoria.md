@@ -6,6 +6,13 @@ author:
 date: 07/04/2022
 toc: true
 documentclass: report
+geometry: "left=2cm,right=2cm,top=3cm,bottom=3cm"
+header-includes: 
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{floatrow}
+  - \floatsetup[table]{capposition=top}
+output: pdf_document
 ---
 
 # Descripción del problema APC.
@@ -187,7 +194,25 @@ DistanciaEnemigoMasCercano(Entrenamiento,a):
   return distancias_componente_componente
 ```
 
-Para el amigo más cercano sería análogo.
+Para el amigo más cercano sería:
+
+```
+DistanciaAmigoMasCercano(Entrenamiento,a):
+  elemento de entrada a
+  dmin=distancia euclídea entre a y el primer elemento de entrenamiento
+  distancia=0
+
+  Para cada elemento e en entrenamiento E:
+    distancia=distancia euclídea entre e y a
+    
+    Si distancia < dmin && clase de e== clase de a
+      dmin=distancia
+      amigo_mas_cercano=e 
+
+  Calculamos distancias componente a componente entre a y amigo_mas_cercano
+
+  return distancias_componente_componente
+```
 
 En el código, la estructura de datos que hemos empleado han sido los vectores de la STL. Además hemos tenido que sobrecargar los operadores de suma y resta para realizar sumas y restas componente a componente entre dos vectores.
 
@@ -313,6 +338,8 @@ Obtenemos los resultados para el algoritmo **RELIEF**:
 |Partición 5| 88.732 | 2.941 | 45.836 | 3.485 | 
 |Media|  87.746 | 2.941 | 45.343 | 3.545 | 
 
+Table: Resultados en el Dataset Ionosphere para RELIEF
+
 |Particiones | Parkinsons      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
@@ -322,6 +349,8 @@ Obtenemos los resultados para el algoritmo **RELIEF**:
 |Partición 4| 92.307 | 0 | 46.153 | 1.328 | 
 |Partición 5| 100 | 0 | 50 | 1.005 | 
 |Media|  95.897 | 0 | 47.948 | 1.152 | 
+
+Table: Resultados en el Dataset Parkinsons para RELIEF
 
 \newpage
 
@@ -335,6 +364,8 @@ Obtenemos los resultados para el algoritmo **RELIEF**:
 |Partición 5| 90.411 | 0 | 45.2055 | 3.952 | 
 |Media|  83.009 | 0 | 41.504 | 4.303 | 
 
+Table: Resultados en el Dataset Spectf_heart para RELIEF
+
 Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 
 |Particiones | Ionosphere      ||||
@@ -347,6 +378,8 @@ Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 |Partición 5| 87.323 | 64.705 | 76.014 | 8485.97 | 
 |Media|  87.750 | 63.529 | 75.64 | 6619.88 | 
 
+Table: Resultados en el Dataset Ionosphere para BL
+
 |Particiones | Parkinsons      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
@@ -357,6 +390,8 @@ Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 |Partición 5| 97.435 | 68.181 | 82.808 | 804.335 |
 |Media|  93.333 | 67.272 | 80.303 | 800.658 | 
 
+Table: Resultados en el Dataset Parkinsons para BL
+
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
@@ -366,6 +401,8 @@ Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 |Partición 4| 86.956 | 59.090 | 73.023 | 6979.56 | 
 |Partición 5| 86.301 | 56.818 | 71.559 | 11173.2 | 
 |Media|  82.477 | 61.818 | 72.147 | 9528.56 | 
+
+Table: Resultados en el Dataset Spectf_heart para BL
 
 Los resultados anteriores se han obtenido en cada iteración del proceso de 5-fold Cross Validation y como podemos observar, por regla general el método **RELIEF** consigue unas tasas muy elevadas de Precisión sobre el conjunto de Test en todas las bases de datos utilizadas, **pero en cambio este método no consigue reducir atributos** o al menos no sirve para este cometido (a excepción de la base de datos de **Ionosphere** dónde se reduce en un 3% aproximadamente), por lo que no consigue una evaluación muy alta de la función objetivo, ya que nuestro propósito era reducir el mayor número de atributos posible a la vez que intentar mantener una elevada precisión al clasificar. 
 
@@ -382,12 +419,16 @@ Como resumen tenemos:
 |RELIEF| 87.746 | 2.941 | 45.343 | 3.545 | 
 |Búsqueda Local| 87.750 | 63.529 | 75.64 | 6619.88 | 
 
+Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
+
 |Algoritmos | Parkinsons ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms |
 |1-NN | 93.333 | 67.272 | 80.303 | 800.658 | 
 |RELIEF | 95.897 | 0 | 47.948 | 1.152 | 
 |Búsqueda Local | 93.333 | 67.272 | 80.303 | 800.658 | 
+
+Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
 |Algoritmos | Spectf_heart ||||
 |:--|:--|:--|:--|:--|
@@ -396,6 +437,7 @@ Como resumen tenemos:
 |RELIEF | 83.009 | 0 | 41.504 | 4.303 | 
 |Búsqueda Local | 82.477 | 61.818 | 72.147 | 9528.56 | 
 
+Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
 En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de los resultados obtenidos por el método de Búsqueda Local podemos conlcuir: 
 
@@ -404,71 +446,41 @@ En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de
 
 No obstante, hay un hecho importante que no se aprecia en las tablas en el método de búsqueda local, y que se aprecia cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
 
-Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos los siguientes resultados por pantalla al ejecutar el algoritmo: 
+Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos las siguientes soluciones por pantalla al ejecutar el algoritmo: 
 
 ```
-Iteracion: 1
-Empezamos la funcion evaluacion en: 46.7949
+Particion: 1
 
- ITERACIONES FINALES HASTA CONVERGENCIA :1572
-         Tiempo de ejecución entrenamiento: 838.751ms
-         Tasa_clas validacion:100
-         Tasa_red validacion:50
-         Funcion objetivo validacion:75
 Solucion obtenida: 
 0.781141, 0, 0.0552385, 0.999041, 0.0200457, 0, 0, 
 0.0950612, 0.935539, 0.846311, 0.0972302, 0.524548, 0, 
 0.00326139, 0, 0.913962, 0.752749, 0.841574, 0.939128, 
 0.0387805, 0.715971, 1, 
 
-Iteracion: 2
-Empezamos la funcion evaluacion en: 48.0769
+Particion: 2
 
- ITERACIONES FINALES HASTA CONVERGENCIA :2027
-         Tiempo de ejecución entrenamiento: 1081.82ms
-         Tasa_clas validacion:76.9231
-         Tasa_red validacion:77.2727
-         Funcion objetivo validacion:77.0979
 Solucion obtenida: 
 0.0635937, 0, 1, 0, 0, 0.0329383, 0.698863, 0, 0, 
 0.0580529, 0.0398286, 0.998241, 0, 0.0121121, 0.719754, 0, 
 0.0819994, 0, 0.0600942, 1, 0.080975, 0.0718255, 
 
-Iteracion: 3
-Empezamos la funcion evaluacion en: 55.5653
+Particion: 3
 
- ITERACIONES FINALES HASTA CONVERGENCIA :1906
-         Tiempo de ejecución entrenamiento: 977.552ms
-         Tasa_clas validacion:94.8718
-         Tasa_red validacion:72.7273
-         Funcion objetivo validacion:83.7995
 Solucion obtenida: 
 0.0707249, 0.839949, 0.0552385, 0, 0, 0.018748, 0.0406307, 
 0.0100419, 0.0935515, 1, 0, 0, 0, 0, 0, 0.913301, 0.696564,
 0.398963, 0, 0, 0.0903173, 0.863963, 
 
-Iteracion: 4
-Empezamos la funcion evaluacion en: 53.6131
+Particion: 4
 
- ITERACIONES FINALES HASTA CONVERGENCIA :839
-         Tiempo de ejecución entrenamiento: 442.798ms
-         Tasa_clas validacion:97.4359
-         Tasa_red validacion:68.1818
-         Funcion objetivo validacion:82.8089
 Solucion obtenida: 
 0.900621, 0, 0.855621, 0.0343507, 0.0228713, 0, 0.0595821, 
 0.0869721, 0.903179, 0.0582782, 0.00515915, 0.572356, 0, 
 0.0294471, 0.728605, 0.811948, 0.0979347, 0.0504305, 
 0.0692294, 0.961353, 0.0190247, 0.0397804, 
 
-Iteracion: 5
-Empezamos la funcion evaluacion en: 51.69
+Particion: 5
 
- ITERACIONES FINALES HASTA CONVERGENCIA :1603
-         Tiempo de ejecución entrenamiento: 840.784ms
-         Tasa_clas validacion:97.4359
-         Tasa_red validacion:68.1818
-         Funcion objetivo validacion:82.8089
 Solucion obtenida: 
 0.0551801, 0.831328, 0, 0.979445, 0.089821, 0, 0, 0, 
 0.990821, 0.808282, 0.074774, 0.819473, 0.0264971, 0, 
@@ -506,89 +518,53 @@ Además, al tener este comportamiento excluyente, el resto de atributos tienden 
 Este hecho no ocurre tanto con el algoritmo **RELIEF**, pues si analizamos la salida de cada iteración del mismo modo en que hemos hecho con el de Búsqueda Local:
 
 ```
-Iteracion: 1
-Numero de elementos en entrenamiento: 156
-Numero de elementos en validacion: 39
+Particion: 1
 
-         Tasa_clas entrenamiento:94.2308
-         Tasa_red entrenamiento:0
-         Funcion objetivo entrenamiento:47.1154
-         Tiempo de ejecución entrenamiento: 1.102ms
-         Tasa_clas validacion:94.8718
-         Tasa_red validacion:0
-         Funcion objetivo validacion:47.4359
 Solucion obtenida: 
 1, 0.388353, 0.84248, 0.401231, 0.378912, 0.402414, 
 0.436481, 0.402141, 0.574087, 0.473696, 0.581067, 0.512275,
 0.395842, 0.581054, 0.297156, 0.716484, 0.645781, 0.880921,
 0.751947, 0.890509, 0.547066, 0.928198, 
-Iteracion: 2
-Numero de elementos en entrenamiento: 156
-Numero de elementos en validacion: 39
 
-         Tasa_clas entrenamiento:98.0769
-         Tasa_red entrenamiento:0
-         Funcion objetivo entrenamiento:49.0385
-         Tiempo de ejecución entrenamiento: 1.484ms
-         Tasa_clas validacion:94.8718
-         Tasa_red validacion:0
-         Funcion objetivo validacion:47.4359
+Particion: 2
+
 Solucion obtenida: 
 0.619862, 0.310448, 0.560894, 0.2776, 0.302762, 0.294823, 
 0.366709, 0.294531, 0.470386, 0.382529, 0.502991, 0.425973,
 0.309465, 0.502861, 0.174225, 0.401239, 0.585643, 0.949089,
 0.717267, 0.759623, 0.34737, 1, 
-Iteracion: 3
-Numero de elementos en entrenamiento: 156
-Numero de elementos en validacion: 39
 
-         Tasa_clas entrenamiento:93.5897
-         Tasa_red entrenamiento:0
-         Funcion objetivo entrenamiento:46.7949
-         Tiempo de ejecución entrenamiento: 1.521ms
-         Tasa_clas validacion:97.4359
-         Tasa_red validacion:0
-         Funcion objetivo validacion:48.7179
+Particion: 3
+
 Solucion obtenida: 
 1, 0.297727, 0.843674, 0.27533, 0.273018, 0.308313, 
 0.376326, 0.308253, 0.730687, 0.612213, 0.796042, 
 0.649244, 0.463112, 0.796029, 0.123959, 0.606604, 
 0.647272, 0.820244, 0.732885, 0.793197, 0.461053, 0.868964, 
-Iteracion: 4
-Numero de elementos en entrenamiento: 156
-Numero de elementos en validacion: 39
 
-         Tasa_clas entrenamiento:94.2308
-         Tasa_red entrenamiento:0
-         Funcion objetivo entrenamiento:47.1154
-         Tiempo de ejecución entrenamiento: 1.371ms
-         Tasa_clas validacion:92.3077
-         Tasa_red validacion:0
-         Funcion objetivo validacion:46.1538
+Particion: 4
+
 Solucion obtenida: 
-0.897252, 0.27068, 0.801999, 0.266364, 0.300469, 0.31335, 0.370151, 0.313183, 0.539956, 0.465823, 0.575747, 0.480578, 0.346269, 0.575613, 0.155191, 0.578079, 0.751897, 1, 0.715037, 0.854044, 0.555776, 0.941265, 
-Iteracion: 5
-Numero de elementos en entrenamiento: 156
-Numero de elementos en validacion: 39
+0.897252, 0.27068, 0.801999, 0.266364, 0.300469, 0.31335, 
+0.370151, 0.313183, 0.539956, 0.465823, 0.575747, 0.480578, 
+0.346269, 0.575613, 0.155191, 0.578079, 0.751897, 1, 0.715037, 
+0.854044, 0.555776, 0.941265, 
 
-         Tasa_clas entrenamiento:94.8718
-         Tasa_red entrenamiento:0
-         Funcion objetivo entrenamiento:47.4359
-         Tiempo de ejecución entrenamiento: 0.872ms
-         Tasa_clas validacion:100
-         Tasa_red validacion:0
-         Funcion objetivo validacion:50
+Particion: 5
+
 Solucion obtenida: 
-0.751032, 0.270351, 0.577874, 0.375149, 0.363059, 0.419926, 0.505587, 0.419608, 0.580489, 0.49853, 0.617586, 0.533746, 0.373091, 0.617322, 0.197938, 0.549694, 0.65334, 0.795322, 0.791317, 0.856609, 0.553759, 1, 
+0.751032, 0.270351, 0.577874, 0.375149, 0.363059, 0.419926, 
+0.505587, 0.419608, 0.580489, 0.49853, 0.617586, 0.533746, 
+0.373091, 0.617322, 0.197938, 0.549694, 0.65334, 0.795322, 
+0.791317, 0.856609, 0.553759, 1, 
 
 
-MEDIA RELIEF
-        Tasa clasificacion promedio: 95.8974
-        Tasa reduccion promedio: 0
-        Funcion Evaluacion promedio: 47.9487
-        Tiempo promedio: 1.27
-Solucion obtenida: 
-0.853629, 0.307512, 0.725384, 0.319135, 0.323644, 0.347765, 0.411051, 0.347543, 0.579121, 0.486558, 0.614686, 0.520363, 0.377556, 0.614576, 0.189694, 0.57042, 0.656787, 0.889115, 0.741691, 0.830796, 0.493005, 0.947685,
+MEDIA RELIEF: 
+ 
+0.853629, 0.307512, 0.725384, 0.319135, 0.323644, 0.347765, 
+0.411051, 0.347543, 0.579121, 0.486558, 0.614686, 0.520363, 
+0.377556, 0.614576, 0.189694, 0.57042, 0.656787, 0.889115, 
+0.741691, 0.830796, 0.493005, 0.947685,
 ```
 
 Como vemos, los atributos por encima de 0.7 en la primera iteración serían:1,3,16,18,19,20,22

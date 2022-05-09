@@ -148,16 +148,6 @@ void AlgoritmoMemetico(std::vector<std::pair<std::vector<double>,std::string>> &
         if(t%10==0){
             t=0;
             if(!mejores){
-                /*
-                std::cout << "Poblacion antes: " << std::endl;
-                for(int i=0; i<tam_pob; i++){
-                    std::cout << "\t" << i << ": ";
-                    for(int j=0; j<poblacion[0].size();j++){
-                        std::cout << poblacion[i][j] << " ";
-                    }
-                    std::cout << std::endl;
-                }
-                */
                 for(int i=0; i<ncromosomas;i++){
                     BusquedaLocalAM(datos,poblacion[i],evaluaciones,gen);
                 }
