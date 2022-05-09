@@ -87,7 +87,7 @@ void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std
     CalculaFitness(poblacion,datos,vector_fitness,pos_mejor,pos_peor);
 
     while(evaluaciones<15000){
-        Seleccion(datos,poblacion,seleccion,gen,2);
+        Seleccion(datos,poblacion,seleccion,gen,2,vector_fitness);
         Cruce(seleccion,tipo,0.3,1,cruce,gen);
         Mutacion(cruce,0.1,gen);
         ReemplazamientoCompetitivo(poblacion,cruce,datos,vector_fitness,pos_mejor,pos_peor);

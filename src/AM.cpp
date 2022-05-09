@@ -122,7 +122,7 @@ void BusquedaLocalAM(std::vector<std::pair<std::vector<double>,std::string>> &da
 
 void AlgoritmoMemetico(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo,double pls, bool mejores, std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
-    std::vector<double>solucion;
+    int solucion;
     int evaluaciones=0;
     double fitness = 0.0;
     int dim=datos[0].first.size();
@@ -133,13 +133,13 @@ void AlgoritmoMemetico(std::vector<std::pair<std::vector<double>,std::string>> &
     std::vector<int> pos_mejores;//Guarda las posiciones de los mejores elementos, solo en caso de 0.1*N mejores
 
     poblacion=Inicializar(tam_pob,dim,gen);
-    Evaluacion(poblacion,datos,solucion,fitness);
-    
+    Evaluacion(poblacion,datos,solucion,fitness,vfitness);
+    w=poblacion[solucion];
     while(evaluaciones<15000){
-        Seleccion(datos,poblacion,seleccion,gen,tam_pob);
+        Seleccion(datos,poblacion,seleccion,gen,tam_pob,vfitness);
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
-        ReemplazarYEvaluarAM(poblacion,cruce,datos,solucion,fitness,vfitness);
+        ReemplazarYEvaluarAM(poblacion,cruce,datos,w,fitness,vfitness);
         evaluaciones+=tam_pob;
         t++;
         seleccion.clear();
@@ -161,5 +161,4 @@ void AlgoritmoMemetico(std::vector<std::pair<std::vector<double>,std::string>> &
         }
         vfitness.clear();
     }
-    w=solucion;   
 }

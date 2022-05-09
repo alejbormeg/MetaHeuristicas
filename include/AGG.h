@@ -22,10 +22,12 @@ std::vector<std::vector<double>> Inicializar(int tam_pob, int dim,std::mt19937 &
  * @brief Calcula la solucion y fitness de la poblacion actual
  * 
  * @param poblacion poblacion actual
- * @param solucion solucion encontrada
+ * @param datos datos para calcular el fitness
+ * @param solucion indice de la mejor sol encontrada
  * @param fitness funcion evaluacion
+ * @param vfitness vector dónde guardamos los fitness
  */
-void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness);
+void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, int &solucion, double &fitness, std::vector<double> &vfitness);
 
 /**
  * @brief Realiza la seleccion de los padres por torneo binario
@@ -35,9 +37,9 @@ void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<s
  * @param seleccion padres seleccionados
  * @param generator generador de números aleatorios
  * @param tam tamaño de la selección (para poder usarse en el AGE)
+ * @param vfitness vector dónde guardamos los fitness
  */
-void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam);
-
+void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam, std::vector<double> & vfitness);
 /**
  * @brief Implementa el cruce aritmético
  * 
@@ -107,8 +109,9 @@ bool Contiene(std::vector<std::vector<double>> const & poblacion,std::vector<dou
  * @param datos conjunto de datos que usaremos para entrenar
  * @param w mejor solución de la población anterior
  * @param fitness fitness de la mejor solución de la población anterior
+ * @param vfitness vector dónde guardamos los fitness
  */
-void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness);
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness,std::vector<double> &vfitness);
 
 /**
  * @brief Algoritmo que implementa un algoritmo genético generacional elitista

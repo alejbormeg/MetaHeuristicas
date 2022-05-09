@@ -20,7 +20,7 @@ std::vector<std::vector<double>> Inicializar(int tam_pob, int dim, std::mt19937 
     return poblacion;
 }
 
-void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, std::vector<double> & solucion, double &fitness){
+void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos, int &solucion, double &fitness, std::vector<double> &vfitness){
     double actual_fitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
     std::vector<double> sol_actual;
@@ -31,72 +31,73 @@ void Evaluacion(std::vector<std::vector<double>> const & poblacion,std::vector<s
         tasa_clas=LeaveOneOut(datos,sol_actual);
         tasa_red_=tasa_red(sol_actual);
         actual_fitness=funcionEvaluacion(tasa_clas,tasa_red_);
+        vfitness.push_back(actual_fitness);
         if(actual_fitness>fitness){
-            solucion=sol_actual;
+            solucion=i;
             fitness=actual_fitness;
         }
     }
 }
 
-void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam){
+void Seleccion(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<std::vector<double>> const & poblacion,std::vector<std::vector<double>> & seleccion,std::mt19937 &generator,int tam, std::vector<double> & vfitness){
     double fitness1=0.0, fitness2=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
-    std::vector<double> v1,v2;
+    int indice1,indice2;
     for (int i=0; i<tam; i++){
-        v1=poblacion[generator()%tam];
-        v2=poblacion[generator()%tam];
-        //Calculamos el valor de fitness de v1
-        tasa_clas=LeaveOneOut(datos,v1);
-        tasa_red_=tasa_red(v1);
-        fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
-        //Calculamos el valor de fitness de v2
-        tasa_clas=LeaveOneOut(datos,v2);
-        tasa_red_=tasa_red(v2);
-        fitness2=funcionEvaluacion(tasa_clas,tasa_red_);
-
-        if(fitness1>fitness2)
-            seleccion.push_back(v1);
+        indice1=generator()%tam;
+        indice2=generator()%tam;
+        if(vfitness[indice1]>vfitness[indice2])
+            seleccion.push_back(poblacion[indice1]);
         else
-            seleccion.push_back(v2);
+            seleccion.push_back(poblacion[indice2]);
     }
 }
 
 void BLX(std::vector<double> const & c1,std::vector<double>const &  c2,std::vector<std::vector<double>> & cruce, double alpha,std::mt19937 &generator){
-    std::vector<double>maximos,minimos;
-
-    maximos.push_back(*std::max_element(c1.begin(), c1.end()));
-    maximos.push_back(*std::max_element(c2.begin(), c2.end()));
-    minimos.push_back(*std::min_element(c1.begin(), c1.end()));
-    minimos.push_back(*std::min_element(c2.begin(), c2.end()));
-
     //cmax
-    double max=*std::max_element(maximos.begin(),maximos.end());
+    double max=0.0;
     //cmin
-    double min=*std::min_element(minimos.begin(),minimos.end());
+    double min=0.0;
     //l*alpha
-    double constante=(max-min)*alpha;
+    double lalpha=0.0;
 
-    //Tomamos los elementos de una uniforme con el intervalo deseado
-    std::uniform_real_distribution<double> dist(min-constante, max+constante);
-    
     //Hijos generados
-    std::vector<double>h;
+    std::vector<double>h1,h2;
 
     //variables auxiliares
     double elem_generado;
 
-    for(int k=0; k<2; k++){
-        for(int i=0; i<c1.size(); i++){
-            elem_generado=dist(generator);
-            if(elem_generado>1.0)
-                elem_generado=1.0;
-            else if(elem_generado<0.0)
-                elem_generado=0.0;
-            h.push_back(elem_generado);
+    for(int i=0; i<c1.size(); i++){
+        if(c1[i]>c2[i]){
+            max=c1[i];
+            min=c2[i];
+        }else{
+            min=c1[i];
+            max=c2[i];
         }
-        cruce.push_back(h);
-        h.clear();
+        lalpha=(max-min)*alpha;
+        //Tomamos los elementos de una uniforme con el intervalo deseado
+        std::uniform_real_distribution<double> dist(min-lalpha, max+lalpha);
+
+        //Generamos primer elemento
+        elem_generado=dist(generator);
+        if(elem_generado>1.0)
+            elem_generado=1.0;
+        else if(elem_generado<0.0)
+            elem_generado=0.0;
+        h1.push_back(elem_generado);
+
+        //Generamos segundo elemento
+        elem_generado=dist(generator);
+        if(elem_generado>1.0)
+            elem_generado=1.0;
+        else if(elem_generado<0.0)
+            elem_generado=0.0;
+        h2.push_back(elem_generado);
     }
+    //Añadimos los dos nuevos vectores
+    cruce.push_back(h1);
+    cruce.push_back(h2);
 
 }
 
@@ -213,7 +214,7 @@ bool Contiene(std::vector<std::vector<double>>const & poblacion,std::vector<doub
 
 }
 
-void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness){
+void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> const & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & w,double &fitness,std::vector<double> &vfitness){
     double fitness1=0.0, minimofitness=100.0,maximofitness=0.0;
     double tasa_clas=0.0, tasa_red_=0.0;
     int indice_peor=0,indice_mejor=0;
@@ -229,6 +230,7 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
         tasa_clas=LeaveOneOut(datos,v);
         tasa_red_=tasa_red(v);
         fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
+        vfitness.push_back(fitness1); 
         if(fitness1<minimofitness){
             indice_peor=i;
             minimofitness=fitness1;
@@ -246,13 +248,8 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
         poblacion=mutaciones;
     }else{
         //En caso contrario eliminamos el peor de mutaciones y lo reemplazamos si no está
-        if(!Contiene(mutaciones,w)){
-            poblacion=mutaciones;
-            poblacion[indice_peor]=w;
-        }
-        else{
-            poblacion=mutaciones;
-        }
+        poblacion=mutaciones;
+        poblacion[indice_peor]=w;
     }
 
     if(maximofitness>fitness){
@@ -264,24 +261,27 @@ void ReemplazarYEvaluar(std::vector<std::vector<double>> & poblacion,std::vector
 
 void AlgoritmoGeneticoGeneracional(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo,std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
-    std::vector<double>solucion;
+    int solucion;
+    std::vector<double> vfitness;  // guarda los valores de fitness de los elementos de la poblacion
+
     int evaluaciones=0;
     double fitness = 0.0;
     int dim=datos[0].first.size();
     int t=0;
 
     poblacion=Inicializar(tam_pob,dim,gen);
-    Evaluacion(poblacion,datos,solucion,fitness);
-    
+    Evaluacion(poblacion,datos,solucion,fitness,vfitness);
+    w=poblacion[solucion];
+
     while(evaluaciones<15000){
-        Seleccion(datos,poblacion,seleccion,gen,tam_pob);
+        Seleccion(datos,poblacion,seleccion,gen,tam_pob,vfitness);
         Cruce(seleccion,tipo,0.3,0.7,cruce,gen);
         Mutacion(cruce,0.1,gen);
-        ReemplazarYEvaluar(poblacion,cruce,datos,solucion,fitness);
+        vfitness.clear();
+        ReemplazarYEvaluar(poblacion,cruce,datos,w,fitness,vfitness);
         evaluaciones+=tam_pob;
         seleccion.clear();
         cruce.clear();
     }
-    w=solucion;
 }
 
