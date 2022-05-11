@@ -320,7 +320,6 @@ int main(int argc, char *argv[])
 		funcion_evaluacion_promedio=0.0;
 		tiempo_promedio=0.0;
 		w_solucion.clear();
-
 	}
 	
 }

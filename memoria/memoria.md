@@ -298,7 +298,28 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 
-## Algoritmo Genético Generacional
+## Algoritmo Genéticos
+
+### Elementos comunes a todos los AG
+
+Los siguientes algoritmos que usaremos serán algoritmos genéticos, Antes de presentar el esquema de estos algoritmos vamos a definir los siguientes elementos que utilizaremos: 
+
+En este tipo de algoritmos partimos de una población inicial $P(t)$ dónde $t$ es el contador de generaciones, así $P(0)$ por ejemplo sería la población inicial (en la primera generación).
+
+Por otro lado la población está compuesta por un conjunto de cromosomas $C_1,...,C_M$ y a su vez cada cromosoma tiene una serie de gener $G_1,...,G_N$. 
+
+La inspiración biológica de este algoritmo se refleja en que trataremos de hayar la solución simulando el comportamiento de las distintas especies en la naturaleza para adaptarse a su entorno. Para ello realizaremos cruces entre cromosomas para generar nuevos miembros de la población y dichos nuevos miembros tendrán mutaciones en sus genes (en algunos casos mejorarán su rendimiento y en otros no, como ocurre en la naturaleza). De esta forma, los mejores miembros (aquellos cuyos genes sean mejores) serán los que sobrevivan y se encuentren en la población de la siguiente generación. 
+
+Con este enfoque se diseñan dos algoritmos para resolver el problema APC, un **Algoritmo Genético Generacional** y un **Algoritmo Genético Estacionario**.
+
+### Algoritmo Genético Generacional (AGG)
+
+Basado en la idea anteriormente explicada, este algoritmo sigue el siguiente esquema: 
+
+![Esquema AGG](./imagenes/AGG.png)
+
+Que traducido a pseudocódigo sería: 
+
 
 
 # Procedimiento 
