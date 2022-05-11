@@ -64,7 +64,6 @@ void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,st
     double tasa_clas=0.0, tasa_red_=0.0;
     std::vector<double> v;
 
-    //TODO REVISAR Y REPENSAR
     v=mutaciones[0];
     tasa_clas=LeaveOneOut(datos,v);
     tasa_red_=tasa_red(v);
@@ -82,7 +81,7 @@ void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,st
         pos_segundo_peor=CalculaPeor(vfitness);
         //Restauramos el valor del peor
         vfitness[pos_peor]=vfitness[pos_peor]-100.0;
-    } else if(vfitness[pos_peor]<fitness1){
+    } else if(vfitness[pos_peor]<fitness1){ //Está entre los dos peores
         vfitness[pos_peor]=fitness1;
         poblacion[pos_peor]=v; //Sigue siendo el peor
     }

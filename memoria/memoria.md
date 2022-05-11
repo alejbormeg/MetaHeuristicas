@@ -298,6 +298,8 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 
+## Algoritmo Genético Generacional
+
 
 # Procedimiento 
 
