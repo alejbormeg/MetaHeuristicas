@@ -70,7 +70,7 @@ El proceso de aprendizaje consiste en mantener en memoria una tabla con los ejem
 
 La descripción en Pseudocódigo sería: 
 
-```
+```c++
 Clasificador1NN(datos, elemento):
   cmin=clase del primer elemento en entrenamiento e1
   dmin=distancia entre e1 y el nuevo ejemplo
@@ -90,7 +90,7 @@ Finalmente usaremos dos técnicas diferentes para comprobar la precisión de nue
 
 - Entrenamiento: Usaremos el método **Leave One Out**, su pseudocódigo es el siguiente: 
 
-  ```
+  ```c++
   LeaveOneOut(Entrenamiento):
     Para cada elemento e en Entrenamiento: 
       etiqueta_predicha=Clasificador1NN(Entrenamiento-{e},e)
@@ -103,7 +103,7 @@ Finalmente usaremos dos técnicas diferentes para comprobar la precisión de nue
   Es decir, en cada paso eliminamos un elemento del conjunto de datos de entrenamiento y tratamos de clasificarlo, si las etiquetas predicha y real coinciden sumamos un acierto, si no se continúa. Finalmente se devuelve el porcentaje de acierto.
 
 - Validación: En este caso método será intentar clasificar cada elemento del conjunto de validación usando los del conjunto de entrenamiento: 
-  ```
+  ```c++
   Evaluacion(Entrenamiento, Validacion):
     Para cada elemento e en Validacion: 
       etiqueta_predicha=Clasificador1NN(Entrenamiento,e)
@@ -116,7 +116,7 @@ Finalmente usaremos dos técnicas diferentes para comprobar la precisión de nue
 
 Para este método es muy importante que los datos estén normalizados entre [0,1] para no priorizar unos atributos sobre otros. Por ello, para cualquier conjunto de datos que utilicemos, lo primero que se hará será normalizar los datos y mezclarlos (para evitar que las clases estén desbalanceadas). El algoritmo para normalizar es el siguiente: 
 
-```
+```c++
 Normalizar(Datos):
   Para cada atributo a: 
     Se calcula el máximo y mínimo de entre todos los datos
@@ -160,7 +160,7 @@ Entendemos el enemigo más cercano como el elemento más próximo al que estemos
 
 La implementación del algoritmo es la siguiente en pseudocódigo: 
 
-```
+```c++
 RELIEF(Entrenamiento,w):
 	Inicializamos w a 0
 
@@ -176,7 +176,7 @@ RELIEF(Entrenamiento,w):
 
 Por su lado las implementaciones para las funciones que calculan las distancias al enemigo y amigo más cercano son las siguientes: 
 
-```
+```c++
 DistanciaEnemigoMasCercano(Entrenamiento,a):
   elemento de entrada a
   dmin=distancia euclídea entre a y el primer elemento de entrenamiento
@@ -196,7 +196,7 @@ DistanciaEnemigoMasCercano(Entrenamiento,a):
 
 Para el amigo más cercano sería:
 
-```
+```c++
 DistanciaAmigoMasCercano(Entrenamiento,a):
   elemento de entrada a
   dmin=distancia euclídea entre a y el primer elemento de entrenamiento
@@ -237,7 +237,7 @@ Este método que hemos descrito se denomina **Búsqueda Local del primer Mejor**
 Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funciones.
 
 - Inicialización Búsqueda Local: Es la función para inicializar el vector $w$ antes del algoritmo. Utilizamos el generador de números pseudoaleatorios basado en el algoritmo de Marsenne Twister, que funciona muy bien como generador de números aleatorios^[se denomina mt19937 debido a que se basa en el primo $2^{19937}-1$].
-  ```
+  ```c++
   InicializacionBL(int dimension, int i){
     Declaramos el vector w
     Inicializamos el generador mt19937 con la semilla i
@@ -251,7 +251,7 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 - Movimiento: es la función que realiza la generación de vecinos en el entorno de la solución actual, volvemos a usar el generador de números pseudoaleatorios Marsenne Twister. 
-  ```
+  ```c++
   Mov(vector w, double sigma, int pos, int i){
     Inicializamos el generador mt19937 con la semilla i
     Inicializamos la distribución Normal(0,sigma^2)
@@ -269,7 +269,7 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 - Algoritmo de BL: Como aclaración al pseudocódigo, el vector $w$ viene ya inicializado con la función anterior.
-  ```
+  ```c++
   BusquedaLocal(vector de pares datos, vector w, semilla){
     Establecemos semilla(semilla)
     creamos vector con orden de mutaciones
@@ -319,6 +319,138 @@ Basado en la idea anteriormente explicada, este algoritmo sigue el siguiente esq
 ![Esquema AGG](./imagenes/AGG.png)
 
 Que traducido a pseudocódigo sería: 
+
+```c++
+AlgoritmoGeneticoGeneracional(datos, vector w , int tam_poblacion, int tipo_cruce, generador mt19937){
+  
+  dim=num_atributos 
+  contador_evaluaciones=0
+  definimos vectores de dim tam_poblacion x dim: poblacion, seleccion, cruce
+
+  Inicializar poblacion
+  Evaluar poblacion
+
+  while (contador_evaluaciones<15000){
+    Seleccionamos Padres
+    Cruzamos padres con BLX (si tipo=1) o con cruce Aritmetico (si tipo=2)
+    Mutamos los cruces 
+    Reemplazamos la población original
+    Evaluamos la nueva población
+  }
+
+  w=mejor cromosoma de la poblacion
+}
+```
+
+La inicialización de la población se realiza de la siguiente manera: 
+
+```c++
+Inicializar(tam_poblacion, dim, generador numeros aleatorios){
+  
+  poblacion= matriz de dimensión tam_poblacion x dim
+
+  for(int k=0; k < tam_poblacion; k++){
+    for(int i=0; i < dim; i++){
+      elemento=generamos un valor aleatorio de una distribución uniforme (0,1)
+      poblacion[k,i]=elemento
+    }
+  }
+
+  return poblacion
+}
+```
+
+La función de evaluación es la siguiente: 
+
+```c++
+Evaluacion( matriz poblacion, matriz datos, int solucion, vector vfitness){
+
+  for(int i=0; i < poblacion.size(); i++){
+    Calculamos tasa de clasificación de poblacion[i]
+    Calculamos tasa reducción de poblacion[i]
+    Calculamos función objetivo de población[i]
+
+    vfitness[i]=fitness calculado
+
+    Si el fitness es el máximo actualmente
+      solucion=i
+  }
+}
+```
+Como aclaración, para acelerar tiempos de ejecución usaremos un vector que contiene para cada elemento de la población su valor de la función objetivo, dicho vector es que llamamos $vfitness$.
+
+La función encargada del proceso de selección utilizará el torneo binario como criterio, es decir, seleccionará en cada paso dos cromosomas y seleccionará al mejor de ellos (con repetición), el pseudocódigo es el siguiente: 
+
+```c++
+Seleccion (matriz datos, matriz poblacion, matriz seleccion, generador num aleatorios,  vector vfitness){
+
+  for(int i=0; i < poblacion.size(); i++){
+    indice1=generamos valor aleatorio entre [0,tam-1]
+    indice2=generamos valor aleatorio entre [0,tam-1]
+
+    if(vfitness[indice1]>vfitness[indice2])
+      metemos poblacion[indice1] en  seleccion
+    else
+      metemos poblacion[indice2] en seleccion
+  }
+}
+```
+
+Tras esto llevamos a cabo el cruce entre los cromosomas de la selección: 
+
+```c++
+Cruce(matriz seleccion,int tipo, double alpha, double probablidad_cruce, matriz cruce, generador de num aleatorios){
+  cruces=probabilidad_cruce*num_cromosomas/2
+
+  if(tipo==1){
+    Para cada parejas de padres consecutiva en seleccion: 
+      Si sus índices están por debajo de cruces
+        Cruce BLX con factor alpha y
+        se insetan los hijos en la matriz cruce
+      Si los índices son posteriores a cruces
+        Se insertan en la matriz cruce sin alterar
+  }else if(tipo==2){
+    Para cada parejas de padres consecutiva en seleccion: 
+      Si sus índices están por debajo de cruces
+        Cruce ARITMETICO con factor alpha y
+        se insetan los hijos en la matriz cruce
+      Si los índices son posteriores a cruces
+        Se insertan en la matriz cruce sin alterar
+  }
+}
+```
+La funcion encargada del cruce BLX-$\alpha$ es: 
+
+```c++
+BLX(vector padre1, vector padre2, matriz cruce, double alpha, generador){
+
+  vector hijo1, hijo2;
+
+  for(int i=0; i<padre1.size(); i++){
+    max=maximo entre padre1[i] y padre2[i]
+    min=minimo entre padre1[i] y padre2[i]
+    l=max-min
+    Creamos distribucion unforme (min-l*alpha, max+l*alpha)
+    Generamos dos valores aleatorios 
+    hijo1.push_back(elemento_generado1) 
+    hijo2.push_back(elemento_generado2)
+  }
+
+  metemos en cruce tanto hijo1 como hijo2
+}
+```
+
+La función para el cruce Aritmético la realizamos con un parámetro $\alpha$ (que es distinto al que se usa en BLX-$\alpha$) para que no hagamos la media aritmética exacta de dos genes, pues de ser así crearíamos dos veces el mismo hijo, en su lugar generamos un alpha aleatorio y la media se hace como $\alpha·g_{1i} + (1-\alpha)·g_{2i}$  sería: 
+
+```c++
+ARITMETICO(vector padre1, vector padre2,matriz cruce, generador)
+  Creamos distribución uniforme en (0,1)
+  
+  for (int i=0; i<2; i++){
+    generamos alpha
+    
+  }
+```
 
 
 
