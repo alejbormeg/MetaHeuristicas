@@ -28,7 +28,7 @@ int CalculaMejor(std::vector<double>&vfitness){
     return mejor;
 }
 
-void CalculaFitness(std::vector<std::vector<double>> & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&vfitness,int &pos_mejor, int &pos_peor){
+void CalculaFitness(std::vector<std::vector<double>> & poblacion,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&vfitness,int &pos_mejor, int &pos_peor, int &pos_segundo_peor){
     //Evaluamos todos los vectores de la población
     double tasa_clas=0.0, tasa_red_=0.0,fitness=0.0;
     double mejorfitness=0.0;
@@ -51,51 +51,87 @@ void CalculaFitness(std::vector<std::vector<double>> & poblacion,std::vector<std
             pos_peor=i;
         }
     }
+    //Hacemos que el peor ya no sea el peor momentáneamente, para así calcular el segundo peor
+    vfitness[pos_peor]=vfitness[pos_peor]+100.0;
+    //Calculamos el segundo peor, que ahora es el peor
+    pos_segundo_peor=CalculaPeor(vfitness);
+    //Restauramos el valor del peor
+    vfitness[pos_peor]=vfitness[pos_peor]-100.0;
 }
 
-void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & vfitness, int pos_mejor, int pos_peor){
+void ReemplazamientoCompetitivo (std::vector<std::vector<double>> & poblacion,std::vector<std::vector<double>> & mutaciones,std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> & vfitness, int &pos_mejor, int &pos_peor, int &pos_segundo_peor){
     double fitness1=0.0,fitness2=0.0, minimofitness=100.0;
     double tasa_clas=0.0, tasa_red_=0.0;
-    int indice_peor=0;
     std::vector<double> v;
 
-    for (int k=0; k<2; k++){
-        //Obtenemos el fitness del primero de los mutados
-        v=mutaciones[k];
-        tasa_clas=LeaveOneOut(datos,v);
-        tasa_red_=tasa_red(v);
-        fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
-        
-        if(vfitness[pos_peor]<fitness1){
-            vfitness[pos_peor]=fitness1;
-            pos_peor=CalculaPeor(vfitness);
-            pos_mejor=CalculaMejor(vfitness);
+    v=mutaciones[0];
+    tasa_clas=LeaveOneOut(datos,v);
+    tasa_red_=tasa_red(v);
+    fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
+    if(vfitness[pos_segundo_peor]<fitness1){
+        vfitness[pos_segundo_peor]=fitness1;
+        poblacion[pos_segundo_peor]=v;
+        //Comprobamos si es el nuevo mejor
+        if(vfitness[pos_mejor]<fitness1){
+            pos_mejor=pos_segundo_peor;
         }
+        //Calculamos el nuevo segundo peor
+        vfitness[pos_peor]=vfitness[pos_peor]+100.0;
+        //Calculamos el segundo peor, que ahora es el peor
+        pos_segundo_peor=CalculaPeor(vfitness);
+        //Restauramos el valor del peor
+        vfitness[pos_peor]=vfitness[pos_peor]-100.0;
+    } else if(vfitness[pos_peor]<fitness1){ //Está entre los dos peores
+        vfitness[pos_peor]=fitness1;
+        poblacion[pos_peor]=v; //Sigue siendo el peor
     }
+
+    v=mutaciones[1];
+    tasa_clas=LeaveOneOut(datos,v);
+    tasa_red_=tasa_red(v);
+    fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
+    if(vfitness[pos_segundo_peor]<fitness1){
+        vfitness[pos_segundo_peor]=fitness1;
+        poblacion[pos_segundo_peor]=v;
+        //Comprobamos si es el nuevo mejor
+        if(vfitness[pos_mejor]<fitness1){
+            pos_mejor=pos_segundo_peor;
+        }
+        //Calculamos el nuevo segundo peor
+        vfitness[pos_peor]=vfitness[pos_peor]+100.0;
+        //Calculamos el segundo peor, que ahora es el peor
+        pos_segundo_peor=CalculaPeor(vfitness);
+        //Restauramos el valor del peor
+        vfitness[pos_peor]=vfitness[pos_peor]-100.0;
+    } else if(vfitness[pos_peor]<fitness1){
+        vfitness[pos_peor]=fitness1;
+        poblacion[pos_peor]=v; //Sigue siendo el peor
+    }
+
 }
 
-void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int semilla,int tipo, std::mt19937 & gen){
+void AlgoritmoGeneticoEstacionario(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int tam_pob,int tipo, std::mt19937 & gen){
     std::vector<std::vector<double>> poblacion,seleccion,cruce;
-    std::vector<double>solucion;
-    std::vector<double> vector_fitness;
+    int solucion; //índice a la mejor solución de la población
+    std::vector<double> vector_fitness; // guarda los valores de fitness de los elementos de la poblacion
+    
     int evaluaciones=0;
     int dim=datos[0].first.size();
     int pos_mejor=0;
-    int pos_peor=0;
+    int pos_peor=0, pos_segundo_peor=0;
 
     poblacion=Inicializar(tam_pob,dim,gen);
-    CalculaFitness(poblacion,datos,vector_fitness,pos_mejor,pos_peor);
+    CalculaFitness(poblacion,datos,vector_fitness,solucion,pos_peor,pos_segundo_peor);
 
     while(evaluaciones<15000){
-        Seleccion(datos,poblacion,seleccion,gen,2);
+        Seleccion(datos,poblacion,seleccion,gen,2,vector_fitness);
         Cruce(seleccion,tipo,0.3,1,cruce,gen);
         Mutacion(cruce,0.1,gen);
-        ReemplazamientoCompetitivo(poblacion,cruce,datos,vector_fitness,pos_mejor,pos_peor);
-        solucion=poblacion[pos_mejor];
+        ReemplazamientoCompetitivo(poblacion,cruce,datos,vector_fitness,solucion,pos_peor,pos_segundo_peor);
+        w=poblacion[solucion];
 
         evaluaciones+=2;
         seleccion.clear();
         cruce.clear();
     }
-    w=solucion;
 }
