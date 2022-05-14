@@ -147,7 +147,6 @@ En nuestro problema, el conjunto de datos se va a representar por medio de un ve
 El esquema de representación de soluciones será un vector de doubles que representará el vector de pesos $w$ solución, de manera que si una característica tiene asociado un peso de 1, significa que se considera completamente en el cálculo de la distancia, si tiene un 0.1 o menos no se considera y para cualquier otro valor intermedio pondera la importancia del atributo que tiene asociado.
 
 
-
 # Descripción de los Métodos de Búsqueda
 
 En esta sección vamos a describir las distintas técnicas que emplearemos para resolver el problema APC. 
@@ -298,6 +297,8 @@ Vamos a presentar a continuación los pseudocódigos del algoritmo y sus funcion
   }
   ```
 
+\newpage
+
 ## Algoritmo Genéticos
 
 ### Elementos comunes a todos los AG
@@ -310,13 +311,28 @@ Por otro lado la población está compuesta por un conjunto de cromosomas $C_1,.
 
 La inspiración biológica de este algoritmo se refleja en que trataremos de hayar la solución simulando el comportamiento de las distintas especies en la naturaleza para adaptarse a su entorno. Para ello realizaremos cruces entre cromosomas para generar nuevos miembros de la población y dichos nuevos miembros tendrán mutaciones en sus genes (en algunos casos mejorarán su rendimiento y en otros no, como ocurre en la naturaleza). De esta forma, los mejores miembros (aquellos cuyos genes sean mejores) serán los que sobrevivan y se encuentren en la población de la siguiente generación. 
 
-Con este enfoque se diseñan dos algoritmos para resolver el problema APC, un **Algoritmo Genético Generacional** y un **Algoritmo Genético Estacionario**.
+Con este enfoque se diseñan dos algoritmos para resolver el problema APC, un **Algoritmo Genético Generacional** y un **Algoritmo Genético Estacionario** con dos tipos de cruce distintos: 
+
+- Cruce BLX-$\alpha$: Es un método de cruce en el cual partiendo de dos padres $C1=(c_{11},...,c_{1n})$ y $C2=(c_{21},...,c_{2n})$ se generan dos descencientes $h_k=(h_{k1},..,h_{kn})$ con $k=1,2$.
+   Así, cada gen de los dos hijos generados se genera aleatoriamente en el intervalo $[C_{min}-l\alpha,C_{max}+l\alpha]$ dónde:
+   -  $C_{min}=\min\lbrace c_{1i},c_{2i} \rbrace$.
+   -   $C_{max}=\max\lbrace c_{1i},c_{2i} \rbrace$.
+   -   $l=C_{max}-C_{min}$.
+   -   $\alpha \in [0,1]$.
+  
+   La peculiaridad de este método de cruce es que aunque en su mayoría de veces, el valor aleatorio generado cae en el intervalo $[C_{min},C_{max}]$ la constante $l\alpha$ permite realizar una "exploración" fuera de ese intervalo y probar con otros valores para el gen, lo que en ciertos casos puede ayudar a converger a una mejor solución para el problema.
+
+- Cruce Aritmético: Se realiza una media ponderada según un factor $\alpha \in [0,1]$ de manera que partiendo de dos padres $C1=(c_{11},...,c_{1n})$ y $C2=(c_{21},...,c_{2n})$ se generan dos descencientes $h_k=(h_{k1},..,h_{kn})$ con $k=1,2$ de manera que $h_{ki}=\alpha c_{1i} + (1-\alpha)c_{2i}$. En este caso todos los valores generados estarán en el intervalo $[\max(c_{1i},c_{2i}),min(c_{1i},c_{2i})]$, por lo que no se llevará a cabo la "exploración" del método anterior. Esto conlleva que los genes tenderán siempre a decrecer.
+
+El criterio de parada del algoritmo será alcanzar las 15000 evaluaciones de la función objetivo. 
 
 ### Algoritmo Genético Generacional (AGG)
 
 Basado en la idea anteriormente explicada, este algoritmo sigue el siguiente esquema: 
 
 ![Esquema AGG](./imagenes/AGG.png)
+
+\newpage 
 
 Que traducido a pseudocódigo sería: 
 
@@ -341,7 +357,6 @@ AlgoritmoGeneticoGeneracional(datos, vector w , int tam_poblacion, int tipo_cruc
   w=mejor cromosoma de la poblacion
 }
 ```
-
 La inicialización de la población se realiza de la siguiente manera: 
 
 ```c++
@@ -377,12 +392,15 @@ Evaluacion( matriz poblacion, matriz datos, int solucion, vector vfitness){
   }
 }
 ```
+\newpage
+
 Como aclaración, para acelerar tiempos de ejecución usaremos un vector que contiene para cada elemento de la población su valor de la función objetivo, dicho vector es que llamamos $vfitness$.
 
 La función encargada del proceso de selección utilizará el torneo binario como criterio, es decir, seleccionará en cada paso dos cromosomas y seleccionará al mejor de ellos (con repetición), el pseudocódigo es el siguiente: 
 
 ```c++
-Seleccion (matriz datos, matriz poblacion, matriz seleccion, generador num aleatorios,  vector vfitness){
+Seleccion (matriz datos, matriz poblacion, matriz seleccion, generador num aleatorios,  
+vector vfitness){
 
   for(int i=0; i < poblacion.size(); i++){
     indice1=generamos valor aleatorio entre [0,tam-1]
@@ -399,7 +417,8 @@ Seleccion (matriz datos, matriz poblacion, matriz seleccion, generador num aleat
 Tras esto llevamos a cabo el cruce entre los cromosomas de la selección: 
 
 ```c++
-Cruce(matriz seleccion,int tipo, double alpha, double probablidad_cruce, matriz cruce, generador de num aleatorios){
+Cruce(matriz seleccion,int tipo, double alpha, double probablidad_cruce, 
+matriz cruce, generador de num aleatorios){
   cruces=probabilidad_cruce*num_cromosomas/2
 
   if(tipo==1){
@@ -443,15 +462,260 @@ BLX(vector padre1, vector padre2, matriz cruce, double alpha, generador){
 La función para el cruce Aritmético la realizamos con un parámetro $\alpha$ (que es distinto al que se usa en BLX-$\alpha$) para que no hagamos la media aritmética exacta de dos genes, pues de ser así crearíamos dos veces el mismo hijo, en su lugar generamos un alpha aleatorio y la media se hace como $\alpha·g_{1i} + (1-\alpha)·g_{2i}$  sería: 
 
 ```c++
-ARITMETICO(vector padre1, vector padre2,matriz cruce, generador)
+ARITMETICO(vector padre1, vector padre2,matriz cruce, generador){
   Creamos distribución uniforme en (0,1)
-  
-  for (int i=0; i<2; i++){
+  vector hijo
+
+  for (int k=0; k<2; k++){
     generamos alpha
-    
+    for(int i=0; i< tam_padre ; i++){
+      elemento=alpha*padre1[i] + (1-alpha)*padre2[i]
+      metemos elemento en hijo
+    }
+    metemos hijo en la matriz de cruce
+    vaciamos hijo
   }
+}
+```
+Tras esto se producen las mutaciones en los genes: 
+
+```c++
+Mutacion(matriz cruce, double pm, generador_num_aleatorios){
+  Calculamos el numero de cromosomas num_cromosomas
+  calculamos el numero de genes num_genes
+  int num_mutaciones=pm*num_cromosomas*num_genes 
+  int fila, col;
+
+  for(i=0; i<num_mutaciones; i++){
+    fila=generamos num aleatorio%num_cromosomas
+    col=generamos num aleatorio%num_genes
+    Mov(cruce[fila],0.3,col,generador_num_aleatorios)
+  }
+}
+Mov(vector w, double sigma, int pos, generador_num_aleatorios){
+  Inicializamos distribucion normal (0.0,sigma)
+    
+  z=elemento generado por la distribucion Normal
+  w[pos]=w[pos]+z
+
+  Si (w[pos]>1.0){
+      w[pos]=1.0
+  }
+
+  Si(w[pos]<0.0){
+      w[pos]=0.0;
+  }
+}
 ```
 
+Finalmente los elementos de la población anterior son reemplazados y se evalúa la nueva población.En este caso se realizarán conjuntamente estas dos etapas:
+
+```c++
+ReemplazarYEvaluar(matriz poblacion, matriz mutaciones, datos, vector w, 
+int solucion, vector vfitness){
+
+  mejor_fitness_anterior=vfitness[solucion]
+  vector auxiliar v
+
+  limpiamos poblacion
+  limpiamos vfitness
+
+  for(int i=0; i< mutaciones.size(); i++){
+    v=mutaciones[i]
+    calculamos fitness de v
+    metemos el fitness en vfitness
+
+    Si es el mejor fitness por ahora{
+      solucion=i
+      mejor_fitness=fitness de v
+    }
+
+    Si es el peor fitness por ahora{
+      peor=i
+      peor_fitness=fitness
+    }
+  }
+
+  Si(peor_fitness>mejor_fitness_anterior)
+    poblacion=mutaciones
+  Si no{
+    poblacion=mutaciones
+    poblacion[indice_peor]=w 
+  }
+
+  Si(mejor_fitness > mejor_fitness_anterior)
+    w=poblacion[solucion]
+}
+```
+
+Como aclaración, $w$ es el vector solución de la población anterior, que en caso de ser mejor que el peor de la nueva población lo mantenemos una generación más.
+
+
+### Algoritmo Genético Estacionario (AGE)
+
+En este caso, el esquema a seguir es el siguiente: 
+
+![Esquema AGE](imagenes/AGE.png)
+
+\newpage
+
+Como vemos, en esencia es similar al caso del AGG, las dos diferencias son que en este caso sólo elegimos dos cromosomas como padres en cada iteración, el cruce entre estos dos padres se realiza con probabilidad 1 (pero sigue siendo con BLX-$\alpha$ o con cruce Aritmético), y que los dos hijos generados compiten con los dos peores de la población actual para entrar en la nueva generación (los dos cromosomas con mejor fitness pasan). 
+
+Así, el pseudocódigo del algoritmo AGE sería similar al del AGG, con la salvedad de que algunas funciones se realizan de forma distinta. 
+
+Para empezar, la función de Evaluación de la población al comienzo del algoritmo (tras la inicialización de la población), se va a reemplazar por la siguiente función: 
+
+```c++
+CalculaFitness(matriz poblacion, datos, vector vfitness, int solucion, int peor, int segundo peor){
+
+  Para cada vector v de la pobacion: 
+    Calculamos el fitness de v
+    Lo almacenamos en vfitness
+
+    Si(fitness de v > mejorfitness){
+      mejorfitness=fitness de v
+      pos_mejor= pos de v
+    }
+
+    Si (fitness de v < peorfitness){
+      peorfitness=fitnes de v
+      pos_peor=pos de v
+    }
+
+    //Calculamos segundo peor de vfitness
+    vfitness[pos_peor]=vfitness[pos_peor]+100.0
+    pos_segundo_peor=CalculaPeor(vfitness);
+    vfitness[pos_peor]=vfitness[pos_peor]-100.0;
+}
+
+int CalculaPeor(vector vfitness){
+  min=100.0
+  Para cada elemento en vfitness{
+    si(elemento < min>){
+      min=elemento
+      peor=pos_elemento
+    }
+  }
+  return peor
+}
+```
+
+La función selección permanece idéntica al caso AGG, con la excepción de que se le especifica por parámetros que solo tome dos elementos como padres.
+
+Del mismo modo, las funciones de cruce y mutación permanecen idéntica con la excepción de que en el cruce se especifica que la probabilidad de cruce es de 1.0, así nos aseguramos que se cruzan los dos padres seleccionados. 
+
+Finalmente la función `ReemplazarYEvaluar` del caso AGG se sustituye por la siguiente: 
+
+\newpage
+
+```c++
+ReemplazamientoCompetitivo(poblacion, mutaciones, datos, vfitness, pos_mejor, 
+pos_peor, pos_segundo_peor){
+
+  Para cada hijo h en mutaciones{
+    fitness1=Calculamos el fitness de h
+    if(fitness1>vfitness[pos_segundo_peor]){
+      vfitness[pos_segundo_peor]=fitness1
+      poblacion[pos_segundo_peor]=h
+
+      //Vemos si es mejor que el actual mejor
+      Si (vfitness[pos_mejor]<fitness1){
+        pos_mejor=pos_segundo_peor
+      } 
+
+      //Calculamos segundo peor de nuevo
+      vfitness[pos_peor]=vfitness[pos_peor]+100.0
+      pos_segundo_peor=CalculaPeor(vfitness);
+      vfitness[pos_peor]=vfitness[pos_peor]-100.0;
+    }
+    else if(vfitness[pos_peor]<fitness1){ //Está entre los dos peores
+        vfitness[pos_peor]=fitness1;
+        poblacion[pos_peor]=h; //Sigue siendo el peor
+    }
+  }
+}
+```
+
+## Algoritmo Memético
+
+Utilizaremos también **algoritmos meméticos**, que son un híbrido entre el algoritmo de *búsqueda local* y *los algoritmos genéticos*. La justificación de esta hibridación reside en que los algoritmos de búsqueda local son malos exploradores (es decir tienden a quedar atrapados en extremos locales) pero buenos explotadores (alcanzamos con precisión el extremo local), en cambio los genéticos son buenos exploradores (no quedan atascados en extremos locales) y malos explotadores (no logran alcanzar extremos con precisión). Es por ello que esta hibridación permite explotar al máximo lo que mejor sabe hacer cada algoritmo, el esquema será por tanto: 
+
+1. Ejecutar un algoritmo genético durante un número $t$ de generaciones establecido (realizando una buena exploración).
+2. Ejecutar un algoritmo de búsqueda local a la población actual (realizando una buena explotación). 
+3. Repetir el proceso anterior hasta alcanzar un máximo de evaluaciones de la función objetivo.
+
+Con esta nueva propuesta realizaremos varios experimentos, primero cambiaremos el tamaño de la población de 30 a 10, la probabilidad de cruce y mutación permanecerán similares al AGG. Por otro lado las versiones que implementaremos serán: 
+
+- **Algoritmo Memético (10,1.0)**: Cada 10 generaciones se lleva a cabo una búsqueda local (de $2·numgenes$ iteraciones) de todos los cromosomas de la población. Se repite el proceso hasta alcanzar las 15000 evaluaciones.
+- **Algoritmo Memético (10,0.1)**: Cada 10 generaciones se lleva a cabo una búsqueda local (de $2·numgenes$ iteraciones) del 10% de los cromosomas de la población, esta versión es más rápida que la anterior pero a cambio solo se mejora un cromosoma aleatorio de la población. Se repite el proceso hasta alcanzar las 15000 evaluaciones.
+  
+\newpage
+
+- **Algoritmo Memético (10,0.1Mej)**: Cada 10 generaciones se lleva a cabo una búsqueda local (de $2·numgenes$ iteraciones) del 10% de los mejores cromosomas de la población, versión mejorada de la anterior que busca centrar esfuerzos en mejorar únicamente los mejores cromosomas de la población. Se repite el proceso hasta alcanzar las 15000 evaluaciones.
+
+La elección de cada tipo de algoritmo se realizará por parámetros que pasaremos al algorimto, pues los tres algoritmos son iguales en esencia, así habrá un parámetro $pls$ que nos da la probabilidad de que el cromosoma haga la búsqueda local que valdrá $1.0$ en el primer algoritmo y $0.1$ en los dos siguientes y un parámetro booleano llamado $mejor$ que indica si la búsqueda local es en los mejores o en cualquier elemento: 
+
+De esta forma el Pseudocódigo del algoritmo será el siguiente: 
+
+```c++
+AlgoritmoMemetico(datos, vector w , int tam_poblacion, int tipo_cruce, int tipo, double pls, bool mejores, generador mt19937){
+  
+  int cont_generaciones=0
+  int dim=num_atributos 
+  int contador_evaluaciones=0
+  int ncromosomas=tam_pob*pls; //Esperanza matematica
+  definimos vectores de dim tam_poblacion x dim: poblacion, seleccion, cruce
+  vector vfitness //fitness de los cromosomas de la poblacion actual
+
+  Inicializar poblacion
+  Evaluar poblacion
+
+  while (contador_evaluaciones<15000){
+    Seleccionamos Padres
+    Cruzamos padres con BLX (si tipo=1) o con cruce Aritmetico (si tipo=2)
+    Mutamos los cruces 
+    Reemplazamos la población original
+    Evaluamos la nueva población
+    contador_generaciones++
+    vector pos_mejores //para la tercera versión
+
+    Si(contador_generaciones%10==0){
+      contador_generaciones=0
+      //Si no es la versión de mejorar mejores
+      Si(!mejor){
+        Para cada i in ncromosomas{
+          BusquedaLocal(datos, poblacion[i],evaluaciones, generador_num_aleatorios)
+        }
+      }Si no{
+        pos_mejores=CalculaMejores(vfitness,ncromosomas);
+        Para cada i in pos_mejores{
+          BusquedaLocal(datos, poblacion[i],evaluaciones, generador_num_aleatorios)
+        }
+      }
+    }
+  }
+
+  w=mejor cromosoma de la poblacion
+}
+
+
+vector Calculamejores (vfitness, int n){
+  vector posiciones
+  vector vfitness_ordenado
+
+  vfitness_ordenado= Ordenamos de menor a mayor el vector de vfitness
+
+  Para cada i<n{
+    //tomamos el elemento i-esimo maximo
+    elem=vfitness_ordenado[vfitnes.size()-i-1]
+    posiciones.push_back(indice correspondiente a elem en vfitness)
+  }
+
+  return posiciones
+}
+```
+
+Todas las funciones que se emplean son idénticas a las de AGG y la Búsqueda Local es igual a la ya explicada con la salvedad de que el criterio de parada es hacer $2·numgenes$ mutaciones.
 
 
 # Procedimiento 
