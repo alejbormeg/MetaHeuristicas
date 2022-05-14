@@ -748,7 +748,7 @@ En la resolución del problema hemos optado por mezclar los datos y normalizarlo
 Obtenemos los resultados para el algoritmo **RELIEF**:
 
 |Particiones | Ionosphere      ||||
-|:--|:--|:--|:--|:--|
+|:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
 |Partición 1| 85.714 | 2.941 |44.327| 3.394 |
 |Partición 2| 90 |2.941| 46.470 | 3.272 | 
@@ -760,7 +760,7 @@ Obtenemos los resultados para el algoritmo **RELIEF**:
 Table: Resultados en el Dataset Ionosphere para RELIEF
 
 |Particiones | Parkinsons      ||||
-|:--|:--|:--|:--|:--|
+|:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
 |Partición 1| 94.871 | 0 |47.435| 1.199 |
 |Partición 2| 94.871 | 0 | 47.435 | 1.017 | 
@@ -771,10 +771,8 @@ Table: Resultados en el Dataset Ionosphere para RELIEF
 
 Table: Resultados en el Dataset Parkinsons para RELIEF
 
-\newpage
-
 |Particiones | Spectf_heart      ||||
-|:--|:--|:--|:--|:--|
+|:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
 |Partición 1| 79.71 | 0 |39.855| 4.122 |
 |Partición 2| 82.608 | 0 | 41.304 | 4.498 | 
@@ -788,7 +786,7 @@ Table: Resultados en el Dataset Spectf_heart para RELIEF
 Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 
 |Particiones | Ionosphere      ||||
-|:--|:--|:--|:--|:--|
+|:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
 |Partición 1| 85.714 | 58.823 |72.268| 8825.46 |
 |Partición 2| 87.142 |55.882| 71.512 | 3509.74 | 
@@ -800,7 +798,7 @@ Obtenemos los resultados para el algoritmo de **Búsqueda Local**:
 Table: Resultados en el Dataset Ionosphere para BL
 
 |Particiones | Parkinsons      ||||
-|:--|:--|:--|:--|:--|
+|:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
 |Partición 1| 100 | 50 | 75 | 788.805 |
 |Partición 2| 76.923 | 77.272 | 77.097 | 1018.39 | 
@@ -822,6 +820,278 @@ Table: Resultados en el Dataset Parkinsons para BL
 |Media|  82.477 | 61.818 | 72.147 | 9528.56 | 
 
 Table: Resultados en el Dataset Spectf_heart para BL
+
+Obtenemos los resultados para el algoritmo de **AGG-BLX**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 84.2857 | 67.6471 | 75.9664| 56286.1 |
+|Partición 2| 91.4286 |58.8235| 75.1261 | 56053.9 | 
+|Partición 3| 90 | 58.8235 | 74.4118 | 56373.3 | 
+|Partición 4| 88.5714 | 67.6471 | 78.1092 | 56056.9 | 
+|Partición 5| 91.5493 | 73.5294 | 76.014 | 56114.7 | 
+|Media| 89.167 | 65.2941 | 77.2306 | 56177 | 
+
+Table: Resultados en el Dataset Ionosphere para AGG-BLX
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 89.7436 | 81.8182| 85.7809 | 11971.5 |
+|Partición 2| 89.7436 | 90.9091 | 90.3263 | 11931.5 | 
+|Partición 3| 92.3077 | 81.8182 | 87.0629 | 11950.3 | 
+|Partición 4| 100 | 86.3636 | 93.1818 | 12092 | 
+|Partición 5| 97.4359 | 81.8182 | 89.627 | 11983.8 |
+|Media|  93.8462 | 84.5455 | 89.1958 | 11985.8 | 
+
+Table: Resultados en el Dataset Parkinsons para AGG-BLX
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 84.058 | 61.3636 |72.7108 | 69600.8 |
+|Partición 2| 85.5072 | 61.3636 | 73.4354 | 69575.3 | 
+|Partición 3| 86.9565 | 59.0909 | 73.0237 | 70756.5 | 
+|Partición 4| 88.4058 | 54.5455 | 71.4756 | 69674.4 | 
+|Partición 5| 90.411 | 61.3636 | 75.8873 | 69974 | 
+|Media| 87.0677 | 59.5455 | 73.3066 | 69916.2 | 
+
+Table: Resultados en el Dataset Spectf_heart para AGG-BLX
+
+Obtenemos los resultados para el algoritmo de **AGG-ARITMETICO**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714 | 52.9412 | 70.7563 | 56105.2 |
+|Partición 2| 94.2857 | 47.0588 | 70.6723 | 56102.6 | 
+|Partición 3| 94.2857 | 47.0588 | 70.6723 | 56103.5 | 
+|Partición 4| 87.1429 | 44.1176 | 65.6303 | 56404.3 | 
+|Partición 5| 90.1408 | 50 | 70.0704 | 56085.7 | 
+|Media| 90.8853 | 48.2353 | 69.5603 | 56160.3 | 
+
+Table: Resultados en el Dataset Ionosphere para AGG-ARITMETICO
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 92.3077 | 63.6364 | 77.972 | 11955.1 |
+|Partición 2| 89.7436 | 63.6364 | 76.69 | 11939.3 | 
+|Partición 3| 92.3077 | 68.1818 | 80.2448 | 11941.4 | 
+|Partición 4| 94.8718 | 68.1818 | 81.5268 |    11940.2 | 
+|Partición 5| 100 | 68.1818 | 84.0909 | 11958.3 |
+|Media|  93.8462 | 66.3636 | 80.1049 | 11946.8 | 
+
+Table: Resultados en el Dataset Parkinsons para AGG-ARITMETICO
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 85.5072 | 34.0909 |59.7991 | 69617.6 |
+|Partición 2| 86.9565 | 43.1818 | 65.0692 | 69562.4 | 
+|Partición 3| 81.1594 | 45.4545 | 63.307 | 69570.6 | 
+|Partición 4| 86.9565 | 31.8182 | 59.3874 | 69684.8 | 
+|Partición 5| 94.5205 | 43.1818 | 68.8512 | 70193.3 | 
+|Media| 87.0201 | 39.5455 | 63.2828 | 69725.8 | 
+
+Table: Resultados en el Dataset Spectf_heart para AGG-ARITMETICO
+
+
+Obtenemos los resultados para el algoritmo de **AGE-BLX**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714 | 100 | 94.2857 | 56332.9 |
+|Partición 2| 95.7143 | 100 | 97.8571 | 56116.3 | 
+|Partición 3| 95.7143 | 100 | 97.8571 | 56073.9 | 
+|Partición 4| 95.7143 | 100 | 97.8571 | 56044.4 | 
+|Partición 5| 91.5493 | 88.2353 | 89.8923 | 56104.9 | 
+|Media| 93.4527 | 97.6471 | 95.5499 | 56160.3 | 
+
+Table: Resultados en el Dataset Ionosphere para AGE-BLX
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 94.8718 | 100 | 97.4359 | 11923.1 |
+|Partición 2| 92.3077 | 100 | 96.1538 | 11954.8 | 
+|Partición 3| 100 | 100 | 100 | 11966 | 
+|Partición 4| 97.4359 | 100 | 98.7179 | 11961.3| 
+|Partición 5| 100 | 100 | 100 | 11940.8 |
+|Media|  96.9231 | 100 | 98.4615 | 11949.2 | 
+
+Table: Resultados en el Dataset Parkinsons para AGE-BLX
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 78.2609 | 88.6364 |83.4486 | 69566.1 |
+|Partición 2| 88.4058 | 88.6364 | 88.5211 | 69532.2 | 
+|Partición 3| 91.3043 | 81.8182 | 86.5613 | 69689.1 | 
+|Partición 4| 91.3043 | 86.3636 | 88.834 | 69669 | 
+|Partición 5| 97.2603 | 90.9091 | 94.0847 | 69526.1 | 
+|Media| 89.3071 | 87.2727 | 88.2899 | 69596.5 | 
+
+Table: Resultados en el Dataset Spectf_heart para AGE-BLX
+
+
+Obtenemos los resultados para el algoritmo de **AGE-ARITMETICO**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 92.8571 | 97.0588 | 94.958 | 56019.8 |
+|Partición 2| 94.2857 | 97.0588 | 95.6723 | 56206.7 | 
+|Partición 3| 94.2857 | 100 | 97.1429 | 56230.8 | 
+|Partición 4| 91.4286 | 100 | 95.7143 | 56096.4 | 
+|Partición 5| 91.5493 | 94.1176 | 92.8335 | 56218.4 | 
+|Media| 93.4527 | 92.8813 | 95.2642 | 56154.4 | 
+
+Table: Resultados en el Dataset Ionosphere para AGE-ARITMETICO
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 100 | 100 | 100 | 11962.3 |
+|Partición 2| 92.3077 | 100 | 96.1538 | 11929.1 | 
+|Partición 3| 97.4359 | 95.4545 | 96.4452 | 11966 | 
+|Partición 4| 100 | 86.3636 | 93.1818 | 11992.5 | 
+|Partición 5| 100 | 100 | 100 | 12457 |
+|Media| 97.9487 | 96.3636 | 97.1562 | 12056.1 | 
+
+Table: Resultados en el Dataset Parkinsons para AGE-ARITMETICO
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 82.6087 | 90.9091 | 86.7589 | 69518.5 |
+|Partición 2| 88.4058 | 90.9091 | 86.7589 | 69469.7 | 
+|Partición 3| 94.2029 | 90.9091 | 92.556  | 69661.4 | 
+|Partición 4| 89.8551 | 86.3636 | 90.3821 | 69514.7 | 
+|Partición 5| 87.3893 | 90 | 87.0174 | 69520.2 | 
+|Media| 89.3071 | 87.2727 | 90 | 69536.9 | 
+
+Table: Resultados en el Dataset Spectf_heart para AGE-ARITMETICO
+
+Obtenemos los resultados para el algoritmo de **AM(10,1.0)**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 90 | 76.4706 | 83.2353 | 62929.6 |
+|Partición 2| 92.8571 | 88.2353 | 90.5462 | 60741.3 | 
+|Partición 3| 90 | 88.2353 | 89.1176 | 57414.5 | 
+|Partición 4| 88.5714 | 82.3529 | 85.4622 | 60430 | 
+|Partición 5| 91.5493 | 94.1176 | 92.8335 | 65237.8 | 
+|Media| 90.5956 | 85.8824 | 88.239 | 61350.6 | 
+
+Table: Resultados en el Dataset Ionosphere para AM(10,1.0)
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 94.8718 | 86.3636 | 90.6177 | 12684.1 |
+|Partición 2| 97.4359 | 86.3636 | 91.8998 | 12889.6 | 
+|Partición 3| 97.4359 | 86.3636 | 91.8998 | 13163.2 | 
+|Partición 4| 97.4359 | 86.3636 | 91.8998 | 12034.6 | 
+|Partición 5| 100 | 95.4545 | 97.7273 | 12782.7 |
+|Media| 97.4359 | 88.1818 | 92.8089 | 12710.8 | 
+
+Table: Resultados en el Dataset Parkinsons para AM(10,1.0)
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.4058 | 68.1818 | 78.2938 | 76556.8 |
+|Partición 2| 85.5072 | 75 | 80.2536 | 86600.3 | 
+|Partición 3| 86.9565 | 70.4545 | 78.7055  | 84867.4 | 
+|Partición 4| 86.9565 | 75 | 80.9783 | 70588.7 | 
+|Partición 5| 86.3014 | 68.1818 | 77.2416 | 74526.8 | 
+|Media| 86.8255 | 71.3636 | 79.0946 | 78628 | 
+
+Table: Resultados en el Dataset Spectf_heart para AM(10,1.0)
+
+
+Obtenemos los resultados para el algoritmo de **AM(10,0.1)**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 84.2857 | 79.4118 | 81.8487 | 56135.8 |
+|Partición 2| 88.5714 | 67.6471 | 78.1092 | 56228.5 | 
+|Partición 3| 91.4286 | 58.8235 | 75.1261 | 58267.7 | 
+|Partición 4| 90 | 67.6471 | 78.8235 | 56088.9 | 
+|Partición 5| 88.7324 | 70.5882 | 79.6603 | 57206.2 | 
+|Media| 88.6036 | 68.8235 | 78.7136 | 56785.4 | 
+
+Table: Resultados en el Dataset Ionosphere para AM(10,0.1)
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 92.3077 | 81.8182 | 87.0629 | 11932.3 |
+|Partición 2| 97.4359 | 90.9091 | 91.6084 | 11860.2 | 
+|Partición 3| 89.7436 | 77.2727 | 83.5082 | 11874.8 | 
+|Partición 4| 94.8718 | 77.2727 | 86.0723 | 11908.3 | 
+|Partición 5| 100 | 77.2727 | 88.6364 | 11911.2 |
+|Media|  93.8462 | 80.9091 | 87.3776 | 11897.4 | 
+
+Table: Resultados en el Dataset Parkinsons para AM(10,0.1)
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 79.7101 | 70.4545 | 75.0823 | 69613.3 |
+|Partición 2| 88.4058 | 59.0909 | 73.7484 | 70623.4 | 
+|Partición 3| 82.6087 | 63.6364 | 73.1225 | 71184.3 | 
+|Partición 4| 89.8551 | 59.0909 | 74.473  | 70880.4 | 
+|Partición 5| 91.7808 | 65.9091 | 78.845 | 70850.8 | 
+|Media| 86.4721 | 63.6364 | 75.0542 | 70630.5 | 
+
+Table: Resultados en el Dataset Spectf_heart para AM(10,0.1)
+
+
+
+Obtenemos los resultados para el algoritmo de **AM(10,0.1Mej)**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 90 | 82.3529 | 86.1765 | 57127.6 |
+|Partición 2| 88.5714 | 88.2353 | 88.4034 | 56077.5 | 
+|Partición 3| 94.2857 | 67.6471 | 80.9664 | 56572.9 | 
+|Partición 4| 85.7143 | 85.2941 | 85.5042 | 56452.9 | 
+|Partición 5| 90.1408 | 88.2353 | 89.1881 | 58121.3 | 
+|Media| 88.6036 | 68.8235 | 78.7136 | 56785.4 | 
+
+Table: Resultados en el Dataset Ionosphere para AM(10,0.1Mej)
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 87.1795 | 90.9091 | 89.0443 | 11928.1 |
+|Partición 2| 89.7436 | 86.3636 | 88.0536 | 11913.3 | 
+|Partición 3| 92.3077 | 90.9091 | 91.6084 | 11918.8 | 
+|Partición 4| 92.3077 | 86.3636 | 89.3357 | 11950.2 | 
+|Partición 5| 100 | 77.2727 | 88.6364 | 12052.6 |
+|Media| 92.3077 | 86.3636 | 89.3357 | 11952.6 | 
+
+Table: Resultados en el Dataset Parkinsons para AM(10,0.1Mej)
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 79.7101 | 59.0909 | 69.4005 | 70898.4 |
+|Partición 2| 88.4058 | 61.3636 | 74.8847 | 69542.2 | 
+|Partición 3| 84.058 | 63.6364 | 73.1225  | 70066.9 | 
+|Partición 4| 85.5072 | 70.4545 | 77.9809 | 69808.2 | 
+|Partición 5| 89.0411 | 56.8182 | 72.9296 | 70400.4 | 
+|Media| 85.3445 | 63.1818 | 74.2631 | 70143.2 | 
+
+Table: Resultados en el Dataset Spectf_heart para AM(10,0.1Mej)
+
 
 Los resultados anteriores se han obtenido en cada iteración del proceso de 5-fold Cross Validation y como podemos observar, por regla general el método **RELIEF** consigue unas tasas muy elevadas de Precisión sobre el conjunto de Test en todas las bases de datos utilizadas, **pero en cambio este método no consigue reducir atributos** o al menos no sirve para este cometido (a excepción de la base de datos de **Ionosphere** dónde se reduce en un 3% aproximadamente), por lo que no consigue una evaluación muy alta de la función objetivo, ya que nuestro propósito era reducir el mayor número de atributos posible a la vez que intentar mantener una elevada precisión al clasificar. 
 
