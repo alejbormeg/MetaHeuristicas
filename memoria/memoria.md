@@ -1036,7 +1036,7 @@ Table: Resultados en el Dataset Ionosphere para AM(10,0.1)
 |Partición 3| 89.7436 | 77.2727 | 83.5082 | 11874.8 | 
 |Partición 4| 94.8718 | 77.2727 | 86.0723 | 11908.3 | 
 |Partición 5| 100 | 77.2727 | 88.6364 | 11911.2 |
-|Media|  93.8462 | 80.9091 | 87.3776 | 11897.4 | 
+|Media| 93.8462 | 80.9091 | 87.3776 | 11897.4 | 
 
 Table: Resultados en el Dataset Parkinsons para AM(10,0.1)
 
@@ -1064,7 +1064,7 @@ Obtenemos los resultados para el algoritmo de **AM(10,0.1Mej)**:
 |Partición 3| 94.2857 | 67.6471 | 80.9664 | 56572.9 | 
 |Partición 4| 85.7143 | 85.2941 | 85.5042 | 56452.9 | 
 |Partición 5| 90.1408 | 88.2353 | 89.1881 | 58121.3 | 
-|Media| 88.6036 | 68.8235 | 78.7136 | 56785.4 | 
+|Media|89.7425 | 82.3529 | 86.0477 | 56870.4 | 
 
 Table: Resultados en el Dataset Ionosphere para AM(10,0.1Mej)
 
@@ -1103,10 +1103,17 @@ Como resumen tenemos:
 
 |Algoritmos | Ionosphere   ||||
 |:--|:--|:--|:--|:--|
-| | % clas | % red | Agr. | Tiempo ms |  % clas | % red | Agr. | Tiempo ms | % clas | % red | Agr. | Tiempo ms |
+| | % clas | % red | Agr. | Tiempo ms |  
 |1-NN| 86.599 | 0 |43.299| 2.653 |
 |RELIEF| 87.746 | 2.941 | 45.343 | 3.545 | 
 |Búsqueda Local| 87.750 | 63.529 | 75.64 | 6619.88 | 
+|AGG-BLX | 89.167 | 65.2941 | 77.2306 | 56177 |
+|AGG-ARITMETICO | 90.8853 | 48.2353 | 69.5603 | 56160.3 |
+|AGE-BLX | 93.4527 | 97.6471 | 95.5499 | 56160.3 | 
+|AGE-ARITMETICO | 93.4527 | 92.8813 | 95.2642 | 56154.4 |
+|AM(10,1.0) | 90.5956 | 85.8824 | 88.239 | 61350.6 |
+|AM(10,0.1) | 88.6036 | 68.8235 | 78.7136 | 56785.4 | 
+|AM(10,0.1Mej) | 89.7425 | 82.3529 | 86.0477 | 56870.4 |
 
 Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 
@@ -1116,6 +1123,13 @@ Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 |1-NN | 93.333 | 67.272 | 80.303 | 800.658 | 
 |RELIEF | 95.897 | 0 | 47.948 | 1.152 | 
 |Búsqueda Local | 93.333 | 67.272 | 80.303 | 800.658 | 
+|AGG-BLX |  93.8462 | 84.5455 | 89.1958 | 11985.8 | 
+|AGG-ARITMETICO | 93.8462 | 66.3636 | 80.1049 | 11946.8 | 
+|AGE-BLX | 96.9231 | 100 | 98.4615 | 11949.2 |
+|AGE-ARITMETICO | 97.9487 | 96.3636 | 97.1562 | 12056.1 | 
+|AM(10,1.0) | 97.4359 | 88.1818 | 92.8089 | 12710.8 |
+|AM(10,0.1) | 93.8462 | 80.9091 | 87.3776 | 11897.4 | 
+|AM(10,0.1Mej) | 92.3077 | 86.3636 | 89.3357 | 11952.6 | 
 
 Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
@@ -1125,6 +1139,13 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 |1-NN | 96.923 | 0 | 48.461 | 0.58 | 
 |RELIEF | 83.009 | 0 | 41.504 | 4.303 | 
 |Búsqueda Local | 82.477 | 61.818 | 72.147 | 9528.56 | 
+|AGG-BLX | 87.0677 | 59.5455 | 73.3066 | 69916.2 | 
+|AGG-ARITMETICO | 87.0201 | 39.5455 | 63.2828 | 69725.8 | 
+|AGE-BLX | 89.3071 | 87.2727 | 88.2899 | 69596.5 | 
+|AGE-ARITMETICO | 89.3071 | 87.2727 | 90 | 69536.9 | 
+|AM(10,1.0) | 86.8255 | 71.3636 | 79.0946 | 78628 | 
+|AM(10,0.1) | 86.4721 | 63.6364 | 75.0542 | 70630.5 | 
+|AM(10,0.1Mej) | 85.3445 | 63.1818 | 74.2631 | 70143.2 | 
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
@@ -1261,10 +1282,10 @@ Como vemos, los atributos por encima de 0.7 en la primera iteración serían:1,3
 En la segunda iteración serían: 18, 19 , 20 y 22. 
 
 En la tercera iteración: 1,3,9,11,14,18,19,20,22
+\newpage
 
 Como vemos coinciden en su gran mayoría en cada iteración, y si nos fijamos en el vector pormedio solución, podemos ver que en este caso si hay valores por encima de 0.7 que son los que por regla general más se han ponderado en cada iteración. 
 
-\newpage
 La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y el algoritmo de Búsqueda Local, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
 
 # Referencias Bibliográficas
