@@ -644,6 +644,8 @@ Utilizaremos también **algoritmos meméticos**, que son un híbrido entre el al
 2. Ejecutar un algoritmo de búsqueda local a la población actual (realizando una buena explotación). 
 3. Repetir el proceso anterior hasta alcanzar un máximo de evaluaciones de la función objetivo.
 
+El algoritmo genético que usaremos para esto será el **generacional** con cruce BLX-$\alpha$ pues como veremos más adelante es el que mejores resultados obtiene.
+
 Con esta nueva propuesta realizaremos varios experimentos, primero cambiaremos el tamaño de la población de 30 a 10, la probabilidad de cruce y mutación permanecerán similares al AGG. Por otro lado las versiones que implementaremos serán: 
 
 - **Algoritmo Memético (10,1.0)**: Cada 10 generaciones se lleva a cabo una búsqueda local (de $2·numgenes$ iteraciones) de todos los cromosomas de la población. Se repite el proceso hasta alcanzar las 15000 evaluaciones.
@@ -1099,6 +1101,14 @@ Sin embargo, el método de **Búsqueda local** si que tiene un comportamiento qu
 
 Por otro lado, comparando los tiempos empleados por ambos algoritmos podemos ver que el método RELIEF es mucho más rápido que el de Búsqueda Local, pues en media tarda unos 2-3ms en entrenar, en cambio el de Búsqueda Local está muy condicionado a si las mutaciones mejoran más o menos la función objetivo lo que en un caso extremo podría llevar a ejecutar 15000 evaluaciones de la función objetivo, es por ello que los tiempos son mayores, aunque muy razonables para la notable mejora conseguida con respecto a RELIEF (menos de 10 segundos normalmente).
 
+Si ahora nos fijamos en los resultados obtenidos por los **Algoritmos Genéticos** vemos como los *Estacionarios* obtienen muy buenos resultados en todas las bases de datos, con altas tasas de reducción (prácticamente el 100% en los dos primeros datasets) y de clasificación, tanto con el cruce BLX-$\alpha$ como con el cruce aritmético. Por otro lado los *Generacionales* también obtienen muy buenos resultados en todos los datasets, dónde podemos ver que se obtienen tasas muy elevadas de clasificación (generalmente superiores al 80%) y aunque en menor medida que los estacionarios, también obtienen buenas tasas de reducción (sobre todo en Parkinsons). No obstante, en el caso de los algoritmos genéticos generacionales si que podemos observar un rendimiento muy superior si usamos el cruce BLX-$\alpha$ a si usamos el cruce aritmético, ya que las tasas de reducción obtenidas con este segundo método no son tan elevadas, especialmente en el dataset de *Spectf_Heart* dónde se consigue un promedio del 40% de reducción. Finalmente en lo relativo al tiempo de ejecución en los dos tipos de algoritmos obtenemos resultados similares y podemos observar un notable aumento en comparación con los algoritmos anteriores (RELIEF y Búsqueda Local) ya que pasamos a una media de 56 segundos por partición en *Ionosphere*, 12 segundos en *Parkinsons* y 69 segundos en *Spectf_heart*. Esto se debe a que la implementación de los algoritmos no ha podido depurarse debidamente por la falta de tiempo y quizá ciertas funciones podrían hacerse de forma más eficiente.
+
+Continuamos analizando los resultados obtenidos por los **Algoritmos Meméticos**, en estos cabe destacar de inicio que tienen tiempos de ejecución similares a los Algoritmos genéticos. En primer lugar observamos como las tasas de reducción y precisión son muy elevadas en las tres variantes del algoritmo, de hecho son los segundos resultados más altos obtenidos hasta el momento. Podemos observar como el primer método *AM(10,1.0)* es el que mejores resultados obtiene de todos, lo que tiene sentido pues es el que mejor combina la potencia de los algoritmos genéticos para *explorar soluciones* y la búsqueda local para *explotar soluciones* ya que los diez cromosomas de la población exploran distintos extremos locales que son capaces de alcanzar con precisión gracias a que la búsqueda local se aplica a todos los cromosomas.
+
+Por otro lado, el segundo algoritmo que mejor rendimiento presenta es el **AM(10,0.1Mej)**, lo cual tiene sentido ya que en este caso sólo se decide explotar con búsqueda local el 10% de los mejores cromosomas (en este caso al ser de tamaño 10 la población, sería el mejor) por lo que estamos optimizando el mejor cromosoma de la población cada 10 generaciones y en cambio, el algororitmo **AM(10,0.1)** solo explota el 10% aleatorio de soluciones, lo que puede incluir cualquier tipo de cromosoma ya sea bueno o malo.
+
+
+
 Como resumen tenemos: 
 
 |Algoritmos | Ionosphere   ||||
@@ -1149,14 +1159,17 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
-En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de los resultados obtenidos por el método de Búsqueda Local podemos conlcuir: 
+En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de los resultados obtenidos podemos concluir: 
 
 - No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también. 
-- El tiempo es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
+- El tiempo que tarda la búsqueda local es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
+- Los **AGG**, a pesar de mejorar ligeramente los resultados con respecto a los obtenidos con la búsqueda local, tardan mucho tiempo en comparacion con la búsqueda local simple.
+- Los **AGE** son los que mejores resultados obtienen en todos los campos, a pesar de tener tiempos de ejecución elevados.
+- Los **AM**, son los siguientes en obtener los mejores resultado, especialmente la primera variante **AM(10,1.0)**, pero con un tiempos de ejecución elevados y ligeramente superiores a las otras dos variantes en el caso de  **AM(10,1.0)**.
 
-No obstante, hay un hecho importante que no se aprecia en las tablas en el método de búsqueda local, y que se aprecia cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
+No obstante, hay un hecho importante que no se aprecia en las tablas y se aprecia en el método de búsqueda local, los algoritmos genéticos y los meméticos cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
 
-Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos las siguientes soluciones por pantalla al ejecutar el algoritmo: 
+Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos las siguientes soluciones por pantalla al ejecutar el algoritmo de Búsqueda Local: 
 
 ```
 Particion: 1
@@ -1282,11 +1295,12 @@ Como vemos, los atributos por encima de 0.7 en la primera iteración serían:1,3
 En la segunda iteración serían: 18, 19 , 20 y 22. 
 
 En la tercera iteración: 1,3,9,11,14,18,19,20,22
-\newpage
 
 Como vemos coinciden en su gran mayoría en cada iteración, y si nos fijamos en el vector pormedio solución, podemos ver que en este caso si hay valores por encima de 0.7 que son los que por regla general más se han ponderado en cada iteración. 
 
-La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y el algoritmo de Búsqueda Local, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
+La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y los demás, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local y los algoritmos genéticos y meméticos, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
+
+Por otro lado, en relación a los algoritmos Genéticos Estacionarios, comentar que los resultados obtenidos son interesantes y muy elevados. Por una parte me parece razonable que se obtengan buenos resultados, ya que en cada generación reemplazamos los peores por otros mejores o iguales, y así el mejor cromosoma de la población siempre tiene un fitness al menos tan bueno como el de la generación anterior. Pero el caso es que en la mayoría de datasets las tasas de reducción son muy elevadas, llegando incluso en los datos de **Parkinsons** a ser del 100%, lo que nos lleva a pensar que en este caso concreto, la mejor solución sería prácticamente 0, lo que significaría que en nuestro clasificador, la distancia entre dos puntos sería de prácticamente 0 siempre. Por otro lado, en el resto de datasets nos reafirma la idea que comentábamos antes de que muchos de los atributos eran redundantes, pues con tasas de reducción muy elevadas (superiores al 87%) se consiguen muy buenos resultados de clasificación en todos los datasets.
 
 # Referencias Bibliográficas
 
