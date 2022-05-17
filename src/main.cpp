@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=3; k<algoritmos.size(); k++){
+	for (int k=1; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 			}
 			else if(k==2){
 				t0=clock();
-				BusquedaLocal(entrenamiento,w,i);
+				BusquedaLocal(entrenamiento,w,gen);
 				t1=clock();
 			}
 			else if(k==3){

@@ -162,24 +162,6 @@ void Cruce(std::vector<std::vector<double>> const & seleccion,int tipo, double a
     } 
 }
 
-void Mov(std::vector<double> & w, double sigma, int pos,std::mt19937 &generator){
-    //Se inicializa con la desviación estandar, por eso usamos sigma en lugar de sigma²
-    std::normal_distribution<double> dist(0.0,sigma);
-    double z=dist(generator);
-    //Mutamos el gen correspondiente
-    w[pos]=w[pos]+z;
-
-    //Nos aseguramos que está entre 0.0 y 1.0 el valor final
-    if(w[pos]>1.0){
-        w[pos]=1.0;
-    }
-
-    if(w[pos]<0.0){
-        w[pos]=0.0;
-    }
-
-}
-
 void Mutacion(std::vector<std::vector<double>> & cruce, double pm,std::mt19937 &generator){
     int num_cromosomas=cruce.size();
     int genes=cruce[0].size();

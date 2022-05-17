@@ -17,24 +17,7 @@ std::vector<double> inicializacionBL(int dim,int i){
     return w;
 }
 
-void Mov(std::vector<double> & w, double sigma, int pos,int i){
-    std::mt19937 gen(i);  // Will be used to obtain a seed for the random number engine
-    //Se inicializa con la desviación estandar, por eso usamos sigma en lugar de sigma²
-    std::normal_distribution<double> dist(0.0,sigma);
-    double z=dist(gen);
-    w[pos]=w[pos]+z;
-    if(w[pos]>1.0){
-        w[pos]=1.0;
-    }
-
-    if(w[pos]<0.0){
-        w[pos]=0.0;
-    }
-
-}
-
-void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,int semilla){
-    srand(semilla); //establecemos semilla
+void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,std::mt19937 &generator){
     std::vector<double> w_mutado=w;
     bool mejora;
     double tasa_clas=0.0;
@@ -59,7 +42,7 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
         mejora=false;
         for(int i=0; i<tam_vector && mejora==false; i++){
             w_mutado=w;
-            Mov(w_mutado,0.3,orden_mutaciones[i],i);
+            Mov(w_mutado,0.3,orden_mutaciones[i],generator);
             contador_mut++; //aumentamos el número de vecinos
             tasa_clas=LeaveOneOut(datos,w_mutado);
 

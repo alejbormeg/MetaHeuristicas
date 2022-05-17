@@ -7,6 +7,7 @@
 #include <cassert>
 #include<cmath>
 #include <vector>
+#include <random>
 
 
 /**
@@ -135,5 +136,15 @@ double Evaluacion (std::vector<std::pair<std::vector<double>,std::string>> &entr
  */
 //El std::vector datos ya debe venir mezclado, prepara para entrenar con 80% y dejar 20% validacion
 void Prepara5FoldCrossVal(std::vector<std::pair<std::vector<double>,std::string>> & datos,std::vector<std::pair<std::vector<double>,std::string>> & entrenamiento,std::vector<std::pair<std::vector<double>,std::string>> & validacion,int k);
+
+/**
+ * @brief Operador de mutación
+ * @param w vector que elegimos mutar 
+ * @param sigma desv típica de la distribución normal
+ * @param pos gen a mutar
+ * @param generator generador de números aleatorios
+ */
+void Mov(std::vector<double> & w, double sigma, int pos,std::mt19937 &generator);
+
 
 #endif

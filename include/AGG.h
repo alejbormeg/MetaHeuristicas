@@ -73,15 +73,6 @@ void BLX(std::vector<double> const &c1,std::vector<double> const &c2,std::vector
 void Cruce(std::vector<std::vector<double>> const & seleccion,int tipo, double alpha,double pc,std::vector<std::vector<double>> & cruce,std::mt19937 &generator);
 
 /**
- * @brief Operador de mutación
- * @param w vector que elegimos mutar 
- * @param sigma desv típica de la distribución normal
- * @param pos gen a mutar
- * @param generator generador de números aleatorios
- */
-void Mov(std::vector<double> & w, double sigma, int pos,std::mt19937 &generator);
-
-/**
  * @brief Mutacion de los cruces
  * 
  * @param cruce cruce actual
