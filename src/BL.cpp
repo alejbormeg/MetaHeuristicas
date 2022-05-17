@@ -36,7 +36,7 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
     int contador_mut=0; //contador de número de mutaciones
     int contador_ev=0;  //Contador de evaluaciones
 
-    while(contador_mut<(20*tam_vector) && contador_ev<max_eval){
+    while(contador_mut<tam_vector && contador_ev<max_eval){
         std::random_shuffle(orden_mutaciones.begin(),orden_mutaciones.end());
         mejora=false;
         for(int i=0; i<tam_vector && mejora==false; i++){
