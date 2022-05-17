@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 			}
 			else if(k==2){
 				t0=clock();
-				BusquedaLocal(entrenamiento,w,gen);
+				BusquedaLocal(entrenamiento,w,gen,datos[0].first.size(),15000);
 				t1=clock();
 			}
 			else if(k==3){

@@ -17,7 +17,7 @@ std::vector<double> inicializacionBL(int dim,int i){
     return w;
 }
 
-void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,std::mt19937 &generator){
+void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w,std::mt19937 &generator,int tam_vector, int max_eval){
     std::vector<double> w_mutado=w;
     bool mejora;
     double tasa_clas=0.0;
@@ -25,7 +25,6 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
     double funcion_evaluacion=0.0;
     double fmax=0.0;
     std::vector<int> orden_mutaciones;
-    int tam_vector=w.size();
 
     for(int i=0;i<tam_vector;i++){
         orden_mutaciones.push_back(i);
@@ -37,7 +36,7 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
     int contador_mut=0; //contador de número de mutaciones
     int contador_ev=0;  //Contador de evaluaciones
 
-    while(contador_mut<(20*tam_vector) && contador_ev<15000){
+    while(contador_mut<(20*tam_vector) && contador_ev<max_eval){
         std::random_shuffle(orden_mutaciones.begin(),orden_mutaciones.end());
         mejora=false;
         for(int i=0; i<tam_vector && mejora==false; i++){
