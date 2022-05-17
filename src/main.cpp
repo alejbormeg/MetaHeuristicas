@@ -9,6 +9,7 @@
 #include "../include/AGE.h"
 #include "../include/AM.h"
 #include "../include/BMB.h"
+#include "../include/ILS.h"
 #include <ctime> 
 
 
@@ -155,6 +156,8 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("AM(10,0.1)");
 	algoritmos.push_back("AM(10,0.1Mej)");
 	algoritmos.push_back("BMB");
+	algoritmos.push_back("ILS");
+
 
 
 
@@ -219,7 +222,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=10; k<algoritmos.size(); k++){
+	for (int k=11; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -282,6 +285,10 @@ int main(int argc, char *argv[])
 			}else if(k==10){
 				t0=clock();
 				BusquedaMultiarranqueBasica(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				t1=clock();
+			}else if(k==11){
+				t0=clock();
+				MetodoILS(entrenamiento,validacion,w,gen,w.size(),15000,15);
 				t1=clock();
 			}
 
