@@ -1,4 +1,5 @@
 #include"../include/utilidades.h"
+#include <iostream>
 
 double distanciaEuclidea(std::vector<double> &e1, std::vector<double> &e2){
 	double distancia;

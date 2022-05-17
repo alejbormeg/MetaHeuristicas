@@ -8,6 +8,7 @@
 #include "../include/AGG.h"
 #include "../include/AGE.h"
 #include "../include/AM.h"
+#include "../include/BMB.h"
 #include <ctime> 
 
 
@@ -153,6 +154,7 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("AM(10,1.0)");
 	algoritmos.push_back("AM(10,0.1)");
 	algoritmos.push_back("AM(10,0.1Mej)");
+	algoritmos.push_back("BMB");
 
 
 
@@ -217,7 +219,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=1; k<algoritmos.size(); k++){
+	for (int k=10; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -231,15 +233,16 @@ int main(int argc, char *argv[])
 			cout << "\nIteracion: " << i << endl;
 			Prepara5FoldCrossVal(datos,entrenamiento,validacion,i);
 			//Calculamos tiempo que tarda el algoritmo
-
+			cout << "K=" << k <<endl;
 			if(k==1){
 				t0=clock();
 				w=metodoRELIEF(entrenamiento);
 				t1=clock();
 			}
 			else if(k==2){
+				w=inicializacionBL(datos[0].first.size(),gen);
 				t0=clock();
-				BusquedaLocal(entrenamiento,w,gen,20*datos[0].first.size(),15000);
+				BusquedaLocal(entrenamiento,w,gen,w.size(),15000);
 				t1=clock();
 			}
 			else if(k==3){
@@ -275,6 +278,10 @@ int main(int argc, char *argv[])
 			else if(k==9){
 				t0=clock();
 				AlgoritmoMemetico(datos,w,10,i,1,0.1,true,gen);
+				t1=clock();
+			}else if(k==10){
+				t0=clock();
+				BusquedaMultiarranqueBasica(entrenamiento,validacion,w,gen,w.size(),15000,15);
 				t1=clock();
 			}
 

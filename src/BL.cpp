@@ -4,13 +4,12 @@
 #include <random>
 
 
-std::vector<double> inicializacionBL(int dim,int i){
+std::vector<double> inicializacionBL(int dim,std::mt19937 &generator){
     std::vector<double> w;
-    std::mt19937 gen(i);  // Will be used to obtain a seed for the random number engine
     std::uniform_real_distribution<double> dist(0.0, 1.0);
     double elem_generado;
     for(int i=0; i<dim; i++){
-        elem_generado=dist(gen);
+        elem_generado=dist(generator);
         w.push_back(elem_generado);
     }
 
@@ -32,11 +31,11 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
     tasa_clas=LeaveOneOut(datos,w);
     tasa_red_=tasa_red(w);
     fmax=funcionEvaluacion(tasa_clas,tasa_red_);
-    std::cout <<"Empezamos la funcion evaluacion en: " << fmax << std::endl;
+    //std::cout <<"Empezamos la funcion evaluacion en: " << fmax << std::endl;
     int contador_mut=0; //contador de número de mutaciones
     int contador_ev=0;  //Contador de evaluaciones
 
-    while(contador_mut<tam_vector && contador_ev<max_eval){
+    while(contador_mut<20*tam_vector && contador_ev<max_eval){
         std::random_shuffle(orden_mutaciones.begin(),orden_mutaciones.end());
         mejora=false;
         for(int i=0; i<tam_vector && mejora==false; i++){
@@ -60,6 +59,6 @@ void BusquedaLocal(std::vector<std::pair<std::vector<double>,std::string>> &dato
         //Salimos
     }
 
-    std::cout << "\n ITERACIONES FINALES HASTA CONVERGENCIA :" << contador_ev << std::endl;
+    //std::cout << "\n ITERACIONES FINALES HASTA CONVERGENCIA :" << contador_ev << std::endl;
 
 }
