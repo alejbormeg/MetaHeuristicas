@@ -9,7 +9,7 @@
 
 
 /**
- * @brief Algoritmo que implementa la búsqueda local primer mejor
+ * @brief Algoritmo que implementa el algoritmo ILS
  * 
  * @param datos conjunto de datos que usaremos para entrenar
  * @param w vector de pesos

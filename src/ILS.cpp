@@ -1,4 +1,4 @@
-#include "../include/BMB.h"
+#include "../include/ILS.h"
 #include <cstdlib>
 #include <random>
 
@@ -20,7 +20,7 @@ void MetodoILS(std::vector<std::pair<std::vector<double>,std::string>> &datos,st
     w=inicializacionBL(dim,generator);
     //Aplicamos BL
     BusquedaLocal(datos,w,generator,dim,iteraciones_por_eval);
-    tasa_clas=Evaluacion(datos,validacion,w);
+    tasa_clas=LeaveOneOut(datos,w);
 	tasa_red_=tasa_red(w);
 	fitness_max=funcionEvaluacion(tasa_clas,tasa_red_);
 
@@ -32,7 +32,8 @@ void MetodoILS(std::vector<std::pair<std::vector<double>,std::string>> &datos,st
             Mov(solucion_actual,0.4,i,generator);
         }
         BusquedaLocal(datos,solucion_actual,generator,dim,iteraciones_por_eval);
-		tasa_clas=Evaluacion(datos,validacion,solucion_actual);
+		//tasa_clas=Evaluacion(datos,validacion,solucion_actual);
+        tasa_clas=LeaveOneOut(datos,solucion_actual);
 		tasa_red_=tasa_red(solucion_actual);
 		fitness=funcionEvaluacion(tasa_clas,tasa_red_);
         if(fitness>fitness_max){

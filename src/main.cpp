@@ -10,6 +10,8 @@
 #include "../include/AM.h"
 #include "../include/BMB.h"
 #include "../include/ILS.h"
+#include "../include/ES.h"
+
 #include <ctime> 
 
 
@@ -161,7 +163,7 @@ int main(int argc, char *argv[])
 
 
 
-	mt19937 gen(0);
+	mt19937 gen(1);
 	/*
 	//5-fold Cross Validation 1NN
 	//Inicializamos el vector de pesos a 1 para que la distancia ponderada coincida con la euclídea.
@@ -222,7 +224,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=11; k<algoritmos.size(); k++){
+	for (int k=10; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;

@@ -25,7 +25,8 @@ void BusquedaMultiarranqueBasica(std::vector<std::pair<std::vector<double>,std::
     for(int i=0; i<T; i++){
         solucion_actual=inicializacionBL(dim,generator);
         BusquedaLocal(datos,solucion_actual,generator,dim,iteraciones_por_eval);
-		tasa_clas=Evaluacion(datos,validacion,solucion_actual);
+		//tasa_clas=Evaluacion(datos,validacion,solucion_actual);
+        tasa_clas=LeaveOneOut(datos,solucion_actual);
 		tasa_red_=tasa_red(solucion_actual);
 		fitness=funcionEvaluacion(tasa_clas,tasa_red_);
         if(fitness>fitness_max){
