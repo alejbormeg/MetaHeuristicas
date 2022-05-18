@@ -157,6 +157,7 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("AM(10,1.0)");
 	algoritmos.push_back("AM(10,0.1)");
 	algoritmos.push_back("AM(10,0.1Mej)");
+	algoritmos.push_back("Enfriamiento Simulado");
 	algoritmos.push_back("BMB");
 	algoritmos.push_back("ILS");
 
@@ -286,9 +287,13 @@ int main(int argc, char *argv[])
 				t1=clock();
 			}else if(k==10){
 				t0=clock();
-				BusquedaMultiarranqueBasica(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				EnfriamientoSimulado(entrenamiento,w,gen,0.001,0.3,0.3);
 				t1=clock();
 			}else if(k==11){
+				t0=clock();
+				BusquedaMultiarranqueBasica(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				t1=clock();
+			}else if(k==12){
 				t0=clock();
 				MetodoILS(entrenamiento,validacion,w,gen,w.size(),15000,15);
 				t1=clock();
