@@ -159,7 +159,8 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("AM(10,0.1Mej)");
 	algoritmos.push_back("Enfriamiento Simulado");
 	algoritmos.push_back("BMB");
-	algoritmos.push_back("ILS");
+	algoritmos.push_back("ILS con Búsqueda Local");
+	algoritmos.push_back("ILS con Enfriamiento Simulado");
 
 
 
@@ -225,7 +226,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=10; k<algoritmos.size(); k++){
+	for (int k=13; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -297,6 +298,10 @@ int main(int argc, char *argv[])
 				t0=clock();
 				MetodoILS(entrenamiento,validacion,w,gen,w.size(),15000,15);
 				t1=clock();
+			}else if(k==13){
+				t0=clock();
+				MetodoILS_ES(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				t1=clock();
 			}
 
 			//Obtenemos tiempo de ejecución en validacion
@@ -318,7 +323,9 @@ int main(int argc, char *argv[])
 			funcion_evaluacion=funcionEvaluacion(tasa_clas,tasa_red_);
 			funcion_evaluacion_promedio+=funcion_evaluacion;
 			cout <<"\t Funcion objetivo validacion:" << funcion_evaluacion<<endl;
-
+			
+			cout << "FORMATO PARA COPIAR A TABLA: " << endl;
+			cout << "| " << tasa_clas << "| " << tasa_red_ << "| " << funcion_evaluacion << "| " << tiempo << "| " << endl;
 			//Acumulamos en el vector solucion
 			w_solucion=w_solucion+w;
 			ImprimeSolucion(w);

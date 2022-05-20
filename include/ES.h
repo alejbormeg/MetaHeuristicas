@@ -8,7 +8,17 @@
 
 
 
-
+/**
+ * @brief Función que calcula el enfriamiento
+ * 
+ * @param T temperatura actual
+ * @param T_inicial temperatura inicial
+ * @param T_final temperatura final
+ * @param M valor de M
+ * @param generator generador de números aleatorios
+ * @return double temperatura tras enfriamiento
+ */
+double Enfriamiento (double T, double T_inicial, double T_final, int M, std::mt19937 &generator);
 
 /**
  * @brief Calcula la temperatura inicial
@@ -30,6 +40,6 @@ double CalculaTempInicial(double coste, double mu, double phi);
  * @param mu valor de mu para Temperatura inicial
  * @param phi valor de phi para la temperatura inicial
  */
-void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w, std::mt19937 &generator,int T_final,double mu, double phi);
+void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w, std::mt19937 &generator,double T_final,double mu, double phi);
 
 #endif
