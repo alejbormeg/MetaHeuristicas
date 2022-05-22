@@ -3,7 +3,7 @@
 #include <random>
 
 
-double Enfriamiento (double T, double T_inicial, double T_final, int M, std::mt19937 &generator){
+double Enfriamiento (double T, double T_inicial, double T_final, double M, std::mt19937 &generator){
     //std::uniform_real_distribution<double> dist(0.9, 0.99);
     //double alpha=dist(generator);
     //return alpha*T;
@@ -28,7 +28,7 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
     int contador_vecinos=0,max_vecinos=10*dim;
     int contador_exitos=-1,max_exitos=0.1*max_vecinos; 
     int contador_evaluaciones=0;
-    int M=15000/max_vecinos;
+    double M=15000/max_vecinos;
     float incremento=0.0;
 
 
@@ -74,7 +74,7 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
             //std:: cout << "\nIncremento: " << incremento << std::endl;
 
             //Condiciones de éxito
-            if(incremento>0 or dado<=exp(incremento/(T_actual))){
+            if(incremento>0 or dado<=exp((-incremento)/(T_actual))){
                 //si se dan contamos un éxito
                 contador_exitos++;
                 //s pasa a ser s_prima
@@ -91,6 +91,7 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
         }
         //enfriamos
         T_actual=Enfriamiento(T_actual,T_inicial,T_final,M,generator);
+        //std:: cout << "\nTemperatura actual: " << T_actual << std::endl;
     }
 }
 
