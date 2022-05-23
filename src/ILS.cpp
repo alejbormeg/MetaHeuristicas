@@ -33,7 +33,7 @@ void MetodoILS(std::vector<std::pair<std::vector<double>,std::string>> &datos,st
         solucion_actual=w;
         //Mutamos el 10% de sus atributos
         for (int i=0; i<t; i++){
-            Mov(solucion_actual,0.4,i,generator);
+            Mov(solucion_actual,0.4,orden_mutaciones[i],generator);
         }
         //Aplicamos BL
         BusquedaLocal(datos,solucion_actual,generator,dim,iteraciones_por_eval);
@@ -84,7 +84,7 @@ void MetodoILS_ES(std::vector<std::pair<std::vector<double>,std::string>> &datos
         solucion_actual=w;
         //Mutamos el 10% de sus atributos
         for (int i=0; i<t; i++){
-            Mov(solucion_actual,0.4,i,generator);
+            Mov(solucion_actual,0.4,orden_mutaciones[i],generator);
         }
         //Aplicamos ES
         EnfriamientoSimulado(datos,solucion_actual, generator,0.001,0.3, 0.3);

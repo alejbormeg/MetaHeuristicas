@@ -6,20 +6,6 @@
 #include "utilidades.h"
 #include "BL.h" 
 
-
-
-/**
- * @brief Función que calcula el enfriamiento
- * 
- * @param T temperatura actual
- * @param T_inicial temperatura inicial
- * @param T_final temperatura final
- * @param M valor de M
- * @param generator generador de números aleatorios
- * @return double temperatura tras enfriamiento
- */
-double Enfriamiento (double T, double T_inicial, double T_final, double M, std::mt19937 &generator);
-
 /**
  * @brief Calcula la temperatura inicial
  * 

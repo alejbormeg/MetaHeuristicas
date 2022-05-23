@@ -3,11 +3,6 @@
 #include <random>
 
 
-double Enfriamiento (double T, double T_inicial, double T_final, double M, std::mt19937 &generator){
-    double beta=(T_inicial-T_final)/(M*T_inicial*T_final);
-    return T/(1+beta*T);
-}
-
 double CalculaTempInicial(double coste, double mu, double phi){
     return (mu * coste)/(-log(phi));
 }
@@ -41,9 +36,10 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
  
     //Calculamos la temperatura inicial
     double T_actual=CalculaTempInicial(fitness_max,mu,phi),T_inicial=T_actual;
+    double beta=(T_inicial-T_final)/(M*T_inicial*T_final);
 
     //Bucle principal, las condiciones de parada son: Se alcanza la temperatura mínima, El contador de evaluaciones supera las 15000 o el contador de existos ==0
-    while(T_final<T_actual && contador_evaluaciones<15000 && contador_exitos!=0){
+    while(contador_evaluaciones<15000 && contador_exitos!=0){
         contador_vecinos=0;
         contador_exitos=0;
         while(contador_exitos<max_exitos && contador_vecinos<max_vecinos){
@@ -64,23 +60,29 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
             dado=dist(generator);
 
             //Condiciones de éxito
-            if(incremento>0 or dado<=exp((-incremento)/(T_actual))){
+            if(fitness_s_prima>fitness_s){
                 //si se dan contamos un éxito
                 contador_exitos++;
                 //s pasa a ser s_prima
                 s=s_prima;
                 //actualizamos el fitness
                 fitness_s=fitness_s_prima;
-
                 //Si mejora el fitness máximo pues tenemos nueva solución
                 if(fitness_s > fitness_max){
                     fitness_max=fitness_s;
                     w=s;
                 }
+            } else if (dado<=exp((-abs(incremento))/(T_actual))){
+                //si se dan contamos un éxito
+                contador_exitos++;
+                //s pasa a ser s_prima
+                s=s_prima;
+                //actualizamos el fitness
+                fitness_s=fitness_s_prima;
             }
         }
         //enfriamos
-        T_actual=Enfriamiento(T_actual,T_inicial,T_final,M,generator);
+        T_actual=T_actual/(1+beta*T_actual);
     }
 }
 

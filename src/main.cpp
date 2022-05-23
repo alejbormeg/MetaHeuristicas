@@ -296,11 +296,11 @@ int main(int argc, char *argv[])
 				t1=clock();
 			}else if(k==12){
 				t0=clock();
-				MetodoILS(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				MetodoILS(entrenamiento,validacion,w,gen,datos[0].first.size(),15000,15);
 				t1=clock();
 			}else if(k==13){
 				t0=clock();
-				MetodoILS_ES(entrenamiento,validacion,w,gen,w.size(),15000,15);
+				MetodoILS_ES(entrenamiento,validacion,w,gen,datos[0].first.size(),15000,15);
 				t1=clock();
 			}
 
