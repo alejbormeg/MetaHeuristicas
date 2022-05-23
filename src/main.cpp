@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=12; k<algoritmos.size(); k++){
+	for (int k=10; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;

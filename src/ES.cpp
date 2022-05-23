@@ -4,10 +4,6 @@
 
 
 double Enfriamiento (double T, double T_inicial, double T_final, double M, std::mt19937 &generator){
-    //std::uniform_real_distribution<double> dist(0.9, 0.99);
-    //double alpha=dist(generator);
-    //return alpha*T;
-
     double beta=(T_inicial-T_final)/(M*T_inicial*T_final);
     return T/(1+beta*T);
 }
@@ -51,9 +47,6 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
         contador_vecinos=0;
         contador_exitos=0;
         while(contador_exitos<max_exitos && contador_vecinos<max_vecinos){
-            //std::cout << "\ncontador de exitos: " << contador_exitos << std::endl;
-            //std::cout << "\ncontador evaluaciones: " << contador_vecinos << std::endl;
-            //std:: cout << "\nTemperatura actual: " << T_actual << std::endl;
             //Generamos nueva solución mutando una componente
             s_prima=s;
             Mov(s_prima,0.3,generator()%dim,generator);
@@ -69,9 +62,6 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
             contador_evaluaciones++;
             //Tiramos el dado para ver si se acepta como éxito en caso de no terner incremento positivo
             dado=dist(generator);
-            //std:: cout << "\nDado: " << dado << std::endl;
-            //std:: cout << "\nExponencial: " << exp(incremento/(T_actual)) << std::endl;
-            //std:: cout << "\nIncremento: " << incremento << std::endl;
 
             //Condiciones de éxito
             if(incremento>0 or dado<=exp((-incremento)/(T_actual))){
@@ -91,7 +81,6 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
         }
         //enfriamos
         T_actual=Enfriamiento(T_actual,T_inicial,T_final,M,generator);
-        //std:: cout << "\nTemperatura actual: " << T_actual << std::endl;
     }
 }
 
