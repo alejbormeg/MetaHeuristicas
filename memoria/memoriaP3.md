@@ -628,74 +628,74 @@ Obtenemos los resultados para el algoritmo de **Enfriamiento Simulado**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 88.5714| 35.2941| 61.9328| 3542.24| 
-|Partición 2| 84.2857| 35.2941| 59.7899| 3526.17| 
-|Partición 3| 95.7143| 32.3529| 64.0336| 3495.62|  
-|Partición 4| 85.7143| 35.2941| 60.5042| 3505.82|
-|Partición 5| 88.7324| 35.2941| 62.0133| 3470.94| 
-|Media| 88.6036| 34.7059| 61.6548| 3508.16| 
+|Partición 1| 91.4286| 91.1765| 91.3025| 35166.5| 
+|Partición 2| 92.8571| 94.1176| 93.4874| 35317.1| 
+|Partición 3| 88.5714| 91.1765| 89.8739| 35201.9| 
+|Partición 4| 85.7143| 91.1765| 88.4454| 35140.3| 
+|Partición 5| 80.2817| 91.1765| 85.7291| 34883.8| 
+|Media| 87.7706| 91.7647| 89.7677| 35141.9| 
 
 Table: Resultados en el Dataset Ionosphere para ES
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 100| 50| 75| 755.589| 
-|Partición 2| 89.7436| 45.4545| 67.5991| 763.403| 
-|Partición 3| 97.4359| 36.3636| 66.8998| 752.234|
-|Partición 4| 97.4359| 40.9091| 69.1725| 776.462| 
-|Partición 5| 97.4359| 50| 73.7179| 773.082|
-|Media|  96.41 | 44.54 | 70.47 | 764.154 | 
+|Partición 1| 97.4359| 100| 98.7179| 7876.45| 
+|Partición 2| 89.7436| 100| 94.8718| 7900.29| 
+|Partición 3| 87.1795| 100| 93.5897| 7781.83| 
+|Partición 4| 97.4359| 100| 98.7179| 7731.16|  
+|Partición 5| 97.4359| 100| 98.7179| 7760.6| 
+|Media| 93.8462| 100| 96.9231| 7718.42| 
 
 Table: Resultados en el Dataset Parkinsons para ES
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 76.8116| 34.0909| 55.4513| 4532.26|
-|Partición 2| 86.9565| 36.3636| 61.6601| 4381.53| 
-|Partición 3| 81.1594| 31.8182| 56.4888| 4370.6| 
-|Partición 4| 79.7101| 29.5455| 54.6278| 4371.91| 
-|Partición 5| 84.9315| 36.3636| 60.6476| 4406.46|  
-|Media| 81.9138| 33.6364| 57.7751| 4412.55|
+|Partición 1| 82.6087| 70.4545| 76.5316| 44145.4| 
+|Partición 2| 78.2609| 68.1818| 73.2213| 44340.6| 
+|Partición 3| 76.8116| 72.7273| 74.7694| 44785|  
+|Partición 4| 89.8551| 70.4545| 80.1548| 44367.9| 
+|Partición 5| 82.1918| 63.6364| 72.9141| 42913|   
+|Media| 81.9456| 69.0909| 75.5183| 44110.4| 
 
 Table: Resultados en el Dataset Spectf_heart para ES
 
-Obtenemos los resultados para el algoritmo de **Búsqueda Local Multiarranque**:
+Obtenemos los resultados para el algoritmo de **Búsqueda Multiarranque Básica**:
 
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
-|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
-|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
-|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
-|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
-|Media| 89.4648| 87.6471| 88.5559| 36009|
+|Partición 1| 84.2857| 97.0588| 90.6723| 35763.6| 
+|Partición 2| 90| 91.1765| 90.5882| 35576.6| 
+|Partición 3| 95.7143| 94.1176| 94.916| 35691.3| 
+|Partición 4| 91.4286| 82.3529| 86.8908| 35833.6| 
+|Partición 5| 91.5493| 88.2353| 89.8923| 35451.5|  
+|Media| 90.5956| 90.5882| 90.5919| 35663.3| 
 
 Table: Resultados en el Dataset Ionosphere para BMB
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 87.1795| 100| 93.5897| 7483.76|
-|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
-|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
-|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
-|Partición 5| 100| 100| 100| 7679.42| 
-|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+|Partición 1| 89.7436| 90.9091| 90.3263| 7692.89| 
+|Partición 2| 94.8718| 100| 97.4359| 7616.72| 
+|Partición 3| 97.4359| 95.4545| 96.4452| 7519.98| 
+|Partición 4| 97.4359| 95.4545| 96.4452| 7141.53| 
+|Partición 5| 100| 90.9091| 95.4545| 7582.75|  
+|Media| 95.8974| 94.5455| 95.2214| 7510.78| 
 
 Table: Resultados en el Dataset Parkinsons para BMB
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
-|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
-|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
-|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
-|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
-|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+|Partición 1| 79.7101| 84.0909| 81.9005| 45345.2| 
+|Partición 2| 84.058| 79.5455| 81.8017| 45173.2| 
+|Partición 3| 78.2609| 77.2727| 77.7668| 45508|   
+|Partición 4| 86.9565| 77.2727| 82.1146| 44764|  
+|Partición 5| 84.9315| 75| 79.9658| 43693.8|   
+|Media| 82.7834| 78.6364| 80.7099| 44896.8| 
 
 Table: Resultados en el Dataset Spectf_heart para BMB
 
@@ -704,36 +704,36 @@ Obtenemos los resultados para el algoritmo de **ILS con Búsqueda Local**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 90| 97.0588| 93.5294| 35726.6| 
-|Partición 2| 95.7143| 100| 97.8571| 34967.6| 
-|Partición 3| 88.5714| 100| 94.2857| 36600.3|   
-|Partición 4| 87.1429| 100| 93.5714| 37243.4| 
-|Partición 5| 85.9155| 100| 92.9577| 35765.7|  
-|Media| 89.4688| 99.4118| 94.4403| 36060.7| 
+|Partición 1| 88.5714| 100| 94.2857| 35261.2| 
+|Partición 2| 92.8571| 97.0588| 94.958| 37295.3| 
+|Partición 3| 88.5714| 94.1176| 91.3445| 36789.4| 
+|Partición 4| 87.1429| 97.0588| 92.1008| 36913| 
+|Partición 5| 90.1408| 100| 95.0704| 36560.5| 
+|Media| 89.4567| 97.6471| 93.5519| 36563.9| 
 
 Table: Resultados en el Dataset Ionosphere para ILS-BL
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 94.8718| 100| 97.4359| 5797.23| 
-|Partición 2| 92.3077| 100| 96.1538| 5754.64| 
-|Partición 3| 97.4359| 100| 98.7179| 6073.34| 
-|Partición 4| 100| 100| 100| 5801.88| 
-|Partición 5| 100| 100| 100| 5979.39| 
-|Media| 96.9231| 100| 98.4615| 5881.3| 
+|Partición 1| 94.8718| 100| 97.4359| 5738.22| 
+|Partición 2| 87.1795| 100| 93.5897| 5174.31| 
+|Partición 3| 97.4359| 100| 98.7179| 6231.88|  
+|Partición 4| 94.8718| 100| 97.4359| 5172.76|  
+|Partición 5| 100| 100| 100| 5102.27| 
+|Media| 94.8718| 100| 97.4359| 5483.89| 
 
 Table: Resultados en el Dataset Parkinsons para ILS_BL
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 78.2609| 95.4545| 86.8577| 47870.7| 
-|Partición 2| 84.058| 97.7273| 90.8926| 48201.4|  
-|Partición 3| 86.9565| 97.7273| 92.3419| 47747.2|   
-|Partición 4| 86.9565| 100| 93.4783| 48165.6|   
-|Partición 5| 86.3014| 97.7273| 92.0143| 47410.9| 
-|Media| 84.5067| 97.7273| 91.117| 47879.2| 
+|Partición 1| 73.913| 95.4545| 84.6838| 49090.2| 
+|Partición 2| 85.5072| 95.4545| 90.4809| 48490.1| 
+|Partición 3| 85.5072| 93.1818| 89.3445| 48080.6| 
+|Partición 4| 94.2029| 86.3636| 90.2833| 48025.8|    
+|Partición 5| 86.3014| 93.1818| 89.7416| 47073.8| 
+|Media| 85.0864| 92.7273| 88.9068| 48152.1| 
 
 Table: Resultados en el Dataset Spectf_heart para ILS_BL
 
@@ -742,36 +742,36 @@ Obtenemos los resultados para el algoritmo de **ILS con Enfriamiento Simulado**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 87.1429| 44.1176| 65.6303| 57601|  
-|Partición 2| 87.1429| 55.8824| 71.5126| 56993.4| 
-|Partición 3| 90| 47.0588| 68.5294| 56825.8|   
-|Partición 4| 87.1429| 41.1765| 64.1597| 57177| 
-|Partición 5| 84.507| 47.0588| 65.7829| 56768.2|   
-|Media| 87.1871| 47.0588| 67.123| 57073.1| 
+|Partición 1| 92.8571| 97.0588| 94.958| 563175| 
+|Partición 2| 88.5714| 100| 94.2857| 564068| 
+|Partición 3| 87.1429| 94.1176| 90.6303| 562951| 
+|Partición 4| 90| 97.0588| 93.5294| 562246| 
+|Partición 5| 88.7324| 97.0588| 92.8956| 558453| 
+|Media| 89.4608| 97.0588| 93.2598| 562179| 
 
 Table: Resultados en el Dataset Ionosphere para ILS-ES
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 94.8718| 45.4545| 70.1632| 12286.8| 
-|Partición 2| 87.1795| 50| 68.5897| 12409.1| 
-|Partición 3| 92.3077| 54.5455| 73.4266| 12279.7| 
-|Partición 4| 94.8718| 50| 72.4359| 12188.4| 
-|Partición 5| 92.3077| 59.0909| 75.6993| 12121| 
-|Media| 92.3077| 51.8182| 72.0629| 12257| 
+|Partición 1| 97.4359| 100| 98.7179| 123764| 
+|Partición 2| 89.7436| 100| 94.8718| 122981|  
+|Partición 3| 94.8718| 100| 97.4359| 119523| 
+|Partición 4| 100| 100| 100| 119439| 
+|Partición 5| 97.4359| 100| 98.7179| 120550| 
+|Media| 95.8974| 100| 97.9487| 121252| 
 
 Table: Resultados en el Dataset Parkinsons para ILS-ES
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 76.8116| 45.4545| 61.1331| 71913.4| 
-|Partición 2| 79.7101| 45.4545| 62.5823| 71790.8| 
-|Partición 3| 85.5072| 40.9091| 63.2082| 71684.5| 
-|Partición 4| 86.9565| 40.9091| 63.9328| 71732.4| 
-|Partición 5| 89.0411| 43.1818| 66.1115| 69315.8|   
-|Media| 83.6053| 43.1818| 63.3936| 71287.4| 
+|Partición 1| 81.1594| 77.2727| 79.2161| 711349| 
+|Partición 2| 81.1594| 72.7273| 76.9433| 704664|  
+|Partición 3| 79.7101| 72.7273| 76.2187| 706318| 
+|Partición 4| 82.6087| 70.4545| 76.5316| 705744|  
+|Partición 5| 86.3014| 75| 80.6507| 684873|   
+|Media| 82.1878| 73.6364| 77.9121| 702590|  
 
 Table: Resultados en el Dataset Spectf_heart para ILS-ES
 
@@ -806,10 +806,10 @@ Todos estos hechos comentados se pueden observar mejor en las siguientes tablas 
 |1-NN| 86.599 | 0 |43.299| 2.653 |
 |RELIEF| 87.746 | 2.941 | 45.343 | 3.545 | 
 |Búsqueda Local| 87.750 | 63.529 | 75.64 | 6619.88 | 
-|Enfriamiento Simulado| 88.6036| 34.7059| 61.6548| 3508.16| 
-|BMB| 89.4648| 87.6471| 88.5559| 36009|
-|ILS-BL| 89.4688| 99.4118| 94.4403| 36060.7| 
-|ILS-ES| 87.1871| 47.0588| 67.123| 57073.1| 
+|Enfriamiento Simulado| 87.7706| 91.7647| 89.7677| 35141.9| 
+|BMB| 90.5956| 90.5882| 90.5919| 35663.3| 
+|ILS-BL| 89.4567| 97.6471| 93.5519| 36563.9| 
+|ILS-ES| 89.4608| 97.0588| 93.2598| 562179| 
 
 Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 
@@ -819,10 +819,10 @@ Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 |1-NN | 93.333 | 67.272 | 80.303 | 800.658 | 
 |RELIEF | 95.897 | 0 | 47.948 | 1.152 | 
 |Búsqueda Local | 93.333 | 67.272 | 80.303 | 800.658 | 
-|Enfriamiento simulado|  96.41 | 44.54 | 70.47 | 764.154 | 
-|BMB| 93.3333| 96.3636| 94.8485| 7657.28|  
-|ILS-BL| 96.9231| 100| 98.4615| 5881.3| 
-|ILS-ES| 92.3077| 51.8182| 72.0629| 12257| 
+|Enfriamiento simulado| 93.8462| 100| 96.9231| 7718.42| 
+|BMB| 95.8974| 94.5455| 95.2214| 7510.78| 
+|ILS-BL| 94.8718| 100| 97.4359| 5483.89| 
+|ILS-ES| 95.8974| 100| 97.9487| 121252| 
 
 Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
@@ -832,9 +832,9 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 |1-NN | 96.923 | 0 | 48.461 | 0.58 | 
 |RELIEF | 83.009 | 0 | 41.504 | 4.303 | 
 |Búsqueda Local | 82.477 | 61.818 | 72.147 | 9528.56 | 
-|Enfriamiento Simulado| 81.9138| 33.6364| 57.7751| 4412.55|
-|BMB 80.675| 80.4545| 80.5648| 44853.1| 
-|ILS-BL| 84.5067| 97.7273| 91.117| 47879.2| 
+|Enfriamiento Simulado| 81.9456| 69.0909| 75.5183| 44110.4| 
+|BMB | 82.7834| 78.6364| 80.7099| 44896.8| 
+|ILS-BL| 85.0864| 92.7273| 88.9068| 48152.1| 
 |ILS-ES| 83.6053| 43.1818| 63.3936| 71287.4| 
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
