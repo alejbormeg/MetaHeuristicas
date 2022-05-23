@@ -704,36 +704,36 @@ Obtenemos los resultados para el algoritmo de **ILS con Búsqueda Local**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
-|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
-|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
-|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
-|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
-|Media| 89.4648| 87.6471| 88.5559| 36009|
+|Partición 1| 90| 97.0588| 93.5294| 35726.6| 
+|Partición 2| 95.7143| 100| 97.8571| 34967.6| 
+|Partición 3| 88.5714| 100| 94.2857| 36600.3|   
+|Partición 4| 87.1429| 100| 93.5714| 37243.4| 
+|Partición 5| 85.9155| 100| 92.9577| 35765.7|  
+|Media| 89.4688| 99.4118| 94.4403| 36060.7| 
 
 Table: Resultados en el Dataset Ionosphere para ILS-BL
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 87.1795| 100| 93.5897| 7483.76|
-|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
-|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
-|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
-|Partición 5| 100| 100| 100| 7679.42| 
-|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+|Partición 1| 94.8718| 100| 97.4359| 5797.23| 
+|Partición 2| 92.3077| 100| 96.1538| 5754.64| 
+|Partición 3| 97.4359| 100| 98.7179| 6073.34| 
+|Partición 4| 100| 100| 100| 5801.88| 
+|Partición 5| 100| 100| 100| 5979.39| 
+|Media| 96.9231| 100| 98.4615| 5881.3| 
 
 Table: Resultados en el Dataset Parkinsons para ILS_BL
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
-|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
-|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
-|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
-|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
-|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+|Partición 1| 78.2609| 95.4545| 86.8577| 47870.7| 
+|Partición 2| 84.058| 97.7273| 90.8926| 48201.4|  
+|Partición 3| 86.9565| 97.7273| 92.3419| 47747.2|   
+|Partición 4| 86.9565| 100| 93.4783| 48165.6|   
+|Partición 5| 86.3014| 97.7273| 92.0143| 47410.9| 
+|Media| 84.5067| 97.7273| 91.117| 47879.2| 
 
 Table: Resultados en el Dataset Spectf_heart para ILS_BL
 
@@ -742,36 +742,36 @@ Obtenemos los resultados para el algoritmo de **ILS con Enfriamiento Simulado**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
-|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
-|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
-|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
-|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
-|Media| 89.4648| 87.6471| 88.5559| 36009|
+|Partición 1| 87.1429| 44.1176| 65.6303| 57601|  
+|Partición 2| 87.1429| 55.8824| 71.5126| 56993.4| 
+|Partición 3| 90| 47.0588| 68.5294| 56825.8|   
+|Partición 4| 87.1429| 41.1765| 64.1597| 57177| 
+|Partición 5| 84.507| 47.0588| 65.7829| 56768.2|   
+|Media| 87.1871| 47.0588| 67.123| 57073.1| 
 
 Table: Resultados en el Dataset Ionosphere para ILS-ES
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 87.1795| 100| 93.5897| 7483.76|
-|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
-|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
-|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
-|Partición 5| 100| 100| 100| 7679.42| 
-|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+|Partición 1| 94.8718| 45.4545| 70.1632| 12286.8| 
+|Partición 2| 87.1795| 50| 68.5897| 12409.1| 
+|Partición 3| 92.3077| 54.5455| 73.4266| 12279.7| 
+|Partición 4| 94.8718| 50| 72.4359| 12188.4| 
+|Partición 5| 92.3077| 59.0909| 75.6993| 12121| 
+|Media| 92.3077| 51.8182| 72.0629| 12257| 
 
 Table: Resultados en el Dataset Parkinsons para ILS-ES
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
-|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
-|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
-|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
-|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
-|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+|Partición 1| 76.8116| 45.4545| 61.1331| 71913.4| 
+|Partición 2| 79.7101| 45.4545| 62.5823| 71790.8| 
+|Partición 3| 85.5072| 40.9091| 63.2082| 71684.5| 
+|Partición 4| 86.9565| 40.9091| 63.9328| 71732.4| 
+|Partición 5| 89.0411| 43.1818| 66.1115| 69315.8|   
+|Media| 83.6053| 43.1818| 63.3936| 71287.4| 
 
 Table: Resultados en el Dataset Spectf_heart para ILS-ES
 
@@ -782,11 +782,6 @@ Sin embargo, el método de **Búsqueda local** si que tiene un comportamiento qu
 
 Por otro lado, comparando los tiempos empleados por ambos algoritmos podemos ver que el método RELIEF es mucho más rápido que el de Búsqueda Local, pues en media tarda unos 2-3ms en entrenar, en cambio el de Búsqueda Local está muy condicionado a si las mutaciones mejoran más o menos la función objetivo lo que en un caso extremo podría llevar a ejecutar 15000 evaluaciones de la función objetivo, es por ello que los tiempos son mayores, aunque muy razonables para la notable mejora conseguida con respecto a RELIEF (menos de 10 segundos normalmente).
 
-Si ahora nos fijamos en los resultados obtenidos por los **Algoritmos Genéticos** vemos como los *Estacionarios* obtienen muy buenos resultados en todas las bases de datos, con altas tasas de reducción (prácticamente el 100% en los dos primeros datasets) y de clasificación, tanto con el cruce BLX-$\alpha$ como con el cruce aritmético. Por otro lado los *Generacionales* también obtienen muy buenos resultados en todos los datasets, dónde podemos ver que se obtienen tasas muy elevadas de clasificación (generalmente superiores al 80%) y aunque en menor medida que los estacionarios, también obtienen buenas tasas de reducción (sobre todo en Parkinsons). No obstante, en el caso de los algoritmos genéticos generacionales si que podemos observar un rendimiento muy superior si usamos el cruce BLX-$\alpha$ a si usamos el cruce aritmético, ya que las tasas de reducción obtenidas con este segundo método no son tan elevadas, especialmente en el dataset de *Spectf_Heart* dónde se consigue un promedio del 40% de reducción. Finalmente en lo relativo al tiempo de ejecución en los dos tipos de algoritmos obtenemos resultados similares y podemos observar un notable aumento en comparación con los algoritmos anteriores (RELIEF y Búsqueda Local) ya que pasamos a una media de 56 segundos por partición en *Ionosphere*, 12 segundos en *Parkinsons* y 69 segundos en *Spectf_heart*. Esto se debe a que la implementación de los algoritmos no ha podido depurarse debidamente por la falta de tiempo y quizá ciertas funciones podrían hacerse de forma más eficiente.
-
-Continuamos analizando los resultados obtenidos por los **Algoritmos Meméticos**, en estos cabe destacar de inicio que tienen tiempos de ejecución similares a los Algoritmos genéticos. En primer lugar observamos como las tasas de reducción y precisión son muy elevadas en las tres variantes del algoritmo, de hecho son los segundos resultados más altos obtenidos hasta el momento y cabe destacar el hecho de que están usando únicamente un tercio de la población que tenían los genéticos (10 cromosomas en vez de 30). Podemos observar como el primer método *AM(10,1.0)* es el que mejores resultados obtiene de todos, lo que tiene sentido pues es el que mejor combina la potencia de los algoritmos genéticos para *explorar soluciones* y la búsqueda local para *explotar soluciones* ya que los diez cromosomas de la población exploran distintos extremos locales que son capaces de alcanzar con precisión gracias a que la búsqueda local se aplica a todos los cromosomas.
-
-Por otro lado, el segundo algoritmo que mejor rendimiento presenta es el **AM(10,0.1Mej)**, lo cual tiene sentido ya que en este caso sólo se decide explotar con búsqueda local el 10% de los mejores cromosomas (en este caso al ser de tamaño 10 la población, sería el mejor) por lo que estamos optimizando el mejor cromosoma de la población cada 10 generaciones y en cambio, el algororitmo **AM(10,0.1)** solo explota el 10% aleatorio de soluciones, lo que puede incluir cualquier tipo de cromosoma ya sea bueno o malo.
 
 Como resumen tenemos: 
 
@@ -796,6 +791,10 @@ Como resumen tenemos:
 |1-NN| 86.599 | 0 |43.299| 2.653 |
 |RELIEF| 87.746 | 2.941 | 45.343 | 3.545 | 
 |Búsqueda Local| 87.750 | 63.529 | 75.64 | 6619.88 | 
+|Enfriamiento Simulado| 88.6036| 34.7059| 61.6548| 3508.16| 
+|BMB| 89.4648| 87.6471| 88.5559| 36009|
+|ILS-BL| 89.4688| 99.4118| 94.4403| 36060.7| 
+|ILS-ES| 87.1871| 47.0588| 67.123| 57073.1| 
 
 Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 
@@ -805,13 +804,10 @@ Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 |1-NN | 93.333 | 67.272 | 80.303 | 800.658 | 
 |RELIEF | 95.897 | 0 | 47.948 | 1.152 | 
 |Búsqueda Local | 93.333 | 67.272 | 80.303 | 800.658 | 
-|AGG-BLX |  93.8462 | 84.5455 | 89.1958 | 11985.8 | 
-|AGG-ARITMETICO | 93.8462 | 66.3636 | 80.1049 | 11946.8 | 
-|AGE-BLX | 96.9231 | 100 | 98.4615 | 11949.2 |
-|AGE-ARITMETICO | 97.9487 | 96.3636 | 97.1562 | 12056.1 | 
-|AM(10,1.0) | 97.4359 | 88.1818 | 92.8089 | 12710.8 |
-|AM(10,0.1) | 93.8462 | 80.9091 | 87.3776 | 11897.4 | 
-|AM(10,0.1Mej) | 92.3077 | 86.3636 | 89.3357 | 11952.6 | 
+|Enfriamiento simulado|  96.41 | 44.54 | 70.47 | 764.154 | 
+|BMB| 93.3333| 96.3636| 94.8485| 7657.28|  
+|ILS-BL| 96.9231| 100| 98.4615| 5881.3| 
+|ILS-ES| 92.3077| 51.8182| 72.0629| 12257| 
 
 Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
@@ -821,13 +817,10 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 |1-NN | 96.923 | 0 | 48.461 | 0.58 | 
 |RELIEF | 83.009 | 0 | 41.504 | 4.303 | 
 |Búsqueda Local | 82.477 | 61.818 | 72.147 | 9528.56 | 
-|AGG-BLX | 87.0677 | 59.5455 | 73.3066 | 69916.2 | 
-|AGG-ARITMETICO | 87.0201 | 39.5455 | 63.2828 | 69725.8 | 
-|AGE-BLX | 89.3071 | 87.2727 | 88.2899 | 69596.5 | 
-|AGE-ARITMETICO | 89.3071 | 87.2727 | 90 | 69536.9 | 
-|AM(10,1.0) | 86.8255 | 71.3636 | 79.0946 | 78628 | 
-|AM(10,0.1) | 86.4721 | 63.6364 | 75.0542 | 70630.5 | 
-|AM(10,0.1Mej) | 85.3445 | 63.1818 | 74.2631 | 70143.2 | 
+|Enfriamiento Simulado| 81.9138| 33.6364| 57.7751| 4412.55|
+|BMB 80.675| 80.4545| 80.5648| 44853.1| 
+|ILS-BL| 84.5067| 97.7273| 91.117| 47879.2| 
+|ILS-ES| 83.6053| 43.1818| 63.3936| 71287.4| 
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
