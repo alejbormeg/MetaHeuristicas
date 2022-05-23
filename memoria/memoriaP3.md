@@ -455,7 +455,7 @@ El algoritmo ILS se basa en la aplicación repetida de un algoritmo de Búsqueda
 El algoritmo se compone de: 
 
 1. Una solución inicial (que generamos aleatoriamente)
-2. Un procedimiento de mutación que usaremos para generar un cambio brusco sobre la solución actual para obtener otra intermedia. Para esto usaremos el operador de mutación usado en Búsqueda Local *Mov($W$,$\aplha$)*.
+2. Un procedimiento de mutación que usaremos para generar un cambio brusco sobre la solución actual para obtener otra intermedia. Para esto usaremos el operador de mutación usado en Búsqueda Local: Mov(W,$\alpha$).
 3. Procedimiento de Búsqueda Local.
 4. Criterio de aceptación que nos indica a qué solución aplicar la próxima modificación. En nuestro caso será a la mejor solución que tengamos en ese momento.
 
@@ -782,8 +782,23 @@ Sin embargo, el método de **Búsqueda local** si que tiene un comportamiento qu
 
 Por otro lado, comparando los tiempos empleados por ambos algoritmos podemos ver que el método RELIEF es mucho más rápido que el de Búsqueda Local, pues en media tarda unos 2-3ms en entrenar, en cambio el de Búsqueda Local está muy condicionado a si las mutaciones mejoran más o menos la función objetivo lo que en un caso extremo podría llevar a ejecutar 15000 evaluaciones de la función objetivo, es por ello que los tiempos son mayores, aunque muy razonables para la notable mejora conseguida con respecto a RELIEF (menos de 10 segundos normalmente).
 
+Si nos fijamos en el modelo basado en *trayectorias simples* (**Enfriamiento Simulado**) vemos que el comportamiento en todos los datasets es pobre, sobre todo en lo referente a la tasa de reducción (siempre por debajo del 50%), comparado con la **Búsqueda Local**, que consigue mejores resultados en todos los datasets. Esto puede deberse a que la función de enfriamiento que se emplea (**método de cauchy modificado**) enfría demasiado rápido, ya que en pocas iteraciones se alcanzan temperaturas muy próximas a la final, lo que se traduce en una mayor dificultad para aceptar soluciones por parte del criterio probabilístico (pues $e^{\Delta f/T} será muy pequeño desde muy pronto) lo que puede suponer que el algoritmo acepte de primeras soluciones malas, que luego por la baja probabilidad no va a volver a cambiar. No obstante, las tasas de clasificación son elevadas, logrando buenos resultados en todas las bases de datos.Además el algoritmo es muy rápido, logrando ejecutarse en menos de 5 segundos en todas las bases de datos.
 
-Como resumen tenemos: 
+Por otro lado, si analizamos los modelos basados en Trayectorias múltiples observamos: 
+
+- El algoritmo **BMB** obtiene muy buenos resultados en todos los datasets, superando el valor $80$ en la función objetivo en todos los datasets, y superando el $90$ en el dataset de Parkinsons, debido a las altas tasas de reducción y clasificación que obtiene. El motivo por el que esto ocurres es porque se beneficia del hecho de que la búsqueda local por si sola solía finalizar tras poco más de 1000 iteraciones en todos los datasets, luego el hecho de seleccionar $T=15$ soluciones en distintos puntos del espacio de búsqueda y realizar 1000 iteraciones con cada una de ellas en el algorimto de **Búsqueda Local** obtenemos resultados muy próximos a los 15 extremos locales que hemos aproximado con cada vector inicial (recordemos que **BL** es muy buen explotador) y además, como la **BL** de por si sola apenas tarda más de 1000 iteraciones las soluciones obtenidas por los 15 vectores iniciales son muy parecidas a las que se habrían obtenido si hubiese finalizado el algoritmo de **BL**. 
+
+  Por otro lado, esta diversidad de explorar distintos puntos iniciales nos permite quedarnos con el mejor extremo local obtenido, por eso mejora el comportamiento de la **BL** simple como veremos a continuación en la tabla resumen.
+
+- El algoritmo **ILS-BL** como podemos observar obtiene excelentes resultados en todos los datasets, superando los 90 puntos de función objetivo en todos los datasets, llegando a casi el 100 en Parkinsons (98.46), con tasa de reducción y clasificación muy elevadas. Esto lo consigue porque desde mi punto de vista, la estrategia seguida por el algorimto es mejor (aunque parecida) a la de **BMB**, por ello consigue mejores resultados que este último en todos los datasets. El hecho de partir de una solución inicial muy próxima al óptimo local (gracias a la **BL**) permite que las mutaciones que le realicemos provoquen soluciones previsiblemente próximas a otros óptimos locales que junto con el proceso de búsqueda local siguiente consiguen aproximar muy bien. Por eso, este hecho de cambiar de buscar trayectorias desde puntos iniciales aleatorios (**BMB**) a puntos inciales aleatorios pero "próximos" en teoría a extremos locales permiten un mayor aprovechamiento del algoritmo de **BL** y como se demuestra, se obtienen muy buenos resultados. 
+
+  En cambio, con la variante que usa el algorimto **ES** en vez de **BL** obtiene resultados pobres (aunque mejores que el algoritmo **ES** por si solo) ya que como comentábamos antes, el algoritmo **ES** tiene este problema de enfriamiento muy rápido que no permite aproximar bien extremos locales.
+
+
+
+
+
+Todos estos hechos comentados se pueden observar mejor en las siguientes tablas resumen: 
 
 |Algoritmos | Ionosphere   ||||
 |:--|:--|:--|:--|:--|
@@ -826,15 +841,15 @@ Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
 En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de los resultados obtenidos podemos concluir: 
 
-- No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también. 
+- No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también, y además son **excluyentes**. 
 - El tiempo que tarda la búsqueda local es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
-- Los **AGG**, a pesar de mejorar ligeramente los resultados con respecto a los obtenidos con la búsqueda local, tardan mucho tiempo en comparacion con la búsqueda local simple.
-- Los **AGE** son los que mejores resultados obtienen en todos los campos, a pesar de tener tiempos de ejecución elevados.
-- Los **AM**, son los siguientes en obtener los mejores resultado, especialmente la primera variante **AM(10,1.0)**, pero con un tiempos de ejecución elevados y ligeramente superiores a las otras dos variantes en el caso de  **AM(10,1.0)**.
+- El tiempo de ejecución de los modelos basados en **trayectorias múltiples** son mucho mayores a los basados en **trayectorias simples**. 
+- Los modelos basados en **trayectorias múltiples** generalmente obtienen mejores resultados que los modelos basados en **trayectorias simples**. 
+- No obstante, no siempre los modelos basados en **trayectorias múltiples** son mejores que los modelos basados en **trayectorias simples**.
 
-No obstante, hay un hecho importante que no se aprecia en las tablas y se aprecia en el método de búsqueda local, los algoritmos genéticos y los meméticos cuando se imprime por pantalla en cada iteración de la validación cruzada el vector solución obtenido, y es que podría decirse que hay atributos que son mutuamente excluyentes, en el sentido de que si uno esta muy próximo a 1, entonces el otro está muy próximo a 0 y viceversa sin que se vea afectada en exceso la tasa de clasificación. 
+Estos hechos los desarrollaremos a continuación:
 
-Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos las siguientes soluciones por pantalla al ejecutar el algoritmo de Búsqueda Local: 
+El hecho de que existan atributos innecesarios lo observamos en el hecho de que se pueden obtener altas tasas de clasificación eliminando muchos atributos. Por ejemplo, en el caso de la base de datos **Parkinsons**, obtenemos las siguientes soluciones por pantalla al ejecutar el algoritmo de Búsqueda Local: 
 
 ```
 Particion: 1
@@ -888,84 +903,12 @@ Como vemos en este caso se ponderan algunos atributos comunes con la primera ite
 
 En cambio, los valores de clasificación son todos muy similares y elevados.
 
-Y este hecho se ve en cada iteración, lo que conlleva que hay ciertos atributos que podrían tener información redundante a la hora de clasificar y por lo tanto mejora la función objetivo el hecho de reducirlos si su "contrario" se incrementa. Es por ello que no considero apropiado devolver como resultado final al problema la media de los 5 vectores obtenidos, pues en cada caso se ponderan atributos diferentes y si mostramos el vector promedio: 
+Si nos fijamos ahora en los tiempos de ejecución, los algoritmos basados en **trayectorias simples** yel **RELIEF**, al aproximar solamente una solución tardan mucho menos que los algoritmos basados en **trayectorias múltipes**, que aproximan diversas soluciones distintas, lo que se traduce en un mayor tiempo de ejecución.
 
-```
-Solucion obtenida: 
-0.374252, 0.334255, 0.39322, 0.402567, 0.0265476, 
-0.0103373, 0.159815, 0.038415, 0.584618, 0.554185, 
-0.0433984, 0.582924, 0.00529942, 0.00896412, 0.301287, 
-0.527842, 0.343365, 0.433774, 0.227647, 0.534632, 
-0.181258, 0.409078, 
-```
+Por otro lado, observamos que los modelos basados en **trayectorias múltiples** obtienen (en general) mejores resultados que los modelos basados en **trayectorias simples**, así la **BMB** o el algorimto **ILS** obtienen mejores resultados que la **Búsqueda local** simple o el algoritmo **ILS-ES** obtiene mejores resultados que **ES**. Esto se debe, como ya se ha mencionado antes, a que los modelos basados en **trayectorias múltiples** añaden a los algoritmos basados en **trayectorias simples** esa capacidad de mejorar el aspecto que peor realizan (la exploración de soluciones) sacrificando en cierto modo parte de aquello que mejor realizan (la explotación de soluciones) logrando un compromiso que en la mayoría de casos mejora resultados. 
 
-Como vemos no hemos conseguido reducir a tantos atributos por debajo de 0.1 como en las anteriores iteraciones de Cross Validation, solo aquellos que son verdaderamente irrelevantes en todas las iteraciones porque nunca o casi nunca se han ponderado, como ocurre en los atributos: 5,6,8,11,13,14, que no han salido en ninguna de las iteraciones anteriores analizadas ponderados por encima de 0.7. 
+No obstante, no siempre son mejores los algoritmos basados en **trayectorias múltiples** son mejores que los algoritmos basados en **trayectorias simples**. De hecho, en el caso en el que el espacio de búsqueda sea **Convexo** posiblemente un algorimto basado en **trayectorias simples** como la **BL** tendría un mejor rendimiento que sus versiones modificadas para **trayectorias múltiples** (**BMB** o **ILS**), ya que al existir únicamente un extremo local que aproximar, lo harán mejor y con más exactitud (debido a su alta capacidad de explotación) que si partimos de diversos puntos y no explotamos tanto las soluciones.
 
-Además, al tener este comportamiento excluyente, el resto de atributos tienden a quedarse en términos cercanos a 0.4-0.5, pues en una iteración se ven incrementados notablemente y en la siguiente son prácticamente 0 por haber aumentado otros, y ninguno supera el 0.7, por lo que con esta solución no reflejamos el hecho de que hay atributos mucho más importantes que otros y mucho menos el hecho de que algunos atributos son **redundantes**.
-
-Este hecho no ocurre tanto con el algoritmo **RELIEF**, pues si analizamos la salida de cada iteración del mismo modo en que hemos hecho con el de Búsqueda Local:
-
-```
-Particion: 1
-
-Solucion obtenida: 
-1, 0.388353, 0.84248, 0.401231, 0.378912, 0.402414, 
-0.436481, 0.402141, 0.574087, 0.473696, 0.581067, 0.512275,
-0.395842, 0.581054, 0.297156, 0.716484, 0.645781, 0.880921,
-0.751947, 0.890509, 0.547066, 0.928198, 
-
-Particion: 2
-
-Solucion obtenida: 
-0.619862, 0.310448, 0.560894, 0.2776, 0.302762, 0.294823, 
-0.366709, 0.294531, 0.470386, 0.382529, 0.502991, 0.425973,
-0.309465, 0.502861, 0.174225, 0.401239, 0.585643, 0.949089,
-0.717267, 0.759623, 0.34737, 1, 
-
-Particion: 3
-
-Solucion obtenida: 
-1, 0.297727, 0.843674, 0.27533, 0.273018, 0.308313, 
-0.376326, 0.308253, 0.730687, 0.612213, 0.796042, 
-0.649244, 0.463112, 0.796029, 0.123959, 0.606604, 
-0.647272, 0.820244, 0.732885, 0.793197, 0.461053, 0.868964, 
-
-Particion: 4
-
-Solucion obtenida: 
-0.897252, 0.27068, 0.801999, 0.266364, 0.300469, 0.31335, 
-0.370151, 0.313183, 0.539956, 0.465823, 0.575747, 0.480578, 
-0.346269, 0.575613, 0.155191, 0.578079, 0.751897, 1, 0.715037, 
-0.854044, 0.555776, 0.941265, 
-
-Particion: 5
-
-Solucion obtenida: 
-0.751032, 0.270351, 0.577874, 0.375149, 0.363059, 0.419926, 
-0.505587, 0.419608, 0.580489, 0.49853, 0.617586, 0.533746, 
-0.373091, 0.617322, 0.197938, 0.549694, 0.65334, 0.795322, 
-0.791317, 0.856609, 0.553759, 1, 
-
-
-MEDIA RELIEF: 
- 
-0.853629, 0.307512, 0.725384, 0.319135, 0.323644, 0.347765, 
-0.411051, 0.347543, 0.579121, 0.486558, 0.614686, 0.520363, 
-0.377556, 0.614576, 0.189694, 0.57042, 0.656787, 0.889115, 
-0.741691, 0.830796, 0.493005, 0.947685,
-```
-
-Como vemos, los atributos por encima de 0.7 en la primera iteración serían:1,3,16,18,19,20,22
-
-En la segunda iteración serían: 18, 19 , 20 y 22. 
-
-En la tercera iteración: 1,3,9,11,14,18,19,20,22
-
-Como vemos coinciden en su gran mayoría en cada iteración, y si nos fijamos en el vector pormedio solución, podemos ver que en este caso si hay valores por encima de 0.7 que son los que por regla general más se han ponderado en cada iteración. 
-
-La explicación a este comportamiento tan distinto entre el algoritmo RELIEF y los demás, en mi opinión, puede estar en la aleatoriedad que conlleva el algoritmo de búsqueda local y los algoritmos genéticos y meméticos, pues al mutar aleatoriamente cada componente si comienza aumentando el peso de unas, la función de evaluación le obliga a reducir el de otras pues como hemos visto son excluyentes.
-
-Por otro lado, en relación a los algoritmos Genéticos Estacionarios, comentar que los resultados obtenidos son interesantes y muy elevados. Por una parte me parece razonable que se obtengan buenos resultados, ya que en cada generación reemplazamos los peores por otros mejores o iguales, y así el mejor cromosoma de la población siempre tiene un fitness al menos tan bueno como el de la generación anterior. Pero el caso es que en la mayoría de datasets las tasas de reducción son muy elevadas, llegando incluso en los datos de **Parkinsons** a ser del 100%, lo que nos lleva a pensar que en este caso concreto, la mejor solución sería prácticamente 0, lo que significaría que en nuestro clasificador, la distancia entre dos puntos sería de prácticamente 0 siempre. Por otro lado, en el resto de datasets nos reafirma la idea que comentábamos antes de que muchos de los atributos eran redundantes, pues con tasas de reducción muy elevadas (superiores al 87%) se consiguen muy buenos resultados de clasificación en todos los datasets.
 
 # Referencias Bibliográficas
 
