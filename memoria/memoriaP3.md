@@ -835,7 +835,7 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 |Enfriamiento Simulado| 81.9456| 69.0909| 75.5183| 44110.4| 
 |BMB | 82.7834| 78.6364| 80.7099| 44896.8| 
 |ILS-BL| 85.0864| 92.7273| 88.9068| 48152.1| 
-|ILS-ES| 83.6053| 43.1818| 63.3936| 71287.4| 
+|ILS-ES| 82.1878| 73.6364| 77.9121| 702590|  
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
