@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=10; k<algoritmos.size(); k++){
+	for (int k=12; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -342,6 +342,8 @@ int main(int argc, char *argv[])
 		cout << "\tTasa reduccion promedio: " << tasa_red_promedio/5<<endl;
 		cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 		cout << "\tTiempo promedio: " << tiempo_promedio/5 <<endl;
+		cout << "FORMATO PARA COPIAR A TABLA: " << endl;
+		cout << "| " << tasa_clas_promedio/5 << "| " << tasa_red_promedio/5 << "| " << funcion_evaluacion_promedio/5 << "| " << tiempo_promedio/5 << "| " << endl;
 		ImprimeSolucion(w_solucion);
 		tasa_clas_promedio=0.0;
 		tasa_red_promedio=0.0;

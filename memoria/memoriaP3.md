@@ -433,30 +433,98 @@ void BusquedaMultiarranqueBasica(matriz datos,matriz validacion,vector w,
  generador_num_aleatorios generator, int tam_vector, 
  int max_eval, int T){
 
-    for(int i=0; i<T; i++){
-        //Generamos solución actual
-        solucion_actual=inicializacionBL(dim,generator);
-        //Aplicamos búsqueda local max_eval/T iteraciones
-        BusquedaLocal(datos,solucion_actual,generator,dim,max_eval/T);
-        //Calculamos Fitness
-		fitness=funcionEvaluacion();
-        //Si es mejor que el máximo actualizamos solucion
-        Si(fitness>fitness_max){
-            fitness_max=fitness;
-            w=solucion_actual;
-        }
-    }
+    for(int i=0; i<T; i++)
+      //Generamos solución actual
+      solucion_actual=inicializacionBL(dim,generator);
+      //Aplicamos búsqueda local max_eval/T iteraciones
+      BusquedaLocal(datos,solucion_actual,generator,dim,max_eval/T)
+      //Calculamos Fitness
+		  fitness=funcionEvaluacion()
+
+      //Si es mejor que el máximo actualizamos solucion
+      Si(fitness>fitness_max)
+        fitness_max=fitness
+        w=solucion_actual
 }
 ```
 
-En este caso
+### Búsqueda local Reiterativa (ILS)
+
+El algoritmo ILS se basa en la aplicación repetida de un algoritmo de Búsqueda Local a una solución inicial que se obtiene por medio de la mutación de un óptimo local previamente encontrado.
+
+El algoritmo se compone de: 
+
+1. Una solución inicial (que generamos aleatoriamente)
+2. Un procedimiento de mutación que usaremos para generar un cambio brusco sobre la solución actual para obtener otra intermedia. Para esto usaremos el operador de mutación usado en Búsqueda Local *Mov($W$,$\aplha$)*.
+3. Procedimiento de Búsqueda Local.
+4. Criterio de aceptación que nos indica a qué solución aplicar la próxima modificación. En nuestro caso será a la mejor solución que tengamos en ese momento.
+
+El pseudocódigo será el siguiente: 
+
+```c++
+MetodoILS()
+  //Solucion aleatoria inicial
+  w=InicializacionBL()
+  //Aplicamos BL a w
+  BusquedaLocal()
+  //Calculamos su fitness
+  fitness_max=funcionEvaluacion()
+
+  Mientras(contador < T)
+    solucion_actual=w
+    //Mutamos el 10%
+    for (int i=0; i<0.1*tam_w; i++){
+        Mov(solucion_actual,0.4,i,generator);
+    }
+    //Aplicamos Búsqueda local
+    BusquedaLocal()
+    //Calculamos el Fitness
+    fitness=funcionEvaluacion()
+
+    //Si es mejor solucion la reemplazamos
+    Si(fitness>fitness_max)
+      fitness_max=fitness
+      w=solucion_actual
+
+    contador++
+```
+
+Por otro lado, realizaremos también una modificación del algoritmo para ejecutarlo con Enfriamiento Simulado en vez de con Búsqueda Local, el pseudocódigo sería el siguiente:
+
+```c++
+MetodoILS_ES()
+  //Solucion aleatoria inicial
+  w=InicializacionBL()
+  //Aplicamos ES a w
+  EfriamientoSimulado()
+  //Calculamos su fitness
+  fitness_max=funcionEvaluacion()
+
+  Mientras(contador < T)
+    solucion_actual=w
+    //Mutamos el 10%
+    for (int i=0; i<0.1*tam_w; i++){
+        Mov(solucion_actual,0.4,i,generator);
+    }
+    //Aplicamos Búsqueda local
+    EnfriamientoSimulado()
+    //Calculamos el Fitness
+    fitness=funcionEvaluacion()
+
+    //Si es mejor solucion la reemplazamos
+    Si(fitness>fitness_max)
+      fitness_max=fitness
+      w=solucion_actual
+
+    contador++
+```
 
 
 # Procedimiento 
 
 Para el desarrollo de la práctica se ha optado por implementar todo en el lenguaje c++ y a partir de código propio, únicamente haciendo uso de funciones y estructuras de datos de la STL y de la librería random para los procesos aleatorios. 
 
-Se ha estructurado todo en una carpeta denominada Software que contiene a su vez una carpeta includes con los ficheros de cabecera empleados: utilidades.h, RELIEF.h y BL.h.
+Se ha estructurado todo en una carpeta denominada Software que contiene a su vez una carpeta includes con los ficheros de cabecera empleados: utilidades.h, RELIEF.h, BL.h, etc...
 
 El fichero utilidades.h tiene funciones utilizadas por todos los algoritmos como el clasificador 1NN, Leave One Out u otras. Mientras que las otras dos contienen las funciones específicas de los otros dos algoritmos. 
 
@@ -554,6 +622,159 @@ Table: Resultados en el Dataset Parkinsons para BL
 |Media|  82.477 | 61.818 | 72.147 | 9528.56 | 
 
 Table: Resultados en el Dataset Spectf_heart para BL
+
+Obtenemos los resultados para el algoritmo de **Enfriamiento Simulado**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714| 35.2941| 61.9328| 3542.24| 
+|Partición 2| 84.2857| 35.2941| 59.7899| 3526.17| 
+|Partición 3| 95.7143| 32.3529| 64.0336| 3495.62|  
+|Partición 4| 85.7143| 35.2941| 60.5042| 3505.82|
+|Partición 5| 88.7324| 35.2941| 62.0133| 3470.94| 
+|Media| 88.6036| 34.7059| 61.6548| 3508.16| 
+
+Table: Resultados en el Dataset Ionosphere para ES
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 100| 50| 75| 755.589| 
+|Partición 2| 89.7436| 45.4545| 67.5991| 763.403| 
+|Partición 3| 97.4359| 36.3636| 66.8998| 752.234|
+|Partición 4| 97.4359| 40.9091| 69.1725| 776.462| 
+|Partición 5| 97.4359| 50| 73.7179| 773.082|
+|Media|  96.41 | 44.54 | 70.47 | 764.154 | 
+
+Table: Resultados en el Dataset Parkinsons para ES
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 76.8116| 34.0909| 55.4513| 4532.26|
+|Partición 2| 86.9565| 36.3636| 61.6601| 4381.53| 
+|Partición 3| 81.1594| 31.8182| 56.4888| 4370.6| 
+|Partición 4| 79.7101| 29.5455| 54.6278| 4371.91| 
+|Partición 5| 84.9315| 36.3636| 60.6476| 4406.46|  
+|Media| 81.9138| 33.6364| 57.7751| 4412.55|
+
+Table: Resultados en el Dataset Spectf_heart para ES
+
+Obtenemos los resultados para el algoritmo de **Búsqueda Local Multiarranque**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
+|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
+|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
+|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
+|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
+|Media| 89.4648| 87.6471| 88.5559| 36009|
+
+Table: Resultados en el Dataset Ionosphere para BMB
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 87.1795| 100| 93.5897| 7483.76|
+|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
+|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
+|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
+|Partición 5| 100| 100| 100| 7679.42| 
+|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+
+Table: Resultados en el Dataset Parkinsons para BMB
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
+|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
+|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
+|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
+|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
+|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+
+Table: Resultados en el Dataset Spectf_heart para BMB
+
+Obtenemos los resultados para el algoritmo de **ILS con Búsqueda Local**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
+|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
+|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
+|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
+|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
+|Media| 89.4648| 87.6471| 88.5559| 36009|
+
+Table: Resultados en el Dataset Ionosphere para ILS-BL
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 87.1795| 100| 93.5897| 7483.76|
+|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
+|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
+|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
+|Partición 5| 100| 100| 100| 7679.42| 
+|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+
+Table: Resultados en el Dataset Parkinsons para ILS_BL
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
+|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
+|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
+|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
+|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
+|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+
+Table: Resultados en el Dataset Spectf_heart para ILS_BL
+
+Obtenemos los resultados para el algoritmo de **ILS con Enfriamiento Simulado**:
+
+|Particiones | Ionosphere      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 88.5714| 88.2353| 88.4034| 35906.8| 
+|Partición 2| 91.4286| 91.1765| 91.3025| 35842.3| 
+|Partición 3| 94.2857| 85.2941| 89.7899| 36004.2|  
+|Partición 4| 85.7143| 85.2941| 85.5042| 36576.6|
+|Partición 5| 87.3239| 88.2353| 87.7796| 35714.9| 
+|Media| 89.4648| 87.6471| 88.5559| 36009|
+
+Table: Resultados en el Dataset Ionosphere para ILS-ES
+
+|Particiones | Parkinsons      ||||
+|:--:|:--:|:--:|:--:|:--:|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 87.1795| 100| 93.5897| 7483.76|
+|Partición 2| 89.7436| 95.4545| 92.5991| 7784.57|
+|Partición 3| 94.8718| 86.3636| 90.6177| 7421.57| 
+|Partición 4| 94.8718| 100| 97.4359| 7917.07| 
+|Partición 5| 100| 100| 100| 7679.42| 
+|Media| 93.3333| 96.3636| 94.8485| 7657.28|  
+
+Table: Resultados en el Dataset Parkinsons para ILS-ES
+
+|Particiones | Spectf_heart      ||||
+|:--|:--|:--|:--|:--|
+| | % clas | % red | Agr. | Tiempo ms | 
+|Partición 1| 72.4638| 79.5455| 76.0046| 45002.1| 
+|Partición 2| 78.2609| 79.5455| 78.9032| 45477.1|  
+|Partición 3| 81.1594| 77.2727| 79.2161| 45015.7|  
+|Partición 4| 79.7101| 79.5455| 79.6278| 44832.9|  
+|Partición 5| 91.7808| 86.3636| 89.0722| 43937.5|   
+|Media| 80.675| 80.4545| 80.5648| 44853.1| 
+
+Table: Resultados en el Dataset Spectf_heart para ILS-ES
+
 
 Los resultados anteriores se han obtenido en cada iteración del proceso de 5-fold Cross Validation y como podemos observar, por regla general el método **RELIEF** consigue unas tasas muy elevadas de Precisión sobre el conjunto de Test en todas las bases de datos utilizadas, **pero en cambio este método no consigue reducir atributos** o al menos no sirve para este cometido (a excepción de la base de datos de **Ionosphere** dónde se reduce en un 3% aproximadamente), por lo que no consigue una evaluación muy alta de la función objetivo, ya que nuestro propósito era reducir el mayor número de atributos posible a la vez que intentar mantener una elevada precisión al clasificar. 
 
