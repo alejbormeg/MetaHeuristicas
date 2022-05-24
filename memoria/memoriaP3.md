@@ -321,7 +321,7 @@ El algoritmo realiza una búsqueda por entornos en el que el criterio de aceptac
 
 En cada iteración del algoritmo generamos un número de vecinos concreto **L(T)** cada vez que se genera un vecino se aplica el criterio de aceptación probabilístico y si lo pasa sustituye a la solución actual (en caso de que sea mejor que la solución actual no es necesario el criterio probabilístico).
 
-Así, la probabilidad de aceptación en nuestro caso será $e^{\Delta f/T}$ que depende del incremento del fitness entre la solución generada y la solución actual ($\Delta f$) y de la temperatura actual (T). De esta manera se aceptan muchas soluciones peores al principio, cuando la probabilidad es mayor, y menos al final, cuando es menor la probabilidad.
+Así, la probabilidad de aceptación en nuestro caso será $e^{\Delta f /T}$ que depende del incremento del fitness entre la solución generada y la solución actualy de la temperatura actual (T). De esta manera se aceptan muchas soluciones peores al principio, cuando la probabilidad es mayor, y menos al final, cuando es menor la probabilidad.
 
 En caso de que se alcance el número máximo de hijos que se pueden generar **L(T)**, o se alcance un número **máximo de éxitos** (cambios de solución de acuerdo al criterio probabilístico) se enfriará la temperatura y se pasa a la siguiente iteración.
 
@@ -337,19 +337,20 @@ double T_final,double mu, double phi){
     w=s //Solución por ahora
     fitness_max=fitness_s
     T_inicial = CalculaTempInicial(fitness_max,mu,phi)
+    M=15000/max_vecinos
+    double beta=(T_inicial-T_final)/(M*T_inicial*T_final)
     T_actual = T_inicial
     contador_vecinos=0
     max_vecinos=10*dim
     contador_exitos=-1 //Para entrar al bucle
     max_exitos=0.1*max_vecinos 
     contador_evaluaciones=0
-    M=15000/max_vecinos
     incremento=0.0
 
     //Bucle principal
-    //Salimos si se alcanza la temperatura final, 
+    //Salimos si se alcanza 
     //el máximo de evaluaciones o no hemos mejorado nada
-    while(T_final<T_actual && contador_evaluaciones<15000 
+    while(contador_evaluaciones<15000 
     && contador_exitos!=0){
         contador_vecinos=0;
         contador_exitos=0;
@@ -368,23 +369,29 @@ double T_final,double mu, double phi){
             incremento=fitness_s_prima-fitness_s;
             
             //Condiciones de éxito
-            Si (incremento>0 o dado<=exp(incremento/(T_actual))){
+            if(fitness_s_prima>fitness_s){
                 //si se dan contamos un éxito
                 contador_exitos++;
                 //s pasa a ser s_prima
-                s=s';
+                s=s_prima;
                 //actualizamos el fitness
-                fitness_s=fitness_s';
-
+                fitness_s=fitness_s_prima;
                 //Si mejora el fitness máximo pues tenemos nueva solución
                 if(fitness_s > fitness_max){
                     fitness_max=fitness_s;
                     w=s;
                 }
+            } else if (dado<=exp((-abs(incremento))/(T_actual))){
+                //si se dan contamos un éxito
+                contador_exitos++;
+                //s pasa a ser s_prima
+                s=s_prima;
+                //actualizamos el fitness
+                fitness_s=fitness_s_prima;
             }
         }
         //enfriamos
-        T_actual=Enfriamiento(T_actual,T_inicial,T_final,M,generator);
+        T_actual=T_actual/(1+beta*T_actual);
     }
 }
 ```
@@ -398,16 +405,7 @@ double CalculaTempInicial(double coste, double mu, double phi){
 
 En nuestro problema usaremos siempre $\mu=0.3=\phi$.
 
-El enfriamiento por su parte se realizará mediante la siguiente función: 
-
-```c++
-double Enfriamiento (double T, double T_inicial, double T_final, double M, std::mt19937 &generator){
-    double beta=(T_inicial-T_final)/(M*T_inicial*T_final);
-    return T/(1+beta*T);
-}
-```
-
-Que pretende implementar el sistema de Cauchy modificado, en el cual la temperatura se actualiza de acuerdo a: 
+El enfriamiento por su parte se realizará mediante el sistema de Cauchy modificado, en el cual la temperatura se actualiza de acuerdo a: 
 
 $$T_{k+1}=\frac{T_k}{1+\beta · T_k} \;\;\; \beta=\frac{T_0-T_f}{M·T_0·T_f}$$
 
@@ -519,6 +517,7 @@ MetodoILS_ES()
     contador++
 ```
 
+La justificación de este modo de proceder es que se ha comprobado empíricamente que las mutaciones de extremos locales son mejores soluciones iniciales que vectores aleatorios del espacio de búsqueda, y que se obtienen mejores resultados.
 
 # Procedimiento 
 
@@ -782,7 +781,7 @@ Sin embargo, el método de **Búsqueda local** si que tiene un comportamiento qu
 
 Por otro lado, comparando los tiempos empleados por ambos algoritmos podemos ver que el método RELIEF es mucho más rápido que el de Búsqueda Local, pues en media tarda unos 2-3ms en entrenar, en cambio el de Búsqueda Local está muy condicionado a si las mutaciones mejoran más o menos la función objetivo lo que en un caso extremo podría llevar a ejecutar 15000 evaluaciones de la función objetivo, es por ello que los tiempos son mayores, aunque muy razonables para la notable mejora conseguida con respecto a RELIEF (menos de 10 segundos normalmente).
 
-Si nos fijamos en el modelo basado en *trayectorias simples* (**Enfriamiento Simulado**) vemos que el comportamiento en todos los datasets es muy bueno y siempre mejor al de la **Búsqueda Local**. El rápido enfriamiento que se emplea (**método de cauchy modificado**) permite cambiar con una alta probabilidad al principio a soluciones que no son mejores que la actual pero rápidamente se pasa una mayor dificultad para aceptar soluciones por parte del criterio probabilístico (pues $e^{\Delta f/T} será muy pequeño desde muy pronto al enfriar tan deprisa), permitiendo así mejorar con las mutaciones las ya existentes como hace la búsqueda local. De hecho, a diferencia de la búsqueda local que terminaba mucho antes de realizar las 15000 evaluaciones, con este nuevo algoritmo se producen muchas más iteraciones, llegando a las 15000 en algunos casos, lo que supone un aumento en el tiempo de ejecución considerable (6 veces mayor en general) con respecto a la búsqueda local, lo que nos hace pensar que el número de atributos del dataset afecta de forma exponencial al tiempo de ejecución del algoritmo.
+Si nos fijamos en el modelo basado en *trayectorias simples* (**Enfriamiento Simulado**) vemos que el comportamiento en todos los datasets es muy bueno y siempre mejor al de la **Búsqueda Local**. El rápido enfriamiento que se emplea (**método de cauchy modificado**) permite cambiar con una alta probabilidad al principio a soluciones que no son mejores que la actual pero rápidamente se pasa una mayor dificultad para aceptar soluciones por parte del criterio probabilístico (pues $e^{\Delta f/T}$ será muy pequeño desde muy pronto al enfriar tan deprisa), permitiendo así mejorar con las mutaciones las ya existentes como hace la búsqueda local. De hecho, a diferencia de la búsqueda local que terminaba mucho antes de realizar las 15000 evaluaciones, con este nuevo algoritmo se producen muchas más iteraciones, llegando a las 15000 en algunos casos, lo que supone un aumento en el tiempo de ejecución considerable (6 veces mayor en general) con respecto a la búsqueda local, lo que nos hace pensar que el número de atributos del dataset afecta de forma exponencial al tiempo de ejecución del algoritmo.
 
 Por otro lado, si analizamos los modelos basados en Trayectorias múltiples observamos: 
 
