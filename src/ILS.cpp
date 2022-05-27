@@ -72,7 +72,7 @@ void MetodoILS_ES(std::vector<std::pair<std::vector<double>,std::string>> &datos
     //Inicializamos solución 
     w=inicializacionBL(dim,generator);
     //Aplicamos ES
-    EnfriamientoSimulado(datos,w, generator,0.001,0.3, 0.3);
+    EnfriamientoSimulado(datos,w, generator,0.001,0.3, 0.3,1000);
     tasa_clas=LeaveOneOut(datos,w);
 	tasa_red_=tasa_red(w);
 	fitness_max=funcionEvaluacion(tasa_clas,tasa_red_);
@@ -87,7 +87,7 @@ void MetodoILS_ES(std::vector<std::pair<std::vector<double>,std::string>> &datos
             Mov(solucion_actual,0.4,orden_mutaciones[i],generator);
         }
         //Aplicamos ES
-        EnfriamientoSimulado(datos,solucion_actual, generator,0.001,0.3, 0.3);
+        EnfriamientoSimulado(datos,solucion_actual, generator,0.001,0.3, 0.3,1000);
         //Obtenemos su tasa de clasificación
         tasa_clas=LeaveOneOut(datos,solucion_actual);
         //Obtenemos su tasa de reducción

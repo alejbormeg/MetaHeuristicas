@@ -7,7 +7,7 @@ double CalculaTempInicial(double coste, double mu, double phi){
     return (mu * coste)/(-log(phi));
 }
 
-void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w, std::mt19937 &generator,double T_final,double mu, double phi){
+void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double>&w, std::mt19937 &generator,double T_final,double mu, double phi, int evaluaciones){
     
     //Variables que usaremos
     float fitness_s,fitness_s_prima, fitness_max=0.0;
@@ -39,7 +39,7 @@ void EnfriamientoSimulado(std::vector<std::pair<std::vector<double>,std::string>
     double beta=(T_inicial-T_final)/(M*T_inicial*T_final);
 
     //Bucle principal, las condiciones de parada son: Se alcanza la temperatura mínima, El contador de evaluaciones supera las 15000 o el contador de existos ==0
-    while(contador_evaluaciones<15000 && contador_exitos!=0){
+    while(contador_evaluaciones<evaluaciones && contador_exitos!=0){
         contador_vecinos=0;
         contador_exitos=0;
         while(contador_exitos<max_exitos && contador_vecinos<max_vecinos){

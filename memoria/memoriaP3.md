@@ -741,36 +741,36 @@ Obtenemos los resultados para el algoritmo de **ILS con Enfriamiento Simulado**:
 |Particiones | Ionosphere      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 92.8571| 97.0588| 94.958| 563175| 
-|Partición 2| 88.5714| 100| 94.2857| 564068| 
-|Partición 3| 87.1429| 94.1176| 90.6303| 562951| 
-|Partición 4| 90| 97.0588| 93.5294| 562246| 
-|Partición 5| 88.7324| 97.0588| 92.8956| 558453| 
-|Media| 89.4608| 97.0588| 93.2598| 562179| 
+|Partición 1| 87.1429| 91.1765| 89.1597| 39504| 
+|Partición 2| 90| 82.3529| 86.1765| 40014.3| 
+|Partición 3| 85.7143| 88.2353| 86.9748| 39294.8| 
+|Partición 4| 82.8571| 85.2941| 84.0756| 39475.8|
+|Partición 5| 92.9577| 85.2941| 89.1259| 38973|  
+|Media| 87.7344| 86.4706| 87.1025| 39452.4|  
 
 Table: Resultados en el Dataset Ionosphere para ILS-ES
 
 |Particiones | Parkinsons      ||||
 |:--:|:--:|:--:|:--:|:--:|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 97.4359| 100| 98.7179| 123764| 
-|Partición 2| 89.7436| 100| 94.8718| 122981|  
-|Partición 3| 94.8718| 100| 97.4359| 119523| 
-|Partición 4| 100| 100| 100| 119439| 
-|Partición 5| 97.4359| 100| 98.7179| 120550| 
-|Media| 95.8974| 100| 97.9487| 121252| 
+|Partición 1| 87.1795| 95.4545| 91.317| 8078.69| 
+|Partición 2| 92.3077| 100| 96.1538| 8090.2|   
+|Partición 3| 92.3077| 100| 96.1538| 8064.8|  
+|Partición 4| 97.4359| 100| 98.7179| 8106.72|  
+|Partición 5| 89.7436| 95.4545| 92.5991| 8104.01| 
+|Media| 91.7949| 98.1818| 94.9883| 8088.88|  
 
 Table: Resultados en el Dataset Parkinsons para ILS-ES
 
 |Particiones | Spectf_heart      ||||
 |:--|:--|:--|:--|:--|
 | | % clas | % red | Agr. | Tiempo ms | 
-|Partición 1| 81.1594| 77.2727| 79.2161| 711349| 
-|Partición 2| 81.1594| 72.7273| 76.9433| 704664|  
-|Partición 3| 79.7101| 72.7273| 76.2187| 706318| 
-|Partición 4| 82.6087| 70.4545| 76.5316| 705744|  
-|Partición 5| 86.3014| 75| 80.6507| 684873|   
-|Media| 82.1878| 73.6364| 77.9121| 702590|  
+|Partición 1| 82.6087| 68.1818| 75.3953| 48008|  
+|Partición 2| 85.5072| 68.1818| 76.8445| 48384.4|   
+|Partición 3| 79.7101| 72.7273| 76.2187| 48493.5|  
+|Partición 4| 84.058| 68.1818| 76.1199| 49614.1|   
+|Partición 5| 84.9315| 63.6364| 74.2839| 46942.9|  
+|Media| 83.3631| 68.1818| 75.7725| 48288.6|  
 
 Table: Resultados en el Dataset Spectf_heart para ILS-ES
 
@@ -791,7 +791,7 @@ Por otro lado, si analizamos los modelos basados en Trayectorias múltiples obse
 
 - El algoritmo **ILS-BL** como podemos observar obtiene excelentes resultados en todos los datasets, superando los 90 puntos de función objetivo en todos los datasets, llegando a casi el 100 en Parkinsons (98.46), con tasa de reducción y clasificación muy elevadas. Esto lo consigue porque desde mi punto de vista, la estrategia seguida por el algorimto es mejor (aunque parecida) a la de **BMB**, por ello consigue mejores resultados que este último en todos los datasets. El hecho de partir de una solución inicial muy próxima al óptimo local (gracias a la **BL**) permite que las mutaciones que le realicemos provoquen soluciones previsiblemente próximas a otros óptimos locales que junto con el proceso de búsqueda local siguiente consiguen aproximar muy bien. Por eso, este hecho de cambiar de buscar trayectorias desde puntos iniciales aleatorios (**BMB**) a puntos inciales aleatorios pero "próximos" en teoría a extremos locales permiten un mayor aprovechamiento del algoritmo de **BL** y como se demuestra, se obtienen muy buenos resultados. 
 
-  Por otro lado, con la variante que usa el algoritmo **ES**, a pesar de ser mejor que la **BL** se obtienen peores resultados que el **ILS-BL** en el dataset de *Spectf-Heart* además de que obtenemos un considerable aumento de tiempo de ejecución por parte del **ILS-ES** en todos los datasets (unas 15 veces superior al de **ILS-ES**), debido principalmente a que se aplica el algoritmo a 15 vectores.
+  Por otro lado, la variante **ILS-ES**, a pesar de ser mejor el **ES** que la **BL** cuando no hay límite de iteraciones,  se obtienen peores resultados que el **ILS-BL** en todos los dataset, este hecho nos confirma que el buen comportamiento del **ES** se debe en parte al gran número de iteraciones que realiza, pues al limitar estas a 1000, la **BL** obtiene mejores resultados.
 
 Todos estos hechos comentados se pueden observar mejor en las siguientes tablas resumen: 
 
@@ -804,7 +804,7 @@ Todos estos hechos comentados se pueden observar mejor en las siguientes tablas 
 |Enfriamiento Simulado| 87.7706| 91.7647| 89.7677| 35141.9| 
 |BMB| 90.5956| 90.5882| 90.5919| 35663.3| 
 |ILS-BL| 89.4567| 97.6471| 93.5519| 36563.9| 
-|ILS-ES| 89.4608| 97.0588| 93.2598| 562179| 
+|ILS-ES| 87.7344| 86.4706| 87.1025| 39452.4|  
 
 Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 
@@ -817,7 +817,7 @@ Table: Resumen resultados en el Dataset Ionosphere para todos los algoritmos
 |Enfriamiento simulado| 93.8462| 100| 96.9231| 7718.42| 
 |BMB| 95.8974| 94.5455| 95.2214| 7510.78| 
 |ILS-BL| 94.8718| 100| 97.4359| 5483.89| 
-|ILS-ES| 95.8974| 100| 97.9487| 121252| 
+|ILS-ES| 91.7949| 98.1818| 94.9883| 8088.88| 
 
 Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 
@@ -830,7 +830,7 @@ Table: Resumen resultados en el Dataset Parkinsons para todos los algoritmos
 |Enfriamiento Simulado| 81.9456| 69.0909| 75.5183| 44110.4| 
 |BMB | 82.7834| 78.6364| 80.7099| 44896.8| 
 |ILS-BL| 85.0864| 92.7273| 88.9068| 48152.1| 
-|ILS-ES| 82.1878| 73.6364| 77.9121| 702590|  
+|ILS-ES| 83.3631| 68.1818| 75.7725| 48288.6| 
 
 Table: Resumen resultados en el Dataset Spectf_heart para todos los algoritmos
 
@@ -838,6 +838,7 @@ En estas tablas podemos ver mejor todo lo comentado anteriormente, y en vista de
 
 - No todos los atributos recogidos son necesarios para obtener una alta tasa de clasificación, pues eliminando más de la mitad en cada base de datos se obtienen valores de clasificación muy elevados también, y además son **excluyentes**. 
 - El tiempo que tarda la búsqueda local es muy razonable, por lo que con apenas unos segundos más que en RELIEF obtenemos resultados mucho mejores. 
+- Dentro de los modelos basados en **trayectorias simples**, el **ES** se comporta mejor que la **BL** cuando no hay límite de iteraciones, y ocurre al contrario cuando establecemos un límite máximo de iteraciones bajo.
 - El tiempo de ejecución de los modelos basados en **trayectorias múltiples** son mucho mayores a los basados en **trayectorias simples**. 
 - Los modelos basados en **trayectorias múltiples** generalmente obtienen mejores resultados que los modelos basados en **trayectorias simples**. 
 - No obstante, no siempre los modelos basados en **trayectorias múltiples** son mejores que los modelos basados en **trayectorias simples**.
@@ -897,6 +898,8 @@ Si seguimos ahora con la tercera iteración: 2, 10, 16, 22
 Como vemos en este caso se ponderan algunos atributos comunes con la primera iteración y otros no ponderados hasta ahora por encima de 0.7.
 
 En cambio, los valores de clasificación son todos muy similares y elevados.
+
+Por otro lado, observamos que la **BL** tiene una rápida convergencia y proporciona en general buenos resultados, en cambio el **ES** tiende a terminar todas las iteraciones disponibles obteniendo así mejores resultados que la **BL** en general. No obstante si se limita el número de iteraciones y se establece bajo, como hemos visto en el **ILS-ES** y el **ILS-BL** la búsqueda local mejora los resultados en comparación con el enfriamiento simulado.
 
 Si nos fijamos ahora en los tiempos de ejecución, los algoritmos basados en **trayectorias simples** yel **RELIEF**, al aproximar solamente una solución tardan mucho menos que los algoritmos basados en **trayectorias múltipes**, que aproximan diversas soluciones distintas, lo que se traduce en un mayor tiempo de ejecución.
 

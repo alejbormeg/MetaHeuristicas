@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
 				t1=clock();
 			}else if(k==10){
 				t0=clock();
-				EnfriamientoSimulado(entrenamiento,w,gen,0.001,0.3,0.3);
+				EnfriamientoSimulado(entrenamiento,w,gen,0.001,0.3,0.3,15000);
 				t1=clock();
 			}else if(k==11){
 				t0=clock();
