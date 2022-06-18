@@ -11,6 +11,7 @@
 #include "../include/BMB.h"
 #include "../include/ILS.h"
 #include "../include/ES.h"
+#include "../include/LF.h"
 
 #include <ctime> 
 
@@ -161,6 +162,7 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("BMB");
 	algoritmos.push_back("ILS con Búsqueda Local");
 	algoritmos.push_back("ILS con Enfriamiento Simulado");
+	algoritmos.push_back("Leaders and Followers");
 
 
 
@@ -226,7 +228,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=10; k<algoritmos.size(); k++){
+	for (int k=14; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -301,6 +303,10 @@ int main(int argc, char *argv[])
 			}else if(k==13){
 				t0=clock();
 				MetodoILS_ES(entrenamiento,validacion,w,gen,datos[0].first.size(),15000,15);
+				t1=clock();
+			}else if(k==14){
+				t0=clock();
+				LeadersAndFollowers(entrenamiento,w,15000,1000,datos[0].first.size(),gen);
 				t1=clock();
 			}
 
