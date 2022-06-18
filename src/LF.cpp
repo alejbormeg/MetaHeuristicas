@@ -5,10 +5,16 @@
 std::vector<double> create_trial(std::vector<double> &leader, std::vector<double> &follower, std::mt19937 &generator){
   std::vector<double> trial;
   std::uniform_real_distribution<> dis(0.0, 1.0);
-  double epsilon;
+  double epsilon,valor;
   for (int i=0; i<leader.size(); i++){
     epsilon=dis(generator);
-    trial.push_back(follower[i]+epsilon*2*(leader[i]-follower[i]));
+    valor=follower[i]+epsilon*2*(leader[i]-follower[i]);
+    if(valor<0)
+      trial.push_back(0.0);
+    else if(valor>1.0)
+      trial.push_back(1.0);
+    else 
+      trial.push_back(valor);
   }
   return trial;
 }
@@ -37,12 +43,12 @@ double CalcMHWScore(std::vector<double> scores)
 std::vector<std::vector<double>> merge_populations(std::vector<std::vector<double>> &L, std::vector<std::vector<double>> &F,std::vector<double> &l_fitness,std::vector<double> &f_fitness, std::mt19937 &generator){
   std::vector<std::vector<double>> Nuevos_Lideres;
   //en primer lugar, guardamos la mejor solución de Líderes
-  int minElementIndex = std::max_element(l_fitness.begin(),l_fitness.end()) - l_fitness.begin();
-  Nuevos_Lideres.push_back(L[minElementIndex]);
+  int maxElementIndex = std::max_element(l_fitness.begin(),l_fitness.end()) - l_fitness.begin();
+  Nuevos_Lideres.push_back(L[maxElementIndex]);
   //Seleccionamos los siguientes n-1 con torneo binario
   for (int i=0; i<L.size(); i++){
-    if(i!=minElementIndex){
-      if(l_fitness[i]<f_fitness[i])
+    if(i!=maxElementIndex){
+      if(l_fitness[i]>f_fitness[i])
         Nuevos_Lideres.push_back(L[i]);
       else 
         Nuevos_Lideres.push_back(F[i]);
@@ -91,7 +97,7 @@ void LeadersAndFollowers(std::vector<std::pair<std::vector<double>,std::string>>
       f_fitness.push_back(fitness1);    
     }
 
-    if(CalcMHWScore(f_fitness)<CalcMHWScore(l_fitness)){
+    if(CalcMHWScore(f_fitness)>CalcMHWScore(l_fitness)){
       L=merge_populations(L,F,l_fitness,f_fitness,generator);
       F=Inicializar(tam_pob,dim,generator);
     }
