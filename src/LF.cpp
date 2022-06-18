@@ -115,6 +115,6 @@ void LeadersAndFollowers(std::vector<std::pair<std::vector<double>,std::string>>
     l_fitness.push_back(fitness1);
   }
   //obtenemos el mínimo fitness
-  int minElementIndex = std::max_element(l_fitness.begin(),l_fitness.end()) - l_fitness.begin();
-  sol=L[minElementIndex];
+  int maxElementIndex = std::max_element(l_fitness.begin(),l_fitness.end()) - l_fitness.begin();
+  sol=L[maxElementIndex];
 }
