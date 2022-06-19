@@ -78,9 +78,13 @@ void LeadersAndFollowers(std::vector<std::pair<std::vector<double>,std::string>>
       fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
       tasa_clas=LeaveOneOut(datos,follower);
       tasa_red_=tasa_red(follower);
-      fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
-      if(fitness1>fitness2)
+      fitness2=funcionEvaluacion(tasa_clas,tasa_red_);
+      if(fitness1>fitness2){
         F[i]=trial;
+        f_fitness.push_back(fitness1);
+      } else {
+        f_fitness.push_back(fitness2);
+      }
     }
     
     //Calculamos el std::vector de Fitness de cada poblacion
@@ -89,12 +93,6 @@ void LeadersAndFollowers(std::vector<std::pair<std::vector<double>,std::string>>
       tasa_red_=tasa_red(L[i]);
       fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
       l_fitness.push_back(fitness1);
-    }
-    for(int i=0;i<F.size();i++){
-      tasa_clas=LeaveOneOut(datos,F[i]);
-      tasa_red_=tasa_red(F[i]);
-      fitness1=funcionEvaluacion(tasa_clas,tasa_red_);
-      f_fitness.push_back(fitness1);    
     }
 
     if(CalcMHWScore(f_fitness)>CalcMHWScore(l_fitness)){

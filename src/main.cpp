@@ -12,7 +12,7 @@
 #include "../include/ILS.h"
 #include "../include/ES.h"
 #include "../include/LF.h"
-
+#include "../include/LFBL.h"
 #include <ctime> 
 
 
@@ -163,6 +163,7 @@ int main(int argc, char *argv[])
 	algoritmos.push_back("ILS con Búsqueda Local");
 	algoritmos.push_back("ILS con Enfriamiento Simulado");
 	algoritmos.push_back("Leaders and Followers");
+	algoritmos.push_back("Leaders and Followers + Local Search");
 
 
 
@@ -228,7 +229,7 @@ int main(int argc, char *argv[])
 	cout << "\tFuncion Evaluacion promedio: "<< funcion_evaluacion_promedio/5 << endl;
 	*/
 
-	for (int k=14; k<algoritmos.size(); k++){
+	for (int k=15; k<algoritmos.size(); k++){
 		cout<< "*************************************"<<endl;
 		cout<< "ALGORITMO " << algoritmos[k] <<endl;
 		cout<< "*************************************"<<endl;
@@ -306,7 +307,11 @@ int main(int argc, char *argv[])
 				t1=clock();
 			}else if(k==14){
 				t0=clock();
-				LeadersAndFollowers(entrenamiento,w,15000,1000,datos[0].first.size(),gen);
+				LeadersAndFollowers(entrenamiento,w,20000,1000,datos[0].first.size(),gen);
+				t1=clock();
+			}else if(k==15){
+				t0=clock();
+				LeadersAndFollowersLocalSearch(entrenamiento,w,20000,1000,datos[0].first.size(),gen);
 				t1=clock();
 			}
 
