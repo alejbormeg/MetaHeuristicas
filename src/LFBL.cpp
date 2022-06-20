@@ -1,24 +1,6 @@
 #include "../include/LFBL.h"
 #include <cstdlib>
 
-std::vector<std::vector<double>> merge_populations_modificada(std::vector<std::vector<double>> &L, std::vector<std::vector<double>> &F,std::vector<double> &l_fitness,std::vector<double> &f_fitness, std::mt19937 &generator){
-  std::vector<std::vector<double>> Nuevos_Lideres;
-  //Seleccionamos los siguientes n-1 con torneo binario
-  for (int i=0; i<L.size()-1; i+=2){
-    if(l_fitness[i]>l_fitness[i+1])
-      Nuevos_Lideres.push_back(L[i]);
-    else 
-      Nuevos_Lideres.push_back(L[i+1]);
-
-    if(f_fitness[i]>f_fitness[i+1])
-      Nuevos_Lideres.push_back(F[i]);
-    else
-      Nuevos_Lideres.push_back(F[i+1]);
-  }
-  L=Nuevos_Lideres;
-  return L;
-}
-
 void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,std::string>> &datos,std::vector<double> &sol, int maxevals, int tam_pob, int dim, std::mt19937 &generator){
   std::vector<std::vector<double>> L,F;
   std::vector<double> l_fitness,f_fitness;
@@ -57,7 +39,7 @@ void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,st
     }
 
     if(CalcMHWScore(f_fitness)>CalcMHWScore(l_fitness)){
-      L=merge_populations_modificada(L,F,l_fitness,f_fitness,generator);
+      L=merge_populations(L,F,l_fitness,f_fitness,generator);
       F=Inicializar(tam_pob,dim,generator);
     }
 

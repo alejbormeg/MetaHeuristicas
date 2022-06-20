@@ -42,17 +42,17 @@ double CalcMHWScore(std::vector<double> scores)
 
 std::vector<std::vector<double>> merge_populations(std::vector<std::vector<double>> &L, std::vector<std::vector<double>> &F,std::vector<double> &l_fitness,std::vector<double> &f_fitness, std::mt19937 &generator){
   std::vector<std::vector<double>> Nuevos_Lideres;
-  //en primer lugar, guardamos la mejor solución de Líderes
-  int maxElementIndex = std::max_element(l_fitness.begin(),l_fitness.end()) - l_fitness.begin();
-  Nuevos_Lideres.push_back(L[maxElementIndex]);
   //Seleccionamos los siguientes n-1 con torneo binario
-  for (int i=0; i<L.size(); i++){
-    if(i!=maxElementIndex){
-      if(l_fitness[i]>f_fitness[i])
-        Nuevos_Lideres.push_back(L[i]);
-      else 
-        Nuevos_Lideres.push_back(F[i]);
-    }
+  for (int i=0; i<L.size()-1; i+=2){
+    if(l_fitness[i]>l_fitness[i+1])
+      Nuevos_Lideres.push_back(L[i]);
+    else 
+      Nuevos_Lideres.push_back(L[i+1]);
+
+    if(f_fitness[i]>f_fitness[i+1])
+      Nuevos_Lideres.push_back(F[i]);
+    else
+      Nuevos_Lideres.push_back(F[i+1]);
   }
   L=Nuevos_Lideres;
   return L;
