@@ -6,15 +6,21 @@ void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,st
   std::vector<double> l_fitness,f_fitness;
   std::vector<double> leader,follower,trial;
   double tasa_clas, tasa_red_,fitness1,fitness2;
+
+  //Inicializamos las poblaciones
   L=Inicializar(tam_pob,dim,generator);
   F=Inicializar(tam_pob,dim,generator);
   int evals=0;
-  
+
+  //Mientras no se supere el numero maximo de evaluaciones
   while(evals<maxevals){
     std::cout << "evals:  "<< evals << std::endl;
     for(int i=0; i<tam_pob ; i++){
+      //Tomamos lider
       leader=L[i];
+      //Tomamos seguidor
       follower=F[i];
+      //Los combinamos
       trial=create_trial(leader,follower,generator);
       tasa_clas=LeaveOneOut(datos,trial);
       tasa_red_=tasa_red(trial);
@@ -22,6 +28,7 @@ void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,st
       tasa_clas=LeaveOneOut(datos,follower);
       tasa_red_=tasa_red(follower);
       fitness2=funcionEvaluacion(tasa_clas,tasa_red_);
+      //Si la combinacion es mejor que el seguidor, lo reemplaza
       if(fitness1>fitness2){
         F[i]=trial;
         f_fitness.push_back(fitness1);
@@ -30,7 +37,7 @@ void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,st
       }
     }
     
-    //Calculamos el std::vector de Fitness de líderes
+    //Calculamos el de Fitness de líderes
     for(int i=0;i<L.size();i++){
       tasa_clas=LeaveOneOut(datos,L[i]);
       tasa_red_=tasa_red(L[i]);
@@ -38,8 +45,11 @@ void LeadersAndFollowersLocalSearch(std::vector<std::pair<std::vector<double>,st
       l_fitness.push_back(fitness1);
     }
 
+    //Si la mediana de los seguidores es mayor que la de los líderes, se mezclan
     if(CalcMHWScore(f_fitness)>CalcMHWScore(l_fitness)){
+      //mezclamos poblaciones
       L=merge_populations(L,F,l_fitness,f_fitness,generator);
+      //Inicializamos de nuevo la población de los seguidores
       F=Inicializar(tam_pob,dim,generator);
     }
 
